@@ -1,0 +1,20 @@
+{
+  "name": "mathapp_backend",
+  "version": "0.0.1",
+  "description": "Backend for MathApp ASU Capstone Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ASU",
+    "SER401",
+    "CAPSTONE",
+    "MATHAPP"
+  ],
+  "author": "Project Team 14",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
