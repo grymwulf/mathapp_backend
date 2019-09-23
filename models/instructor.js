@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, type) => {
     return sequelize.define('instructor', {
 
@@ -5,14 +7,14 @@ module.exports = (sequelize, type) => {
         // tracking ID for underlying student info
         // retained at the school
         id: {
-            type: type.INTEGER,
+            type: Sequelize.INTEGER,
             primaryKey: true
         },
 
         // firstName: instructor first name
-        firstName: type.STRING,
+        firstName: Sequelize.STRING,
 
-        // latName: instructor last name
-        lastName: type.STRING,
+        // lastName: instructor last name
+        lastName: Sequelize.STRING,
     })
 }

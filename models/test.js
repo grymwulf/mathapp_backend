@@ -1,9 +1,11 @@
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, type) => {
     return sequelize.define('test', {
 
         // id: primary ID for the test
         id: {
-            type: type.INTEGER,
+            type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
@@ -32,11 +34,11 @@ module.exports = (sequelize, type) => {
             ]
         }
         */
-        questions: type.STRING,
+        questions: Sequelize.TEXT,
 
         // type of test
         // ADDITION, SUBTRACTION, DIVISION, MULTIPLICATION, MIXED
-        type: type.STRING
+        type: Sequelize.STRING
 
         
 
