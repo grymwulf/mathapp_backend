@@ -5,37 +5,8 @@ const students = require('./routes/students');
 const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
-const path = require('path');
+const data = require ('./database');
 
-// data object models
-const Sequelize = require('sequelize');
-const StudentModel = require('./models/student');
-const ResultModel = require('./models/result');
-const InstructorModel = require('./models/instructor');
-const TestModel = require('./models/test');
-
-// instantiate database
-var filename = path.basename('data/storage.sqlite');
-console.log(filename);
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'data/storage.sqlite'
-});
-
-// instantiate data objects
-const Student = StudentModel(sequelize, Sequelize);
-const Result = ResultModel(sequelize, Sequelize);
-const Test = TestModel(sequelize, Sequelize);
-const Instructor = InstructorModel(sequelize, Sequelize);
-
-// create foriegn keys
-Result.belongsTo(Student);
-
-// force syncing database
-sequelize.sync({})
-    .then(() => {
-        console.log(`Database & tables created!`)
-    });
 
 
 
@@ -64,15 +35,8 @@ app.use('/results', results);
 */
 
 
-/*
-    Export our DataModels for use in routes
-*/
-module.exports = {
-    Student,
-    Instructor,
-    Result,
-    Test
-};
+
+
 /*
     Server
 */
