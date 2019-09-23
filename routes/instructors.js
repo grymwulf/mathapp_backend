@@ -22,7 +22,7 @@ router.get('/:id?', function(req,res) {
         }
 
         // refactored search to separate function for readability
-        var result = getInstructor(id);
+        var result = getInstructorByID(id);
         
         console.log(result);  // debugging output
 
@@ -71,7 +71,9 @@ router.use(function(req,res) {
     return;
 })
 
-function getInstructor(id) {
+
+// we move this to a separate function for readability
+function getInstructorByID(id) {
     // result object
     var result = {};
 
