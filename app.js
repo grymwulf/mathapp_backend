@@ -26,13 +26,11 @@ app.use(function (req,res,next) {
 /*
     Routes
 */
-/*
 app.use('/doc', express.static('doc'));
 app.use('/students', students);
 app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
-*/
 
 
 
@@ -41,5 +39,4 @@ app.use('/results', results);
     Server
 */
 
-// start server
-// app.listen(SERVER_PORT, () => console.log(`Starting server, listening on ${SERVER_PORT}`));
+app.listen(SERVER_PORT, () => console.log(`Starting server, listening on ${SERVER_PORT}`));
