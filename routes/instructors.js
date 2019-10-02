@@ -37,7 +37,7 @@ router.get('/', function(req,res) {
     var result = {};
     data.Instructor.findAll()
         .then(function (instructors) {
-            result['data'] = instructors.toJSON();
+            result['data'] = instructors;
             result['responseCode'] = 200;
             result['response'] = "Query Successful";
             instructors.forEach(element => {
@@ -64,13 +64,15 @@ router.get('/', function(req,res) {
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(function(req,res) {
     var result = {};
-    result['data'] = {};
+    result['data'] = {
+        "endpoint" : "instructors"
+    };
     result['responseCode'] = 501;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
     return;
-})
+});
 
 
 // we move this to a separate function for readability
@@ -107,3 +109,6 @@ function getInstructorByID(id) {
             return result;
         })
 }
+
+// required to make routes work
+module.exports = router;

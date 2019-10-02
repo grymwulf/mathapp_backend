@@ -16,12 +16,15 @@ const SERVER_PORT = 8000;
 /*
     Middleware
 */
+// express settings
+app.set('trust proxy', true);
 
 // troubleshooting
 app.use(function (req,res,next) {
-    console.log(req);
+    console.log(req.url);
+    console.log(req.ip);
     next();
-})
+});
 
 /*
     Routes
@@ -32,11 +35,30 @@ app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
 
+/*
+    Default base route
+*/
+// default handler
+// anything not implemented gets a response not implemented
+// this HAS to be last in file to ensure it doesn't trigger on anything else that might match
+app.use(function(req,res) {
+    var result = {};
+    result['data'] = {};
+    result['responseCode'] = 501;
+    result['response'] = "Not Implemented";
+    res.status(result.responseCode);
+    res.json(result);
+    return;
+});
+
 
 
 
 /*
     Server
 */
+// force ipv4
+app.listen(SERVER_PORT, '0.0.0.0', () => console.log(`Starting server, listening on ${SERVER_PORT}`));
 
-app.listen(SERVER_PORT, () => console.log(`Starting server, listening on ${SERVER_PORT}`));
+// ipv6 compatible
+// app.listen(SERVER_PORT, () => console.log(`Starting server, listening on ${SERVER_PORT}`));

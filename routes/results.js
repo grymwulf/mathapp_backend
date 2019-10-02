@@ -4,12 +4,12 @@ const data = require('../database');
 
 // get all results
 
-router.get('/', function(req,res) {
+router.get('/all', function(req,res) {
     var result = {};
 
-    data.Result.getAll()
+    data.Result.findAll()
         .then(function(results) {
-            result['data'] = results.toJson();
+            result['data'] = results;
             result['responseCode'] = 200;
             result['response'] = "Query Successful";
             results.forEach(element =>{
@@ -36,10 +36,15 @@ router.get('/', function(req,res) {
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(function(req,res) {
     var result = {};
-    result['data'] = {};
+    result['data'] = {
+        "endpoint" : "results"
+    };
     result['responseCode'] = 501;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
     return;
-})
+});
+
+// required to make routes work
+module.exports = router;
