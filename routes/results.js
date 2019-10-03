@@ -25,7 +25,7 @@ router.get('/all', function(req,res) {
     data.Result.findAll()
         .then(function(results) {
             result['data'] = results;
-            result['responseCode'] = HTTPStatus.OK;
+            result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             results.forEach(element =>{
                 console.log(element);
@@ -38,7 +38,7 @@ router.get('/all', function(req,res) {
             console.log('Error querying all results');
             console.log(err)
             result['data'] = {};
-            result['responseCode'] = HTTPStatus.INTERNAL_SERVER_ERROR;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
@@ -54,7 +54,7 @@ router.use(function(req,res) {
     result['data'] = {
         "endpoint" : "results"
     };
-    result['responseCode'] = HTTPStatus.NOT_IMPLEMENTED;
+    result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);

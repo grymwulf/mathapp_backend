@@ -29,9 +29,9 @@ router.get('/:id?', function(req,res) {
         (req.params.id.parseInt() == NaN)) // id is not a number
         {
             result['data'] = {};
-            result['responseCode'] = HTTPStatus.BAD_REQUEST;
+            result['responseCode'] = HttpStatus.BAD_REQUEST;
             result['response'] = "Invalid parameter for request.  ID must be an integer";
-            res.status(HTTPStatus.BAD_REQUEST);
+            res.status(HttpStatus.BAD_REQUEST);
             res.json(result);
             return;
         }
@@ -53,7 +53,7 @@ router.get('/', function(req,res) {
     data.Instructor.findAll()
         .then(function (instructors) {
             result['data'] = instructors;
-            result['responseCode'] = HTTPStatus.OK;
+            result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             instructors.forEach(element => {
                 console.log(element);
@@ -65,7 +65,7 @@ router.get('/', function(req,res) {
             console.log('Error querying all instructors');
             console.log(err)
             result['data'] = {};
-            result['responseCode'] = HTTPStatus.INTERNAL_SERVER_ERROR;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
@@ -82,7 +82,7 @@ router.use(function(req,res) {
     result['data'] = {
         "endpoint" : "instructors"
     };
-    result['responseCode'] = HTTPStatus.NOT_IMPLEMENTED;
+    result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
@@ -100,7 +100,7 @@ function getInstructorByID(id) {
         .then(function(instructor) {
             if (!instructor) {
                 // not found, send proper response
-                result['responseCode'] = HTTPStatus.NO_CONTENT;
+                result['responseCode'] = HttpStatus.NO_CONTENT;
                 result['response'] = `ID: ${id} does not match a known instructor.`
                 result['data'] = {};
                 return result;
@@ -110,7 +110,7 @@ function getInstructorByID(id) {
             result['data'] = {
                 "instructor": instructor.toJSON()
             }
-            result['responseCode'] = HTTPStatus.OK;
+            result['responseCode'] = HttpStatus.OK;
             result['response'] = "Request successful, "
             return result;
         })
@@ -119,7 +119,7 @@ function getInstructorByID(id) {
         .catch(function (err) {
             console.log(err)
             result['data'] = {};
-            result['responseCode'] = HTTPStatus.INTERNAL_SERVER_ERROR;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             return result;
         })

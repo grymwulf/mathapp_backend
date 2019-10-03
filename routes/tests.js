@@ -26,7 +26,7 @@ router.use(function(req,res) {
     result['data'] = {
         "endpoint" : "tests"
     };
-    result['responseCode'] = HTTPStatus.NOT_IMPLEMENTED;
+    result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);

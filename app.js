@@ -62,7 +62,7 @@ app.use('/results', results);
 app.use(function(req,res) {
     var result = {};
     result['data'] = {};
-    result['responseCode'] = HTTPStatus.NOT_IMPLEMENTED;
+    result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
