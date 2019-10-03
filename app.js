@@ -23,6 +23,7 @@ const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const data = require ('./database');
+const HttpStatus = require('http-status-codes');
 
 
 
@@ -61,7 +62,7 @@ app.use('/results', results);
 app.use(function(req,res) {
     var result = {};
     result['data'] = {};
-    result['responseCode'] = 501;
+    result['responseCode'] = HTTPStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
