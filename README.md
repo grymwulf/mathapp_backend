@@ -21,8 +21,8 @@ Proprietary and confidential
  1. Download source code -
  2. Requires Node.js installed on hosting device (Currently being developed against Node.js V10.15.3)
  3. In root directory type the following commands:
-   1. npm install
-   2. npm start
+    1. npm install
+    2. npm start
  4. Application will listen on port indicated in app.js, by default 8000
  
  
