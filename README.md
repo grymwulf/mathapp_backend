@@ -16,3 +16,13 @@ Proprietary and confidential
  
  Generate API Docs
  apidoc -i / -o /doc
+ 
+ # Installation
+ Download source code -
+ Requires Node.js installed on hosting device (Currently being developed against Node.js V10.15.3)
+ In root directory type the following commands:
+  npm install
+  npm start
+ Application will listen on port indicated in app.js, by default 8000
+ 
+ 
