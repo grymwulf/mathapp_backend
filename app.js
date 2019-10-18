@@ -29,7 +29,8 @@ const HttpStatus = require('http-status-codes');
 
 
 // define true constants
-const SERVER_PORT = 8000;
+
+const SERVER_PORT = 80;
 
 /*
     Middleware
