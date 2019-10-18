@@ -47,11 +47,12 @@ app.use(function (req,res,next) {
 /*
     Routes
 */
-app.use('/doc', express.static('doc'));
+
 app.use('/students', students);
 app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
+app.use('/', express.static('doc'));
 
 /*
     Default base route

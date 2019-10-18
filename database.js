@@ -19,11 +19,19 @@ const ResultModel = require('./models/result');
 const InstructorModel = require('./models/instructor');
 const TestModel = require('./models/test');
 
-// instantiate database
+// instantiate database AWS
+const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_ADDRESS
+    dialect: process.env.DB_DIALECT
+});
+
+// instantiate database local testing environment
+/*
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: 'data/storage.sqlite'
 });
+*/
 
 // instantiate data objects
 const Student = StudentModel(sequelize, Sequelize);
