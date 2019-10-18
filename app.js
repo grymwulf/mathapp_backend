@@ -24,13 +24,14 @@ const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const data = require ('./database');
 const HttpStatus = require('http-status-codes');
+require('dotenv').config();
 
 
 
 
 // define true constants
 
-const SERVER_PORT = 80;
+const SERVER_PORT = process.env.PORT;
 
 /*
     Middleware
