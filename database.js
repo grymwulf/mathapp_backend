@@ -18,6 +18,8 @@ const StudentModel = require('./models/student');
 const ResultModel = require('./models/result');
 const InstructorModel = require('./models/instructor');
 const TestModel = require('./models/test');
+// fix for working with windows
+require('dotenv').config();
 
 // instantiate database AWS
 const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
