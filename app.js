@@ -78,7 +78,7 @@ app.use(function(req,res) {
     Server
 */
 // force ipv4
-app.listen(SERVER_PORT, '0.0.0.0', () => console.log(`Starting server, listening on ${SERVER_PORT}`));
+// app.listen(SERVER_PORT, '0.0.0.0', () => console.log(`Starting server, listening on ${SERVER_PORT}`));
 
 // ipv6 compatible
-// app.listen(SERVER_PORT, () => console.log(`Starting server, listening on ${SERVER_PORT}`));
+app.listen(SERVER_PORT, () => console.log(`Starting server, listening on ${SERVER_PORT}`));
