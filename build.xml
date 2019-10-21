@@ -1,0 +1,35 @@
+<project name="MathApp" default="dist" basedir=".">
+    <description>
+        Build file for the MathApp backend.
+    </description>
+    <property name="aws" location="aws"/>
+    <property name="stage" location="prestage"/>
+
+    <target name="init" depends="clean">
+        <tstamp />
+        <mkdir dir="${aws}" />
+    </target>
+
+    <target name="clean">
+        <delete dir="${aws}" />
+        <delete dir="${stage}" />
+    </target>
+
+    <target name="aws" depends="init" description="Assemble AWS Elastic Beanstalk package.">
+        <mkdir dir="${stage}"/>
+        <copy file="app.js" todir="${stage}/"/>
+        <copy file="database.js" todir="${stage}/"/>
+        <copy todir="${stage}/routes">
+            <fileset dir="routes" />
+        </copy>
+        <copy todir="${stage}/models">
+            <fileset dir="models" />
+        </copy>
+        <copy todir="${stage}/doc">
+            <fileset dir="doc" />
+        </copy>
+        <copy file="package.json" todir="${stage}"/>
+        <zip destfile="${aws}/mathapp.zip" basedir="${stage}" />
+    </target>
+</project>
+

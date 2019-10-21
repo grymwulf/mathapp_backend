@@ -19,6 +19,23 @@ const HttpStatus = require('http-status-codes');
 
 
 // get a specific instructor
+/**
+ * @api (get) /instructors/:id
+ * 
+ * @apiName GetInstructorByID
+ * 
+ * @apiGroup Instructors
+ * 
+ * @apiParam (Number) input Instructor ID to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for instructor
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/:id?', function(req,res) {
 
     console.log("get instructor by ID");
@@ -48,6 +65,21 @@ router.get('/:id?', function(req,res) {
 });
 
 // get list of all instructors
+/**
+ * @api (get) /instructors
+ * 
+ * @apiName Get All Instructors
+ * 
+ * @apiGroup Instructors
+ * 
+ * @apiSuccess (JSON) data Current list of all known instructors
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/', function(req,res) {
     var result = {};
     data.Instructor.findAll()

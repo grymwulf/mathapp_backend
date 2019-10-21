@@ -16,7 +16,7 @@ Proprietary and confidential
  
 
  Generate API Docs:
- - apidoc -i / -o /doc
+ - apidoc -i /routes -o /doc
  - Not Implemented Yet
  
  # Installation
