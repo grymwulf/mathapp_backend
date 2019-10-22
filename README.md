@@ -31,11 +31,12 @@ Proprietary and confidential
  # Installation
  1. Download source code -
  2. For local development copy .env-sample to .env and update the environment variables located there
- 3. For AWS Deployment, use the ant aws command in the base directory - this will assemble the correct package for uploading to AWS Elastic Beanstalk under aws/mathapp.zip - Just upload this zip file.
+ 3. For AWS Deployment, use the ant aws command in the base directory - this will assemble the correct package for uploading to AWS Elastic Beanstalk under aws/mathapp.zip - Just upload this zip file. 
+    1. Review the .env_sample file - all environment variables starting with DB_ need to be passed in the AWS Elastic Beanstalk configuration for the app.
  4. ** TODO ** Configure docker container build script for completely managed local dev environment.
- 3. In root directory type the following commands:
+ 5. In root directory type the following commands:
     1. npm install
     2. npm start
- 4. Application will listen on port indicated by the environment variable PORT or by default 8000
+ 6. Application will listen on port indicated by the environment variable PORT or by default 8000
  
  
