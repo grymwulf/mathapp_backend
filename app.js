@@ -31,7 +31,7 @@ require('dotenv').config();
 
 // define true constants
 
-const SERVER_PORT = process.env.PORT;
+const SERVER_PORT = process.env.PORT || 8000;
 
 /*
     Middleware
