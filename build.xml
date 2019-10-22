@@ -30,6 +30,7 @@
         </copy>
         <copy file="package.json" todir="${stage}"/>
         <zip destfile="${aws}/mathapp.zip" basedir="${stage}" />
+        <delete dir="${stage}" />
     </target>
 </project>
 
