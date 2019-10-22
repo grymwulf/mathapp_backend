@@ -29,6 +29,7 @@
             <fileset dir="doc" />
         </copy>
         <copy file="package.json" todir="${stage}"/>
+        <copy file="package-lock.json" todir="${stage}"/>
         <zip destfile="${aws}/mathapp.zip" basedir="${stage}" />
         <delete dir="${stage}" />
     </target>
