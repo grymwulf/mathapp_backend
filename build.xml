@@ -17,8 +17,15 @@
 
     <target name="aws" depends="init" description="Assemble AWS Elastic Beanstalk package.">
         <mkdir dir="${stage}"/>
+        <!--
         <copy file="app.js" todir="${stage}/"/>
         <copy file="database.js" todir="${stage}/"/>
+        -->
+        <copy todir="${stage}">
+            <fileset dir=".">
+                <include name="*.js"/>
+            </fileset>
+        </copy>
         <copy todir="${stage}/routes">
             <fileset dir="routes" />
         </copy>
