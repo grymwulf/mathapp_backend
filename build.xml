@@ -4,6 +4,7 @@
     </description>
     <property name="aws" location="aws"/>
     <property name="stage" location="prestage"/>
+    <property name="docker" location="docker/mathapp_api/docker_volume"/>
 
     <target name="init" depends="clean">
         <tstamp />
@@ -13,6 +14,7 @@
     <target name="clean">
         <delete dir="${aws}" />
         <delete dir="${stage}" />
+        <delete dir="${docker}" />
     </target>
 
     <target name="aws" depends="init" description="Assemble AWS Elastic Beanstalk package.">
@@ -39,6 +41,45 @@
         <copy file="package-lock.json" todir="${stage}"/>
         <zip destfile="${aws}/mathapp.zip" basedir="${stage}" />
         <delete dir="${stage}" />
+    </target>
+
+    <target name="docker_start" depends="docker_stop" description="Assemble and start docker.">
+        <mkdir dir="${stage}"/>
+        <!--
+        <copy file="app.js" todir="${stage}/"/>
+        <copy file="database.js" todir="${stage}/"/>
+        -->
+        <mkdir dir="${docker}/data"/>
+        <copy todir="${docker}">
+            <fileset dir=".">
+                <include name="*.js"/>
+            </fileset>
+        </copy>
+        <copy todir="${docker}/routes">
+            <fileset dir="routes" />
+        </copy>
+        <copy todir="${docker}/models">
+            <fileset dir="models" />
+        </copy>
+        <copy todir="${docker}/doc">
+            <fileset dir="doc" />
+        </copy>
+        <copy file="package.json" todir="${docker}"/>
+        <copy file="package-lock.json" todir="${docker}"/>
+        <exec executable="docker-compose" dir="./docker">
+            <arg value="build"/>
+        </exec>
+        <exec executable="docker-compose" dir="./docker">
+            <arg value="--no-ansi"/>
+            <arg value="up"/>
+            <arg value="-d"/>
+        </exec>
+    </target>
+    <target name="docker_stop" depends="init" description="Assemble and start docker.">
+        <exec executable="docker-compose" dir="./docker">
+            <arg value="--no-ansi"/>
+            <arg value="down"/>
+        </exec>
     </target>
 </project>
 
