@@ -23,6 +23,7 @@ const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const data = require ('./database');
+const apptest = require('./routes/apptest');
 const HttpStatus = require('http-status-codes');
 require('dotenv').config();
 
@@ -54,6 +55,7 @@ app.use('/students', students);
 app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
+app.use('/apptest', apptest);
 app.use('/', express.static('doc'));
 
 /*

@@ -22,13 +22,32 @@ const HttpStatus = require('http-status-codes');
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function(req,res) {
+router.use(async function (req, res) {
     var result = {};
+    var data = {};
+    await data.Instructor.findAll()
+        .then(function (instructors) {
+            data['instructors'] = instructors;
+        });
+    await data.Results.findAll()
+        .then(function (results) {
+            data['results'] = results;
+        });
+    await data.Tests.findAll()
+        .then(function (tests) {
+            data['tests'] = tests;
+        });
+    await data.Students.findAll()
+        .then(function (students) {
+            data['students'] = students;
+        });
     result['data'] = {
-        "endpoint" : "tests"
+        "endpoint": "apptest",
+        "payload": "You've successfully reached the apptest endpoint.",
+        "data" : data
     };
-    result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
-    result['response'] = "Not Implemented";
+    result['responseCode'] = HttpStatus.OK;
+    result['response'] = "SUCCESS";
     res.status(result.responseCode);
     res.json(result);
     return;

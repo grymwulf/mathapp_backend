@@ -20,7 +20,7 @@ const HttpStatus = require('http-status-codes');
 
 // get a specific instructor
 /**
- * @api (get) /instructors/:id
+ * @api (get) /instructors/id/:id
  * 
  * @apiName GetInstructorByID
  * 
@@ -36,16 +36,18 @@ const HttpStatus = require('http-status-codes');
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/:id?', function(req,res) {
+router.get('/id/:id', function(req,res) {
 
     console.log("get instructor by ID");
+    console.log(req.params.id);
 
-    if ((req.params.id === undefined) || // shouldn't happen, but if id is undefined
+    if ((typeof(req.params.id) === undefined) || // shouldn't happen, but if id is undefined
         (req.params.id == null) || // id is null, again shouldn't happen
         (req.params.id == "") || // id is empty string
         (req.params.id.parseInt() == NaN)) // id is not a number
         {
             result['data'] = {};
+            result['endpoint'] = "/id/:id";
             result['responseCode'] = HttpStatus.BAD_REQUEST;
             result['response'] = "Invalid parameter for request.  ID must be an integer";
             res.status(HttpStatus.BAD_REQUEST);
@@ -85,6 +87,7 @@ router.get('/', function(req,res) {
     data.Instructor.findAll()
         .then(function (instructors) {
             result['data'] = instructors;
+            result['endpoint'] = "/";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             instructors.forEach(element => {
