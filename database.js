@@ -22,13 +22,26 @@ const TestModel = require('./models/test');
 require('dotenv').config();
 
 // instantiate database AWS
-/*
-const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-    host: process.env.DB_ADDRESS,
-    dialect: process.env.DB_DIALECT
-});
-*/
+console.log(process.env.RDS_DB_NAME);
+console.log(process.env.RDS_USERNAME);
+console.log(process.env.RDS_HOSTNAME);
+console.log(process.env.RDS_USERNAME);
+console.log(process.env.RDS_PASSWORD);
 
+
+
+const sequelize = new Sequelize(process.env.RDS_DB_NAME,
+    process.env.RDS_USERNAME, process.env.RDS_PASSWORD,
+    {
+        host: process.env.RDS_HOSTNAME,
+        port: process.env.RDS_PORT,
+        dialect: 'mysql'
+    }
+);
+
+// console.log(sequelize);
+
+/*
 // instantiate database local testing environment
 const path = require('path');
 const dbpath = path.resolve(__dirname, 'data/storage.sqlite');
@@ -37,7 +50,7 @@ const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: dbpath
 });
-
+*/
 
 // instantiate data objects
 const Student = StudentModel(sequelize, Sequelize);

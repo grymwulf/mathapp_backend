@@ -44,7 +44,7 @@ router.get('/id/:id', function(req,res) {
     if ((typeof(req.params.id) === undefined) || // shouldn't happen, but if id is undefined
         (req.params.id == null) || // id is null, again shouldn't happen
         (req.params.id == "") || // id is empty string
-        (req.params.id.parseInt() == NaN)) // id is not a number
+        (parseInt(req.params.id, 10) === NaN)) // id is not a number
         {
             result['data'] = {};
             result['endpoint'] = "/id/:id";
@@ -56,14 +56,15 @@ router.get('/id/:id', function(req,res) {
         }
 
         // refactored search to separate function for readability
-        var result = getInstructorByID(id);
-        
-        console.log(result);  // debugging output
-
+        var id = parseInt(req.params.id, 10)
+        getInstructorByID(id)
+            .then((result) =>{
+                console.log(result);
+                res.json(result);
+                return;
+            })
         // build our response packet
-        res.status(result.responseCode);
-        res.json(result);
-        return;
+        //res.status(result.responseCode);
 });
 
 // get list of all instructors
@@ -126,12 +127,12 @@ router.use(function(req,res) {
 
 
 // we move this to a separate function for readability
-function getInstructorByID(id) {
+async function getInstructorByID(id) {
     // result object
     var result = {};
 
     // execute query
-    data.Instructor.findByPk(id.parseInt())
+    data.Instructor.findByPk(id)
         .then(function(instructor) {
             if (!instructor) {
                 // not found, send proper response

@@ -18,11 +18,11 @@
 // module imports
 const express = require('express');
 const app = express();
+const data = require ('./database');
 const students = require('./routes/students');
 const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
-const data = require ('./database');
 const apptest = require('./routes/apptest');
 const HttpStatus = require('http-status-codes');
 require('dotenv').config();

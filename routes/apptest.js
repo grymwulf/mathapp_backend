@@ -17,6 +17,12 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
+console.log(data);
+
+const all_instructors = data.Instructor.findAll();
+const all_tests = data.Test.findAll();
+const all_results = data.Result.findAll();
+const all_students = data.Student.findAll();
 
 
 // default handler
@@ -24,33 +30,22 @@ const HttpStatus = require('http-status-codes');
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(async function (req, res) {
     var result = {};
-    var data = {};
-    await data.Instructor.findAll()
-        .then(function (instructors) {
-            data['instructors'] = instructors;
+    var db_data = {};
+    console.log("starting promise");
+    Promise
+        .all([all_instructors, all_tests, all_results,all_students ])
+        .then( db_data => {
+            result['data'] = {
+                "endpoint": "apptest",
+                "payload": "You've got to apptest successfully, and the promises resolved",
+                "data": db_data
+            };
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "SUCCESS";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
         });
-    await data.Results.findAll()
-        .then(function (results) {
-            data['results'] = results;
-        });
-    await data.Tests.findAll()
-        .then(function (tests) {
-            data['tests'] = tests;
-        });
-    await data.Students.findAll()
-        .then(function (students) {
-            data['students'] = students;
-        });
-    result['data'] = {
-        "endpoint": "apptest",
-        "payload": "You've successfully reached the apptest endpoint.",
-        "data" : data
-    };
-    result['responseCode'] = HttpStatus.OK;
-    result['response'] = "SUCCESS";
-    res.status(result.responseCode);
-    res.json(result);
-    return;
 });
 
 // required to make routes work
