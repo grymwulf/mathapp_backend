@@ -28,7 +28,7 @@ const all_students = data.Student.findAll();
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(async function (req, res) {
+router.use(function (req, res) {
     var result = {};
     var db_data = {};
     console.log("starting promise");
@@ -42,6 +42,18 @@ router.use(async function (req, res) {
             };
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "SUCCESS";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+        .catch((err) => {
+            result['data'] = {
+                "endpoint": "apptest",
+                "payload": "Error was thrown",
+                "data": err
+            };
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = 'INTERNAL_SERVER_ERROR';
             res.status(result.responseCode);
             res.json(result);
             return;
