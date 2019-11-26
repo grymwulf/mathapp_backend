@@ -15,17 +15,17 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
-    return sequelize.define('student', {
+    return sequelize.define('questions', {
 
-        // id: primary ID of student, should match any 
-        // tracking ID for underlying student info
-        // retained at the school
+        // id: primary ID for the question
         id: {
             type: Sequelize.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
 
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
+
     })
 }

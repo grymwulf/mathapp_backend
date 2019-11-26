@@ -25,10 +25,7 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-        // firstName: instructor first name
-        firstName: Sequelize.STRING,
-
-        // lastName: instructor last name
-        lastName: Sequelize.STRING,
+        // implement a data field to store data for testing get/post
+        data: Sequelize.TEXT
     })
 }

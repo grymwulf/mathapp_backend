@@ -24,37 +24,7 @@ module.exports = (sequelize, type) => {
             autoIncrement: true
         },
 
-        // questions in test
-        // should be a stringified JSON object
-        // many DBMS don't have a JSON dataype
-        // JSON object should resemble 
-        /*
-        {
-            "questions": [
-                {
-                    "questionNum": 1,
-                    "varX": 4,
-                    "varY": 4,
-                    "operand": "+",
-                    "answer": 8
-                },
-                {
-                    "questionNum": 2,
-                    "varX": 3,
-                    "varY": 3,
-                    "operand": "-",
-                    "answer": 0
-                }
-            ]
-        }
-        */
-        questions: Sequelize.TEXT,
-
-        // type of test
-        // ADDITION, SUBTRACTION, DIVISION, MULTIPLICATION, MIXED
-        type: Sequelize.STRING
-
-        
-
+        // implement a data field to store data for testing get/post
+        data: Sequelize.TEXT
     })
 }
