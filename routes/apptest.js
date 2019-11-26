@@ -17,26 +17,25 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
-console.log(data);
-
-const all_instructors = data.Instructor.findAll();
-const all_tests = data.Test.findAll();
-const all_results = data.Result.findAll();
-const all_students = data.Student.findAll();
-
+// console.log(data);
 
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(function (req, res) {
+    var all_instructors = data.Instructor.findAll();
+    var all_tests = data.Test.findAll();
+    var all_results = data.Result.findAll();
+    var all_students = data.Student.findAll();
+    var all_questions = data.Question.findAll();
     var result = {};
     var db_data = {};
     console.log("starting promise");
     Promise
-        .all([all_instructors, all_tests, all_results,all_students ])
+        .all([all_instructors, all_tests, all_results,all_students, all_questions ])
         .then( db_data => {
             result['data'] = {
-                "endpoint": "apptest",
+                "endpoint": "/apptest",
                 "payload": "You've got to apptest successfully, and the promises resolved",
                 "data": db_data
             };

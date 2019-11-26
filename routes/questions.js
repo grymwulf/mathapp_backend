@@ -27,7 +27,7 @@ const HttpStatus = require('http-status-codes');
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "questions"
+        "endpoint" : "/questions"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";

@@ -23,7 +23,9 @@ const QuestionModel = require('./models/questions');
 require('dotenv').config();
 
 // instantiate database AWS
+console.log("Environment Variables: ");
 console.log(process.env.RDS_DB_NAME);
+console.log(process.env.RDS_PORT);
 console.log(process.env.RDS_USERNAME);
 console.log(process.env.RDS_HOSTNAME);
 console.log(process.env.RDS_USERNAME);
@@ -40,7 +42,10 @@ const sequelize = new Sequelize(process.env.RDS_DB_NAME,
     }
 );
 
-// console.log(sequelize);
+/*
+console.log("Did sequelize initialize?:");
+console.log(sequelize);
+*/
 
 /*
 // instantiate database local testing environment
@@ -58,16 +63,29 @@ const Student = StudentModel(sequelize, Sequelize);
 const Result = ResultModel(sequelize, Sequelize);
 const Test = TestModel(sequelize, Sequelize);
 const Instructor = InstructorModel(sequelize, Sequelize);
-const Question = require('./models/questions');
+const Question = QuestionModel(sequelize, Sequelize);
 
 // create foriegn keys
 Result.belongsTo(Student);
 
-// sync database
-sequelize.sync({})
+const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "dev";
+if (APP_ENVIRONMENT === "dev") {
+    sequelize.sync({
+        force: true
+    })
     .then(() => {
-        console.log(`Database sync successful`)
+        console.log(`Database sync successful - force: true`)
     });
+} else {
+    sequelize.sync({
+        force: false
+    })
+    .then(() => {
+        console.log(`Database sync successful - force: false`)
+    });
+}
+// sync database
+
 
 
 

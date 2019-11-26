@@ -88,7 +88,7 @@ router.get('/', function(req,res) {
     data.Instructor.findAll()
         .then(function (instructors) {
             result['data'] = instructors;
-            result['endpoint'] = "/";
+            result['endpoint'] = "/instructors";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             instructors.forEach(element => {
@@ -101,6 +101,7 @@ router.get('/', function(req,res) {
             console.log('Error querying all instructors');
             console.log(err)
             result['data'] = {};
+            result['endpoint'] = "/instructors";
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -116,7 +117,7 @@ router.get('/', function(req,res) {
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "instructors"
+        "endpoint" : "/instructors"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";

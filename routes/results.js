@@ -52,7 +52,7 @@ router.get('/all', function(req,res) {
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "results"
+        "endpoint" : "/results"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";

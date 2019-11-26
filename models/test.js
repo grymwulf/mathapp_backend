@@ -20,8 +20,8 @@ module.exports = (sequelize, type) => {
         // id: primary ID for the test
         id: {
             type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            primaryKey: true
         },
 
         // implement a data field to store data for testing get/post

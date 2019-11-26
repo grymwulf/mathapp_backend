@@ -17,10 +17,11 @@ const Sequelize = require('sequelize')
 module.exports = (sequelize, type) => {
     return sequelize.define('result', {
         id: {
-            type: type.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
         },
+        
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
     })
