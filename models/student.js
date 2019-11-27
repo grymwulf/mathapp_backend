@@ -22,13 +22,11 @@ module.exports = (sequelize, type) => {
         // retained at the school
         id: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true
         },
 
-        // firstName: students first name
-        firstName: Sequelize.STRING,
-
-        // lastName: students last name
-        lastName: Sequelize.STRING,
+        // implement a data field to store data for testing get/post
+        data: Sequelize.TEXT
     })
 }

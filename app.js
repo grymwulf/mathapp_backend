@@ -18,11 +18,13 @@
 // module imports
 const express = require('express');
 const app = express();
+const data = require ('./database');
 const students = require('./routes/students');
 const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
-const data = require ('./database');
+const apptest = require('./routes/apptest');
+const questions = require ('./routes/students');
 const HttpStatus = require('http-status-codes');
 require('dotenv').config();
 
@@ -39,6 +41,9 @@ const SERVER_PORT = process.env.PORT || 8000;
 // express settings
 app.set('trust proxy', true);
 
+// initialize app settings
+app.use(express.json());
+
 // troubleshooting
 app.use(function (req,res,next) {
     console.log(req.url);
@@ -54,6 +59,8 @@ app.use('/students', students);
 app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
+app.use('/apptest', apptest);
+app.use('/questions', questions);
 app.use('/', express.static('doc'));
 
 /*

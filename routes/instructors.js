@@ -36,16 +36,18 @@ const HttpStatus = require('http-status-codes');
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/:id?', function(req,res) {
+router.get('/:id', function(req,res) {
 
     console.log("get instructor by ID");
+    console.log(req.params.id);
 
-    if ((req.params.id === undefined) || // shouldn't happen, but if id is undefined
+    if ((typeof(req.params.id) === undefined) || // shouldn't happen, but if id is undefined
         (req.params.id == null) || // id is null, again shouldn't happen
         (req.params.id == "") || // id is empty string
-        (req.params.id.parseInt() == NaN)) // id is not a number
+        (parseInt(req.params.id, 10) === NaN)) // id is not a number
         {
             result['data'] = {};
+            result['endpoint'] = "/id/:id";
             result['responseCode'] = HttpStatus.BAD_REQUEST;
             result['response'] = "Invalid parameter for request.  ID must be an integer";
             res.status(HttpStatus.BAD_REQUEST);
@@ -54,14 +56,15 @@ router.get('/:id?', function(req,res) {
         }
 
         // refactored search to separate function for readability
-        var result = getInstructorByID(id);
-        
-        console.log(result);  // debugging output
-
+        var id = parseInt(req.params.id, 10)
+        getInstructorByID(id)
+            .then((result) =>{
+                console.log(result);
+                res.json(result);
+                return;
+            })
         // build our response packet
-        res.status(result.responseCode);
-        res.json(result);
-        return;
+        //res.status(result.responseCode);
 });
 
 // get list of all instructors
@@ -85,6 +88,7 @@ router.get('/', function(req,res) {
     data.Instructor.findAll()
         .then(function (instructors) {
             result['data'] = instructors;
+            result['endpoint'] = "/instructors";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             instructors.forEach(element => {
@@ -97,6 +101,7 @@ router.get('/', function(req,res) {
             console.log('Error querying all instructors');
             console.log(err)
             result['data'] = {};
+            result['endpoint'] = "/instructors";
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -112,7 +117,7 @@ router.get('/', function(req,res) {
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "instructors"
+        "endpoint" : "/instructors"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
@@ -123,12 +128,12 @@ router.use(function(req,res) {
 
 
 // we move this to a separate function for readability
-function getInstructorByID(id) {
+async function getInstructorByID(id) {
     // result object
     var result = {};
 
     // execute query
-    data.Instructor.findByPk(id.parseInt())
+    data.Instructor.findByPk(id)
         .then(function(instructor) {
             if (!instructor) {
                 // not found, send proper response

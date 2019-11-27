@@ -17,34 +17,9 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
-// get all results
 
-router.get('/all', function(req,res) {
-    var result = {};
 
-    data.Result.findAll()
-        .then(function(results) {
-            result['data'] = results;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            results.forEach(element =>{
-                console.log(element);
-            })
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-        .catch(function(err){
-            console.log('Error querying all results');
-            console.log(err)
-            result['data'] = {};
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-});
+
 
 // default handler
 // anything not implemented gets a response not implemented
@@ -52,7 +27,7 @@ router.get('/all', function(req,res) {
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "/results"
+        "endpoint" : "/questions"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";

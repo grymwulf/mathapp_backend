@@ -14,6 +14,7 @@
 
 const express = require('express');
 const router = express.Router();
+const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
 
@@ -24,7 +25,7 @@ const HttpStatus = require('http-status-codes');
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "tests"
+        "endpoint" : "/tests"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";

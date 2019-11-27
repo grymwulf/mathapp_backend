@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "keywords": [
     "ASU",
@@ -16,10 +16,14 @@
   "author": "Project Team 14",
   "license": "ISC",
   "dependencies": {
+    "apidoc": "^0.17.7",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http-status-codes": "^1.3.2",
     "mysql2": "^1.7.0",
+    "nodemon": "^2.0.1",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
     "sequelize": "^5.19.0"
   },
   "devDependencies": {}
