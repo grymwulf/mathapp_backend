@@ -20,7 +20,7 @@ const HttpStatus = require('http-status-codes');
 
 // get a specific instructor
 /**
- * @api (get) /instructors/id/:id
+ * @api (get) /instructors/:id
  * 
  * @apiName GetInstructorByID
  * 
@@ -36,7 +36,7 @@ const HttpStatus = require('http-status-codes');
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/id/:id', function(req,res) {
+router.get('/:id', function(req,res) {
 
     console.log("get instructor by ID");
     console.log(req.params.id);
