@@ -18,7 +18,7 @@ const StudentModel = require('./models/student');
 const ResultModel = require('./models/result');
 const InstructorModel = require('./models/instructor');
 const TestModel = require('./models/test');
-const QuestionModel = require('./models/questions');
+const QuestionModel = require('./models/question');
 // fix for working with windows
 require('dotenv').config();
 
