@@ -12,8 +12,8 @@
     Proprietary and confidential
 */
 
-class Instructors extends Model {}
-Instructors.init({ 
+class Instructor extends Model {}
+Instructor.init({ 
 	fistName: Sequelize.STRING(50)
 	lastName: Sequelize.STRING(50)
 }, {
@@ -21,5 +21,5 @@ Instructors.init({
 	modelName: ‘instructor’ 
 });
 
-Instructors.hasMany(Test);
-Instructors.hasMany(Class);
+Instructor.hasMany(Test);
+Instructor.hasMany(Class);
