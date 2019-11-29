@@ -12,13 +12,14 @@
     Proprietary and confidential
 */
 
-class OPERAND extends Model {}
-OPERAND.init({ 
-	value: Sequelize. INTEGER
+
+class Operand extends Model {}
+Operand.init({ 
+	type: Sequelize.INTEGER
 }, {
 	sequelize, 
 	modelName: ‘operand’ 
 });
 
-OPERAND.hasMany(Question);
-OPERAND.hasMany(Level);
+Operand.hasMany(Question);
+Operand.hasMany(Level);
