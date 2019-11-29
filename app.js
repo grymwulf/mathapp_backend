@@ -25,6 +25,7 @@ const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
 const questions = require ('./routes/students');
+const operands = require ('./routes/operands');
 const HttpStatus = require('http-status-codes');
 require('dotenv').config();
 
@@ -61,6 +62,7 @@ app.use('/tests', tests);
 app.use('/results', results);
 app.use('/apptest', apptest);
 app.use('/questions', questions);
+app.use('/operands', operands);
 app.use('/', express.static('doc'));
 
 /*
