@@ -22,6 +22,7 @@ module.exports = (sequelize, type) => {
         // retained at the school
         id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             autoIncrement: true,
             primaryKey: true
         },
