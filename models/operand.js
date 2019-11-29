@@ -20,6 +20,7 @@ module.exports = (sequelize, type) => {
         // id: primary ID for the test
         id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             autoIncrement: true,
             primaryKey: true
         },
