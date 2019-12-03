@@ -41,6 +41,7 @@ module.exports = (sequelize, type) => {
         studentId: {
             model: 'student',
 	    key: 'id'
+
         },
 
 	testId: {
