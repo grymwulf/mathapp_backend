@@ -21,13 +21,36 @@ module.exports = (sequelize, type) => {
         // tracking ID for underlying student info
         // retained at the school
         id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.INTEGER(11),
             allowNull: false,
             autoIncrement: true,
             primaryKey: true
         },
 
         // implement a data field to store data for testing get/post
+        firstName: {
+            type: Sequelize.STRING(50),
+            allowNull: false,
+            autoIncrement: true,
+        },
+        lastName: {
+            type: Sequelize.STRING(50),
+            allowNull: false,
+            autoIncrement: true,
+        },
+        studentId: {
+            model: 'student',
+	    key: 'id'
+        },
+
+	testId: {
+            model: 'test',
+	    key: 'id'
+        },
+
+        // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
+
     })
+
 }
