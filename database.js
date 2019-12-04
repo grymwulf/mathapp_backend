@@ -74,7 +74,7 @@ Instructor.hasMany(Test);
 Instructor.hasMany(Student);
 Student.hasMany(Result);
 
-const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "dev";
+const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";
 if (APP_ENVIRONMENT === "dev") {
     sequelize.sync({
         force: true
