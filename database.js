@@ -68,7 +68,13 @@ const Question = QuestionModel(sequelize, Sequelize);
 const Operand = OperandModel(sequelize, Sequelize);
 
 // create foriegn keys
-Result.belongsTo(Student);
+//Result.belongsTo(Student);
+Test.belongsTo(Instructor);
+//Test.hasMany(Result);
+//Question.belongsTo(Test);
+Instructor.hasMany(Test);
+Instructor.hasMany(Student);
+Student.hasMany(Test);
 
 const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "dev";
 if (APP_ENVIRONMENT === "dev") {
