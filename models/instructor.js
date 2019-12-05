@@ -38,16 +38,7 @@ module.exports = (sequelize, type) => {
             allowNull: false,
             autoIncrement: true,
         },
-        studentId: {
-            model: 'student',
-	    key: 'id'
 
-        },
-
-	testId: {
-            model: 'test',
-	    key: 'id'
-        },
 
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
