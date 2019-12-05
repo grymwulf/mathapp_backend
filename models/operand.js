@@ -15,34 +15,17 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
-    return sequelize.define('instructor', {
+    return sequelize.define('operand', {
 
-        // id: primary ID of instructor, should match any 
-        // tracking ID for underlying student info
-        // retained at the school
+        // id: primary ID for the test
         id: {
-            type: Sequelize.INTEGER(11),
+            type: Sequelize.INTEGER,
             allowNull: false,
             autoIncrement: true,
             primaryKey: true
         },
 
         // implement a data field to store data for testing get/post
-        firstName: {
-            type: Sequelize.STRING(50),
-            allowNull: false,
-            autoIncrement: true,
-        },
-        lastName: {
-            type: Sequelize.STRING(50),
-            allowNull: false,
-            autoIncrement: true,
-        },
-
-
-        // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
-
     })
-
 }
