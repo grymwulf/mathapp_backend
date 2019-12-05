@@ -22,7 +22,7 @@ Proprietary and confidential
  - Java SE 1.8.0_202 (optional for ant build scripts)
 
 # Installation
-1. Install MySQL
+1. Install MySQL, Node.js, and NPM (Apache Ant and Java SE are optional)
     1. Note:  MySQL version 8.0 and higher has changed authentication methods.  AWS has mysql_native_password enabled by default. 
     Please ensure when installing MySQL 8.0 or greater that you choose to use the `mysql_native_password` authentication.  If during database installation
     you recieve an error similar to: "Client does not support authentication protocol requested by server" your MySQL installation has the new 
