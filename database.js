@@ -66,12 +66,7 @@ const Instructor = InstructorModel(sequelize, Sequelize);
 const Question = QuestionModel(sequelize, Sequelize);
 
 // create foriegn keys
-Result.belongsTo(Student);
-Test.belongsTo(Instructor);
-Test.hasMany(Question);
-Question.belongsTo(Test);
-Instructor.hasMany(Test);
-Instructor.hasMany(Student);
+Test.hasMany(Result);
 Student.hasMany(Result);
 
 const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";

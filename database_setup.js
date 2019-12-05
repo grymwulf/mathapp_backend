@@ -12,6 +12,14 @@
     Proprietary and confidential
 */
 
+/*
+
+This file is usefull in the setup and development process
+On initial setup, it completely wipes a prior database version and recreates it.  This is only usefull at the
+initial install step.  For development, when adjusting foreign keys you can leave the database in a broken state.
+Running this file in that case clears this issue as it allows the database to be completely recreated during devlopment.
+*/
+
 const db = require('mysql2');
 var fs = require('fs');
 var readline = require('readline');
@@ -27,16 +35,20 @@ const ADMIN_PASSWORD = "admin_password";
 var MATHAPP_DB_NAME = process.env.RDS_DB_NAME || "mathapp";
 var MATHAPP_DB_USER = process.env.RDS_USERNAME || "mathapp_api";
 var MATHAPP_DB_PASSWORD = process.env.RDS_PASSWORD || "password_mathapp_api";
+var MATHAPP_DB_HOST = process.env.RDS_HOSTNAME || "localhost";
+var MATHAPP_DB_PORT = process.env.RDS_PORT || "3306";
 
+// 
 var connection = db.createConnection({
-    host: 'localhost',
-    port: '3306',
+    host: MATHAPP_DB_HOST,
+    port: MATHAPP_DB_PORT,
     user: ADMIN_USER,
     password: ADMIN_PASSWORD,
     multipleStatements: true
 })
 
-var db_create = `CREATE SCHEMA IF NOT EXISTS ${MATHAPP_DB_NAME};\n`;
+var db_drop = `DROP SCHEMA IF EXISTS ${MATHAPP_DB_NAME};`;
+var db_create = `CREATE SCHEMA IF NOT EXISTS ${MATHAPP_DB_NAME};`;
 var user_create = `CREATE USER IF NOT EXISTS '${MATHAPP_DB_USER}'@'%'`;
 var user_password = `SET PASSWORD FOR '${MATHAPP_DB_USER}'@'%' =  '${MATHAPP_DB_PASSWORD}';`
 var user_access = `GRANT ALL ON ${MATHAPP_DB_NAME}.* TO '${MATHAPP_DB_USER}'@'%'`
@@ -44,6 +56,12 @@ var user_access = `GRANT ALL ON ${MATHAPP_DB_NAME}.* TO '${MATHAPP_DB_USER}'@'%'
 connection.connect(function(err) {
     if (err) throw err;
     console.log("Connection made!");
+    console.log("Executing: " + db_drop);
+    connection.query(db_drop,
+        function (err, result) {
+            if (err) throw err;
+            console.log("Database Dropped.");
+        });
     console.log("Executing: " + db_create);
     connection.query(db_create,
         function (err, result) {
@@ -54,7 +72,7 @@ connection.connect(function(err) {
     connection.query(user_create,
         function(err, result) {
             if (err) throw err;
-            console.log("User Dropped, already exists.");
+            console.log("User Dropped.");
         });
     console.log("Executing: " + user_password);
     connection.query(user_password,
@@ -72,4 +90,4 @@ connection.connect(function(err) {
 
 setTimeout((function () {
     return process.exit(0);
-}), 1000);
+}), 2000);
