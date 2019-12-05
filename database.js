@@ -18,7 +18,7 @@ const StudentModel = require('./models/student');
 const ResultModel = require('./models/result');
 const InstructorModel = require('./models/instructor');
 const TestModel = require('./models/test');
-const QuestionModel = require('./models/questions');
+const QuestionModel = require('./models/question');
 // fix for working with windows
 require('dotenv').config();
 
@@ -67,8 +67,14 @@ const Question = QuestionModel(sequelize, Sequelize);
 
 // create foriegn keys
 Result.belongsTo(Student);
+Test.belongsTo(Instructor);
+Test.hasMany(Question);
+Question.belongsTo(Test);
+Instructor.hasMany(Test);
+Instructor.hasMany(Student);
+Student.hasMany(Result);
 
-const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "dev";
+const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";
 if (APP_ENVIRONMENT === "dev") {
     sequelize.sync({
         force: true

@@ -47,7 +47,7 @@ router.get('/:id', function(req,res) {
         (parseInt(req.params.id, 10) === NaN)) // id is not a number
         {
             result['data'] = {};
-            result['endpoint'] = "/id/:id";
+            result['endpoint'] = "/:id";
             result['responseCode'] = HttpStatus.BAD_REQUEST;
             result['response'] = "Invalid parameter for request.  ID must be an integer";
             res.status(HttpStatus.BAD_REQUEST);
