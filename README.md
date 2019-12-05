@@ -28,7 +28,9 @@ Proprietary and confidential
     you recieve an error similar to: "Client does not support authentication protocol requested by server" your MySQL installation has the new 
     authentication enabled.  Review several fixes [here](https://medium.com/@crmcmullen/how-to-run-mysql-8-0-with-native-password-authentication-502de5bac661).
 2. Download source code or clone the repository.
-3. For local development copy .env-sample to .env and update the environment variables located there
+3. For local development
+    1. Copy .env-sample to .env
+    2. Update values in the new .env file to match the local environment or desired settings
 4. Edit `database_setup.js` to update the `ADMIN_USER` and `ADMIN_PASSWORD` constants for an account with admin privileges on the MySQL db
 5. For AWS Deployment, use the `ant aws` command in the base directory - this will assemble the correct package for uploading to AWS Elastic Beanstalk under `aws/mathapp.zip` - Just upload this zip file. 
     1. Review the `.env_sample` file - I've adjusted the files to use the default RDS_ environment variables supplied by Elastic Beanstalk
