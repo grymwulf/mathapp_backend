@@ -27,8 +27,8 @@ require('dotenv').config();
 
 
 // Fill in the values for a MySQL user with privileges to create dtabase schema
-const ADMIN_USER = "admin";
-const ADMIN_PASSWORD = "admin_password";
+const ADMIN_USER = process.env.DB_ADMIN || "admin";
+const ADMIN_PASSWORD = process.env.DB_ADMIN_PASSWORD || "admin_password";
 
 // read .env file, if not filled out, use default values in .env_sample
 // commenting next line out for testing
