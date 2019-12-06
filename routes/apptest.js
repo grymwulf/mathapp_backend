@@ -35,10 +35,14 @@ router.use(function (req, res) {
         .all([all_instructors, all_tests, all_results,all_students, all_questions ])
         .then( db_data => {
             db_data.forEach(element => {
-                element.forEach(entry => {
-                    entry.data = JSON.parse(entry.data);
-                })
-            });   
+                try {
+                    element.forEach(entry => {
+                        entry.data = JSON.parse(entry.data);
+                    })
+                } catch (err) {
+                    console.log(err);
+                }
+            }); 
             result['data'] = {
                 "endpoint": "/apptest",
                 "payload": "You've got to apptest successfully, and the promises resolved",
