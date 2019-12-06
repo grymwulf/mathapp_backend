@@ -1,0 +1,476 @@
+{
+	"info": {
+		"_postman_id": "b9552624-e772-4cb0-8eb1-25c07c64bde7",
+		"name": "SER401",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get apptest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e52e7998-e19b-42e2-a230-4e54335f265f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/apptest",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"apptest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Post: Instructors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c6d5283e-e993-43ee-b0e5-495f315db05e",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"data\":\"testing instructors\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/instructors",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"instructors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Post: Students",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a20377d-f463-447f-9859-08053020fdbd",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"data\": \"testing students\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/students",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Post: Results",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "28b14f45-177a-4d17-a9fb-0df47310abdf",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"data\": \"testing results\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/results",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Post: Questions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cf4a7d89-47f3-4547-84f4-a75c2ed77d95",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"data\": \"testing questions\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/questions",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Post: Tests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "049bd3c2-6e30-4c65-b10a-0fa79bbb97ab",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"data\": \"testing tests\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/tests",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Get: Instructors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "32480170-c965-4213-8e6d-e27f19ecbcf8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"pm.test(\"Has proper data\", function() {",
+							"    pm.expect(pm.response.text()).to.include(\"testing instructors\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/instructors",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"instructors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Get: Results",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f50a66f-ae72-453d-9ed9-cfee906beac6",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"pm.test(\"Has proper data\", function() {",
+							"    pm.expect(pm.response.text()).to.include(\"testing results\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/results",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Get: Students",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d992b511-713e-4d45-89dc-55ab56949606",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"pm.test(\"Has proper data\", function() {",
+							"    pm.expect(pm.response.text()).to.include(\"testing students\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/students",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Get: Questions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "01c299db-6f50-4c62-af89-921a8acb2499",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"pm.test(\"Has proper data\", function() {",
+							"    pm.expect(pm.response.text()).to.include(\"testing questions\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/questions",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Get: Tests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "94aee9b2-eb2f-40c4-bd6c-85da3bc3324e",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"pm.test(\"Has proper data\", function() {",
+							"    pm.expect(pm.response.text()).to.include(\"testing tests\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/tests",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tests"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
