@@ -44,12 +44,14 @@ app.set('trust proxy', true);
 // initialize app settings
 app.use(express.json());
 
+/*
 // troubleshooting
 app.use(function (req,res,next) {
     console.log(req.url);
     console.log(req.ip);
     next();
 });
+*/
 
 /*
     Routes

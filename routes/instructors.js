@@ -134,7 +134,6 @@ router.post('/', function (req, res) {
         result['response'] = "Created"
         res.status(result.responseCode);
         res.header('Location', uri);
-        console.log(res.status);
         res.json(result);
         return;
     }).catch(function (err) {
