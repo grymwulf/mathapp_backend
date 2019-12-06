@@ -40,9 +40,13 @@ router.use(function (req, res) {
                         entry.data = JSON.parse(entry.data);
                     })
                 } catch (err) {
-                    console.log(err);
+                    if (err instanceof SyntaxError) {
+                        console.log("Error parsing, already JSON.");
+                    } else {
+                        console.log(err);
+                    }
                 }
-            }); 
+            });
             result['data'] = {
                 "endpoint": "/apptest",
                 "payload": "You've got to apptest successfully, and the promises resolved",
