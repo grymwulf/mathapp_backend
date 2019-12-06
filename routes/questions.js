@@ -17,9 +17,71 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
+// basic getter
+router.get('/', function(req,res) {
+    var result = {};
+    data.Question.findAll({
+            raw: true
+        })
+        .then(function (questions) {
+            result['data'] = questions;
+            result['endpoint'] = "/instructors";
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            questions.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });
+            res.json(result);
+            return;
+        }).catch(function(err){
+            console.log('Error querying all instructors');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = "/instructors";
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
-
-
+// post data to endpoint
+router.post('/', function (req, res) {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+    data.Question.create({
+        "data": JSON.stringify(req.body)
+    }).then(newQuestion => {
+        console.log(`New question data received: Entry ${newQuestion.id} created.`);
+        console.log(`Data added was: ${newQuestion.data}.`);
+        var uri = req.protocol + '://' + req.get('host') +
+            req.baseUrl + req.path + newQuestion.id;
+        result['data'] = {
+            'id': newQuestion.id,
+            'uri': uri
+        };
+        result['endpoint'] = "/questions";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error creating new student record');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = "/questions";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+})
 
 // default handler
 // anything not implemented gets a response not implemented

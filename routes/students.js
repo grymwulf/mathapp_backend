@@ -20,13 +20,18 @@ const HttpStatus = require('http-status-codes');
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
     var result = {};
-    data.Student.findAll()
+    data.Student.findAll({
+            raw: true
+        })
         .then(function (students) {
-            result['data'] = students;
+            result['data'] =students;
             result['endpoint'] = "/students";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
+            students.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });
             res.json(result);
             return;
         }).catch(function (err) {

@@ -47,7 +47,7 @@ router.get('/:id', function(req,res) {
         (parseInt(req.params.id, 10) === NaN)) // id is not a number
         {
             result['data'] = {};
-            result['endpoint'] = "/:id";
+            result['endpoint'] = "/instructors/:id";
             result['responseCode'] = HttpStatus.BAD_REQUEST;
             result['response'] = "Invalid parameter for request.  ID must be an integer";
             res.status(HttpStatus.BAD_REQUEST);
@@ -60,6 +60,7 @@ router.get('/:id', function(req,res) {
         getInstructorByID(id)
             .then((result) =>{
                 console.log(result);
+                res.status(result.responseCode);
                 res.json(result);
                 return;
             })
@@ -85,16 +86,18 @@ router.get('/:id', function(req,res) {
  */
 router.get('/', function(req,res) {
     var result = {};
-    data.Instructor.findAll()
+    data.Instructor.findAll({
+            raw: true
+        })
         .then(function (instructors) {
             result['data'] = instructors;
             result['endpoint'] = "/instructors";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
-            instructors.forEach(element => {
-                console.log(element);
-            });
             res.status(result.responseCode);
+            instructors.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });            
             res.json(result);
             return;
         }).catch(function(err){
@@ -110,6 +113,41 @@ router.get('/', function(req,res) {
         })
 });
 
+// post data to endpoint
+router.post('/', function (req, res) {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+    data.Instructor.create({
+        "data": JSON.stringify(req.body)
+    }).then(newInstructor => {
+        console.log(`New instructor data received: Entry ${newInstructor.id} created.`);
+        console.log(`Data added was: ${newInstructor.data}.`);
+        var uri = req.protocol + '://' + req.get('host') +
+            req.baseUrl + req.path + newInstructor.id;
+        result['data'] = {
+            'id': newInstructor.id,
+            'uri': uri
+        };
+        result['endpoint'] = "/instructors";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error creating new instructor record');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = "/instructors";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+})
 
 // default handler
 // anything not implemented gets a response not implemented
@@ -142,12 +180,14 @@ async function getInstructorByID(id) {
                 result['data'] = {};
                 return result;
             }
-
+            console.log("Found an Instructor");
+            console.log(instructor.toJSON());
             // it was found, build response
             result['data'] = {
                 "instructor": instructor.toJSON()
             }
             result['responseCode'] = HttpStatus.OK;
+            console.log(HttpStatus.OK);
             result['response'] = "Request successful, "
             return result;
         })

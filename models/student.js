@@ -28,5 +28,7 @@ module.exports = (sequelize, type) => {
 
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
+    },{
+        timestamps: false
     })
 }
