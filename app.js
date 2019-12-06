@@ -20,7 +20,7 @@ const express = require('express');
 const app = express();
 const data = require ('./database');
 const students = require('./routes/students');
-const teachers = require('./routes/teachers');
+const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
@@ -56,7 +56,7 @@ app.use(function (req,res,next) {
 */
 
 app.use('/students', students);
-app.use('/teachers', teachers);
+app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
 app.use('/apptest', apptest);

@@ -18,17 +18,17 @@ const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
 
-// get a specific teacher
+// get a specific instructor
 /**
- * @api (get) /teachers/:id
+ * @api (get) /instructors/:id
  * 
- * @apiName GetTeacherByID
+ * @apiName GetInstructorByID
  * 
- * @apiGroup Teachers
+ * @apiGroup Instructors
  * 
- * @apiParam (Number) input Teacher ID to pull
+ * @apiParam (Number) input Instructor ID to pull
  * 
- * @apiSuccess (JSON) data Current table entry for Teacher
+ * @apiSuccess (JSON) data Current table entry for instructor
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -38,7 +38,7 @@ const HttpStatus = require('http-status-codes');
  */
 router.get('/:id', function(req,res) {
 
-    console.log("get teacher by ID");
+    console.log("get instructor by ID");
     console.log(req.params.id);
 
     if ((typeof(req.params.id) === undefined) || // shouldn't happen, but if id is undefined
@@ -117,7 +117,7 @@ router.get('/', function(req,res) {
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "/teachers"
+        "endpoint" : "/instructors"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
@@ -128,24 +128,24 @@ router.use(function(req,res) {
 
 
 // we move this to a separate function for readability
-async function getTeacherByID(id) {
+async function getInstructorByID(id) {
     // result object
     var result = {};
 
     // execute query
-    data.Teacher.findByPk(id)
-        .then(function(teacher) {
-            if (!teacher) {
+    data.Instructor.findByPk(id)
+        .then(function(instructor) {
+            if (!instructor) {
                 // not found, send proper response
                 result['responseCode'] = HttpStatus.NO_CONTENT;
-                result['response'] = `ID: ${id} does not match a known teacher.`
+                result['response'] = `ID: ${id} does not match a known instructor.`
                 result['data'] = {};
                 return result;
             }
 
             // it was found, build response
             result['data'] = {
-                "teacher": teacher.toJSON()
+                "instructor": instructor.toJSON()
             }
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Request successful, "

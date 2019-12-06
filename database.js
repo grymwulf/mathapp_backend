@@ -16,7 +16,7 @@
 const Sequelize = require('sequelize');
 const StudentModel = require('./models/student');
 const ResultModel = require('./models/result');
-const TeacherModel = require('./models/teacher');
+const InstructorModel = require('./models/instructor');
 const TestModel = require('./models/test');
 const QuestionModel = require('./models/question');
 // fix for working with windows
@@ -62,7 +62,7 @@ const sequelize = new Sequelize({
 const Student = StudentModel(sequelize, Sequelize);
 const Result = ResultModel(sequelize, Sequelize);
 const Test = TestModel(sequelize, Sequelize);
-const Teacher = TeacherModel(sequelize, Sequelize);
+const Instructor = InstructorModel(sequelize, Sequelize);
 const Question = QuestionModel(sequelize, Sequelize);
 
 // create foriegn keys
@@ -95,7 +95,7 @@ if (APP_ENVIRONMENT === "dev") {
 */
 module.exports = {
     Student,
-    Teacher,
+    Instructor,
     Result,
     Test,
     Question
