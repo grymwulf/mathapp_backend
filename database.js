@@ -38,7 +38,7 @@ const sequelize = new Sequelize(process.env.RDS_DB_NAME,
     {
         host: process.env.RDS_HOSTNAME,
         port: process.env.RDS_PORT,
-        dialect: 'mysql'
+        dialect: process.env.DB_DIALECT
     }
 );
 
@@ -66,10 +66,12 @@ const Instructor = InstructorModel(sequelize, Sequelize);
 const Question = QuestionModel(sequelize, Sequelize);
 
 // create foriegn keys
+
 Test.hasMany(Result);
 Student.hasMany(Result);
 Test.belongsTo(Student);
 Test.belongsTo(Instructor);
+
 
 const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";
 if (APP_ENVIRONMENT === "dev") {
