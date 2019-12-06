@@ -24,7 +24,7 @@ const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
-const questions = require ('./routes/students');
+const questions = require ('./routes/questions');
 const HttpStatus = require('http-status-codes');
 require('dotenv').config();
 

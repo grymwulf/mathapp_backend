@@ -90,4 +90,4 @@ connection.connect(function(err) {
 
 setTimeout((function () {
     return process.exit(0);
-}), 2000);
+}), 5000);

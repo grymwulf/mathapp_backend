@@ -34,6 +34,11 @@ router.use(function (req, res) {
     Promise
         .all([all_instructors, all_tests, all_results,all_students, all_questions ])
         .then( db_data => {
+            db_data.forEach(element => {
+                element.forEach(entry => {
+                    entry.data = JSON.parse(entry.data);
+                })
+            });   
             result['data'] = {
                 "endpoint": "/apptest",
                 "payload": "You've got to apptest successfully, and the promises resolved",
@@ -41,7 +46,7 @@ router.use(function (req, res) {
             };
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "SUCCESS";
-            res.status(result.responseCode);
+            res.status(HttpStatus.OK);
             res.json(result);
             return;
         })
