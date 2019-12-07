@@ -17,8 +17,36 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
-// get all results
+// basic getter to get record by primary key
+router.get('/:id', function(req,res) {
+    var result = {};
+    data.Result.findAll({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then( resultData => {
+            result['data'] = resultData;
+            result['endpoint'] = `/results/:id`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/results/:id`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
+// get all results
 router.get('/', function(req,res) {
     var result = {};
 
