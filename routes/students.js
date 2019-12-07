@@ -17,6 +17,35 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
+// basic getter to get record by primary key
+router.get('/:id', function(req, res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then( studentData => {
+            result['data'] = studentData;
+            result['endpoint'] = `/students/:id`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/students/:id`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+})
+
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
     var result = {};
@@ -46,36 +75,6 @@ router.get('/', function (req, res) {
             return;
         })
 })
-
-// implement a handler to handle the URIs generated from posting data
-router.get('/:id', function(req, res) {
-    var result = {};
-    data.Student.findAll({
-            where: {
-                id: req.params.id
-            }
-        })
-        .then( studentData => {
-            result['data'] = studentData;
-            result['endpoint'] = `/students/:id`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch(function (err) {
-            console.log('Error querying a student');
-            console.log(err)
-            result['data'] = {};
-            result['endpoint'] = `/students/:id`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-})
-
 
 // get data store it, return a URI + id for stored data
 router.post('/', function (req, res) {
