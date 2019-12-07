@@ -52,12 +52,12 @@ router.get('/:id', function(req, res) {
     var result = {};
     data.Student.findAll({
             where: {
-                id: `${req.params.id}`
+                id: req.params.id
             }
         })
         .then( studentData => {
             result['data'] = studentData;
-            result['endpoint'] = `/students/${req.params.id}`;
+            result['endpoint'] = `/students/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -67,7 +67,7 @@ router.get('/:id', function(req, res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/students/${req.params.id}`;
+            result['endpoint'] = `/students/:id`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
