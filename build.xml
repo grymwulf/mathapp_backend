@@ -48,7 +48,7 @@
     </target>
     <target name="docker.start" depends="docker.run" />
     <target name="docker.up" depends="docker.run" />
-    <target name="docker.run">
+    <target name="docker.run" depends="docker.stop">
         <exec executable="docker-compose" dir="./">
             <arg value="--no-ansi" />
             <arg value="up" />
