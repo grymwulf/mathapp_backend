@@ -23,7 +23,7 @@
         -->
         <copy todir="${stage}">
             <fileset dir=".">
-                <include name="*.js"/>
+                <include name="*.js" />
             </fileset>
         </copy>
         <copy todir="${stage}/routes">
@@ -38,13 +38,29 @@
         <copy file="package.json" todir="${stage}">
             <filterchain>
                 <linecontains negate="true">
-                    <contains value="sqlite3"/>
+                    <contains value="sqlite3" />
                 </linecontains>
             </filterchain>
         </copy>
-        <copy file="package-lock.json" todir="${stage}"/>
+        <copy file="package-lock.json" todir="${stage}" />
         <zip destfile="${aws}/mathapp.zip" basedir="${stage}" />
         <delete dir="${stage}" />
     </target>
+    <target name="docker.start" depends="docker.run" />
+    <target name="docker.up" depends="docker.run" />
+    <target name="docker.run">
+        <exec executable="docker-compose" dir="./">
+            <arg value="--no-ansi" />
+            <arg value="up" />
+            <arg value="-d" />
+        </exec>
+    </target>
+    <target name="docker.stop">
+        <exec executable="docker-compose" dir="./">
+            <arg value="--no-ansi" />
+            <arg value="down" />
+        </exec>
+    </target>
+    <target name="docker.down" depends="docker.stop" />
 </project>
 
