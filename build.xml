@@ -8,10 +8,9 @@
 
     <target name="init" depends="clean">
         <tstamp />
-        <mkdir dir="${aws}" />
     </target>
 
-    <target name="clean">
+    <target name="clean" depends="docker.stop">
         <delete dir="${aws}" />
         <delete dir="${stage}" />
     </target>
@@ -44,6 +43,7 @@
     <target name="aws" depends="stage_files" 
             description="Assemble AWS Elastic Beanstalk package." >
         <mkdir dir="${stage}"/>
+        <mkdir dir="${aws}" />
         <!--
         <copy file="app.js" todir="${stage}/"/>
         <copy file="database.js" todir="${stage}/"/>
@@ -61,12 +61,12 @@
         <copy todir="${docker_deploy}">
             <fileset dir="${stage}" />
         </copy>
+        <delete dir="${stage}" />
         <exec executable="docker-compose" dir="./">
             <arg value="--no-ansi" />
+            <arg value="--build" />
             <arg value="up" />
-            <arg value="-d" />
         </exec>
-        <delete dir="${stage}" />
     </target>
     <target name="docker.stop">
         <exec executable="docker-compose" dir="./">

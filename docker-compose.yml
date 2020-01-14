@@ -37,4 +37,4 @@ services:
       - '8000:8000'
     expose:
       - '8000'
-    command: bash -c "npm install && npm start"
+    command: bash -c "sudo npm cache clean --force && npm install && npm start"
