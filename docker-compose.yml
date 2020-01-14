@@ -35,4 +35,4 @@ services:
       - '8000:8000'
     expose:
       - '8000'
-    command: bash -c "npm install --no-package-lock && npm start"
+    command: bash -c "rm -rf /home/nose/app/node_modules && npm install --prefer-offline --no-package-lock && npm start"
