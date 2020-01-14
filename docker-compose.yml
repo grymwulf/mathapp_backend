@@ -28,13 +28,10 @@ services:
       - RDS_PASSWORD=password_mathapp_api
       - RDS_PORT=3306
       - APP_ENVIRONMENT=dev
-      - DB_ADMIN=admin
-      - DB_ADMIN_PASSWORD=admin_password
-      - DB_DIALECT=mysql
     volumes: 
       - ./backend:/home/node/app
     ports: 
       - '8000:8000'
     expose:
       - '8000'
-    command: bash -c "sudo npm cache clean --force && npm install && npm start"
+    command: bash -c "npm install --no-package-lock && npm start"

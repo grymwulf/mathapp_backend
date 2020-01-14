@@ -64,7 +64,6 @@
         <delete dir="${stage}" />
         <exec executable="docker-compose" dir="./">
             <arg value="--no-ansi" />
-            <arg value="--build" />
             <arg value="up" />
         </exec>
     </target>

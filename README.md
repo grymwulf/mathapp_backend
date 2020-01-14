@@ -13,6 +13,8 @@ Proprietary and confidential
 
 # mathapp_backend
  Backend Development for mathapp ASU Capstone Project
+
+# See below for Docker instructions
  
 # Requirements
  - Node v10.15.3
@@ -40,6 +42,20 @@ Proprietary and confidential
     3. npm start
 7. Application will listen on port indicated by the environment variable PORT specified in .env or by default 8000
 
+# Docker
+This application has been updated to work with docker-compose, and as such if you want to deploy this using docker, please use the following information:
+
+## Requirements (Docker)
+1. Java Development Kit (JDK v8 or higher)
+2. Apache Ant
+3. Docker (w/ docker-compose)
+
+## Settings
+1. The docker-compose loads all of the relevant environment variables - if needed or desired please update the environment variables to match your system settings.
+
+## Running the app
+1. In the app base directory, run the command 'ant docker.start' - please be aware that there is a large delay in getting the node application running - due to the development environment, it runs 'npm install' each time it starts the containers.  Please wait until you get the console logging indicating the node application has started successfully.
+2. To stop the application use 'ant docker.stop'
 
 # Generate API Docs:
  - `apidoc -i /routes -o /doc`
