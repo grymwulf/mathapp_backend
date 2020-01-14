@@ -4,23 +4,18 @@
     </description>
     <property name="aws" location="aws"/>
     <property name="stage" location="prestage"/>
+    <property name="docker_deploy" location="backend"/>
 
     <target name="init" depends="clean">
         <tstamp />
-        <mkdir dir="${aws}" />
     </target>
 
-    <target name="clean">
+    <target name="clean" depends="docker.stop">
         <delete dir="${aws}" />
         <delete dir="${stage}" />
     </target>
 
-    <target name="aws" depends="init" description="Assemble AWS Elastic Beanstalk package.">
-        <mkdir dir="${stage}"/>
-        <!--
-        <copy file="app.js" todir="${stage}/"/>
-        <copy file="database.js" todir="${stage}/"/>
-        -->
+    <target name="stage_files" depends="init" description="Assemble files for use.">
         <copy todir="${stage}">
             <fileset dir=".">
                 <include name="*.js" />
@@ -43,16 +38,33 @@
             </filterchain>
         </copy>
         <copy file="package-lock.json" todir="${stage}" />
+    </target>
+
+    <target name="aws" depends="stage_files" 
+            description="Assemble AWS Elastic Beanstalk package." >
+        <mkdir dir="${stage}"/>
+        <mkdir dir="${aws}" />
+        <!--
+        <copy file="app.js" todir="${stage}/"/>
+        <copy file="database.js" todir="${stage}/"/>
+        -->
+   
         <zip destfile="${aws}/mathapp.zip" basedir="${stage}" />
         <delete dir="${stage}" />
     </target>
+
     <target name="docker.start" depends="docker.run" />
     <target name="docker.up" depends="docker.run" />
     <target name="docker.run" depends="docker.stop">
+        <antcall target="stage_files" />
+        <mkdir dir="${docker_deploy}" />
+        <copy todir="${docker_deploy}">
+            <fileset dir="${stage}" />
+        </copy>
+        <delete dir="${stage}" />
         <exec executable="docker-compose" dir="./">
             <arg value="--no-ansi" />
             <arg value="up" />
-            <arg value="-d" />
         </exec>
     </target>
     <target name="docker.stop">
@@ -60,6 +72,7 @@
             <arg value="--no-ansi" />
             <arg value="down" />
         </exec>
+        <delete dir="${docker_deploy}" />
     </target>
     <target name="docker.down" depends="docker.stop" />
 </project>
