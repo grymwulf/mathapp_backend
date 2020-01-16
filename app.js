@@ -20,12 +20,13 @@ const express = require('express');
 const app = express();
 const data = require ('./database');
 const students = require('./routes/students');
-const instructors = require('./routes/instructors');
+const instructors = require('./routes/teachers');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
 const questions = require ('./routes/questions');
 const HttpStatus = require('http-status-codes');
+const validator = require('express-openapi-validator').OpenApiValidator;
 require('dotenv').config();
 
 
@@ -64,6 +65,10 @@ app.use('/results', results);
 app.use('/apptest', apptest);
 app.use('/questions', questions);
 app.use('/', express.static('doc'));
+
+/*
+    Set up OpenAPIValidator
+*/
 
 /*
     Default base route
