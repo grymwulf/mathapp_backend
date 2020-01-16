@@ -73,20 +73,6 @@ app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 /*
     Set up OpenAPIValidator
 */
-new validator({
-    apiSpec: './mathapp.apiDocs.yaml',
-})
-    .install(app);
-
-/*
-    Express Error Handler
-*/
-app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-        message: err.message,
-        errors: err.errors,
-    });
-});
 
 /*
     Default base route
