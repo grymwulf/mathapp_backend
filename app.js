@@ -26,7 +26,6 @@ const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
 const questions = require ('./routes/questions');
 const HttpStatus = require('http-status-codes');
-const validator = require('express-openapi-validator').OpenApiValidator;
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocs = YAML.load('./mathapp.apiDocs.yaml');
