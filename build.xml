@@ -59,7 +59,9 @@
         <copy todir="${docker_deploy}">
             <fileset dir="${stage}" />
         </copy>
-        <delete dir="${stage}" />
+        <delete includeEmptyDirs="true" quiet="true" >
+            <fileset dir="${stage}" />
+        </delete>
         <exec executable="docker-compose" dir="./">
             <arg value="--no-ansi" />
             <arg value="up" />
