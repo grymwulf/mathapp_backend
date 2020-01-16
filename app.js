@@ -27,6 +27,10 @@ const apptest = require('./routes/apptest');
 const questions = require ('./routes/questions');
 const HttpStatus = require('http-status-codes');
 const validator = require('express-openapi-validator').OpenApiValidator;
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocs = YAML.load('./mathapp.apiDocs.yaml');
+
 require('dotenv').config();
 
 
@@ -64,7 +68,7 @@ app.use('/tests', tests);
 app.use('/results', results);
 app.use('/apptest', apptest);
 app.use('/questions', questions);
-app.use('/', express.static('doc'));
+app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 /*
     Set up OpenAPIValidator

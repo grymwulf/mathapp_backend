@@ -27,9 +27,6 @@
         <copy todir="${stage}/models">
             <fileset dir="models" />
         </copy>
-        <copy todir="${stage}/doc">
-            <fileset dir="doc" />
-        </copy>
         <copy file="package.json" todir="${stage}">
             <filterchain>
                 <linecontains negate="true">
@@ -38,6 +35,7 @@
             </filterchain>
         </copy>
         <copy file="package-lock.json" todir="${stage}" />
+        <copy file="mathapp.apiDocs.yaml" todir="${stage}" />
     </target>
 
     <target name="aws" depends="stage_files" 
@@ -65,6 +63,10 @@
         <exec executable="docker-compose" dir="./">
             <arg value="--no-ansi" />
             <arg value="up" />
+            <arg value="--build" />
+            <arg value="--force-recreate" />
+            <arg value="--no-deps" />
+
         </exec>
     </target>
     <target name="docker.stop">
