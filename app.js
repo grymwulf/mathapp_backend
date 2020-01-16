@@ -24,7 +24,6 @@ const instructors = require('./routes/instructors');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
-const questions = require ('./routes/questions');
 const HttpStatus = require('http-status-codes');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -66,7 +65,6 @@ app.use('/instructors', instructors);
 app.use('/tests', tests);
 app.use('/results', results);
 app.use('/apptest', apptest);
-app.use('/questions', questions);
 app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 /*
