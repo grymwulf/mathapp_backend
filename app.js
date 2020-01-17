@@ -67,7 +67,6 @@ router.use('/instructors', instructors);
 router.use('/tests', tests);
 router.use('/results', results);
 router.use('/apptest', apptest);
-router.use('/questions', questions);
 router.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 app.use('/api/v1', router);
