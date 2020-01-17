@@ -505,9 +505,12 @@ components:
     new_student:
       type: object
       properties:
-        student_name:
+        student_firstname:
           type: string
-          description: Student's Name
+          description: Student's First Name
+        student_lastname:
+          type: string
+          description: Student's Last Name
         teacher_id:
           type: integer
           description: ID for Student's Teacher
@@ -515,9 +518,12 @@ components:
     new_teacher:
       type: object
       properties:
-        teacher_name:
+        teacher_firstname:
           type: string
-          description: Teacher's Name
+          description: Teacher's First Name
+        teacher_lastname:
+          type: string
+          description: Teacher's Last Name
     new_test:
       description: Create a new test for students to take
       type: object
