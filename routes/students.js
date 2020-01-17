@@ -53,11 +53,8 @@ router.get('/', function (req, res) {
             raw: true
         })
         .then(function (students) {
-            result['data'] =students;
-            result['endpoint'] = "/students";
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
+            result['students'] =students;
+            res.status(HttpStatus.OK);
             students.forEach(element => {
                 element.data = JSON.parse(element.data)
             });

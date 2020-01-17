@@ -18,9 +18,9 @@ const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
 
-// get a specific instructor
+// get a specific teacher
 /**
- * @api (get) /instructors/:id
+ * @api (get) /teachers/:id
  * 
  * @apiName GetInstructorByID
  * 
@@ -38,14 +38,14 @@ const HttpStatus = require('http-status-codes');
  */
 router.get('/:id', function(req,res) {
     var result = {};
-    data.Instructor.findAll({
+    data.Teacher.findAll({
             where: {
                 id: req.params.id
             }
         })
         .then( instructorData => {
             result['data'] = instructorData;
-            result['endpoint'] = `/instructors/:id`;
+            result['endpoint'] = `/teachers/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -55,7 +55,7 @@ router.get('/:id', function(req,res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/instructors/:id`;
+            result['endpoint'] = `/teachers/:id`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -64,15 +64,15 @@ router.get('/:id', function(req,res) {
         })
 });
 
-// get list of all instructors
+// get list of all teachers
 /**
- * @api (get) /instructors
+ * @api (get) /teachers
  * 
- * @apiName Get All Instructors
+ * @apiName Get All Teachers
  * 
- * @apiGroup Instructors
+ * @apiGroup Teachers
  * 
- * @apiSuccess (JSON) data Current list of all known instructors
+ * @apiSuccess (JSON) data Current list of all known teachers
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -82,25 +82,25 @@ router.get('/:id', function(req,res) {
  */
 router.get('/', function(req,res) {
     var result = {};
-    data.Instructor.findAll({
+    data.Teacher.findAll({
             raw: true
         })
-        .then(function (instructors) {
-            result['data'] = instructors;
-            result['endpoint'] = "/instructors";
+        .then(function (teachers) {
+            result['data'] = teachers;
+            result['endpoint'] = "/teachers";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
-            instructors.forEach(element => {
+            teachers.forEach(element => {
                 element.data = JSON.parse(element.data)
             });            
             res.json(result);
             return;
         }).catch(function(err){
-            console.log('Error querying all instructors');
+            console.log('Error querying all teachers');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = "/instructors";
+            result['endpoint'] = "/teachers";
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -114,18 +114,18 @@ router.post('/', function (req, res) {
     var result = {};
     console.log(`Post: `);
     console.log(req.body);
-    data.Instructor.create({
+    data.Teacher.create({
         "data": JSON.stringify(req.body)
-    }).then(newInstructor => {
-        console.log(`New instructor data received: Entry ${newInstructor.id} created.`);
-        console.log(`Data added was: ${newInstructor.data}.`);
+    }).then(newTeacher => {
+        console.log(`New teachers data received: Entry ${newTeacher.id} created.`);
+        console.log(`Data added was: ${newTeacher.data}.`);
         var uri = req.protocol + '://' + req.get('host') +
-            req.baseUrl + req.path + newInstructor.id;
+            req.baseUrl + req.path + newTeacher.id;
         result['data'] = {
-            'id': newInstructor.id,
+            'id': newTeacher.id,
             'uri': uri
         };
-        result['endpoint'] = "/instructors";
+        result['endpoint'] = "/teachers";
         result['responseCode'] = HttpStatus.CREATED;
         result['response'] = "Created"
         res.status(result.responseCode);
@@ -136,7 +136,7 @@ router.post('/', function (req, res) {
         console.log('Error creating new instructor record');
         console.log(err)
         result['data'] = {};
-        result['endpoint'] = "/instructors";
+        result['endpoint'] = "/teachers";
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
@@ -151,7 +151,7 @@ router.post('/', function (req, res) {
 router.use(function(req,res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "/instructors"
+        "endpoint" : "/teachers"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
