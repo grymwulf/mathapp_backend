@@ -33,7 +33,8 @@ const router = express.Router();
 
 require('dotenv').config();
 
-
+// load & Parse api spec
+const apiSpec = YAML.load('./mathapp.apiDocs.yaml');
 
 
 // define true constants
