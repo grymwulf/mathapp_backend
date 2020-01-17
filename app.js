@@ -24,7 +24,6 @@ const instructors = require('./routes/teachers');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
-const questions = require ('./routes/questions');
 const HttpStatus = require('http-status-codes');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -73,6 +72,7 @@ router.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 app.use('/api/v1', router);
 app.use('/', router);
+
 
 /*
     Default base route

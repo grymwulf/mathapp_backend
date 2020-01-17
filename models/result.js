@@ -21,9 +21,32 @@ module.exports = (sequelize, type) => {
             autoIncrement: true,
             primaryKey: true
         },
-        
-        // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT
+
+        student_answer: {
+            type: Sequelize.INTEGER,
+            require: true
+        },
+
+        correct_answer: {
+            type: Sequelize.INTEGER,
+            require: true
+        },
+
+        operation: {
+            type: Sequelize.STRING,
+            require: true
+        },
+
+        operand1: {
+            type: Sequelize.INTEGER,
+            require: true
+        },
+
+        operand2: {
+            type: Sequelize.INTEGER,
+            require: true
+        }
+
     },{
         timestamps: false
     })
