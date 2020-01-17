@@ -23,7 +23,7 @@ const HttpStatus = require('http-status-codes');
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(function (req, res) {
-    var all_instructors = data.Instructor.findAll();
+    var all_teachers = data.Teacher.findAll();
     var all_tests = data.Test.findAll();
     var all_results = data.Result.findAll();
     var all_students = data.Student.findAll();
@@ -31,7 +31,7 @@ router.use(function (req, res) {
     var db_data = {};
     console.log("starting promise");
     Promise
-        .all([all_instructors, all_tests, all_results,all_students, all_questions ])
+        .all([all_teachers, all_tests, all_results,all_students ])
         .then( db_data => {
             db_data.forEach(element => {
                 try {
