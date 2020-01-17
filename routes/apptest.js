@@ -27,7 +27,6 @@ router.use(function (req, res) {
     var all_tests = data.Test.findAll();
     var all_results = data.Result.findAll();
     var all_students = data.Student.findAll();
-    var all_questions = data.Question.findAll();
     var result = {};
     var db_data = {};
     console.log("starting promise");
