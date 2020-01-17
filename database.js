@@ -62,7 +62,7 @@ const Student = StudentModel(sequelize, Sequelize);
 const Result = ResultModel(sequelize, Sequelize);
 const Test = TestModel(sequelize, Sequelize);
 const Teacher = TeacherModel(sequelize, Sequelize);
-const Question = QuestionModel(sequelize, Sequelize);
+
 
 // create foriegn keys
 
