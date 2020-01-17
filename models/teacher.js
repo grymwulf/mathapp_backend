@@ -15,9 +15,9 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
-    return sequelize.define('instructor', {
+    return sequelize.define('teacher', {
 
-        // id: primary ID of instructor, should match any 
+        // id: primary ID of teacher, should match any 
         // tracking ID for underlying student info
         // retained at the school
         id: {

@@ -20,7 +20,7 @@ const express = require('express');
 const app = express();
 const data = require ('./database');
 const students = require('./routes/students');
-const instructors = require('./routes/instructors');
+const instructors = require('./routes/teachers');
 const tests = require('./routes/tests');
 const results = require ('./routes/results');
 const apptest = require('./routes/apptest');
@@ -28,10 +28,12 @@ const HttpStatus = require('http-status-codes');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocs = YAML.load('./mathapp.apiDocs.yaml');
+const router = express.Router();
 
 require('dotenv').config();
 
-
+// load & Parse api spec
+const apiSpec = YAML.load('./mathapp.apiDocs.yaml');
 
 
 // define true constants
@@ -60,12 +62,17 @@ app.use(function (req,res,next) {
     Routes
 */
 
-app.use('/students', students);
-app.use('/instructors', instructors);
-app.use('/tests', tests);
-app.use('/results', results);
-app.use('/apptest', apptest);
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+router.use('/students', students);
+router.use('/instructors', instructors);
+router.use('/tests', tests);
+router.use('/results', results);
+router.use('/apptest', apptest);
+router.use('/questions', questions);
+router.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
+app.use('/api/v1', router);
+app.use('/', router);
+
 
 /*
     Default base route
