@@ -16,6 +16,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
+const Test = require('../models/test')
 
 // basic getter to get record by primary key
 router.get('/:id', function(req,res) {
@@ -25,7 +26,7 @@ router.get('/:id', function(req,res) {
                 id: req.params.id
             }
         })
-        .then( resultData => {
+        .then((resultData) => {
             result['data'] = resultData;
             result['endpoint'] = `/results/:id`;
             result['responseCode'] = HttpStatus.OK;
@@ -47,14 +48,14 @@ router.get('/:id', function(req,res) {
 });
 
 // getter to get record(s) by test
-router.get('/:testId', (req,res) => {
+router.get('/:testId', (req, res) => {
     var result = {};
     data.Result.findAll({
         where: {
             testId: req.params.testId
         }
     })
-    .then(resultData => {
+    .then((resultData) => {
         result['data'] = resultData;
         result['endpoint'] = `results/:testId`;
         result['responseCode'] = HttpStatus.OK;
@@ -64,6 +65,38 @@ router.get('/:testId', (req,res) => {
         return;
     }).catch((err) => {
         console.log('Error querying results by test');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/:testId`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+router.get('/:studentId', (req, res) => {
+    var result = {};
+    data.Result.findAll({
+        include: {
+            model: Test,
+            required: true,
+            where: {
+                studentId: req.params.studentId
+            }
+        }
+    })
+    .then((resultData) => {
+        result['data'] = resultData;
+        result['endpoint'] = `results/:studentId`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch((err) => {
+        console.log('Error querying results by student');
         console.log(err);
         result['data'] = {};
         result['endpoint'] = `/results/:testId`;
