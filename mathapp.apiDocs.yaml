@@ -1,6 +1,6 @@
 openapi: '3.0.0'
 info:
-  version: "1-oas3"
+  version: "0.1.0"
   title: 'MathApp.API'
   description: 'This is the backend API for the ASU STEM Academy Math APP Project'
 servers:
@@ -375,7 +375,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  result:
+                  results:
                     type: object
                     $ref: '#/components/schemas/result'
         '400':
