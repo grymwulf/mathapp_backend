@@ -67,7 +67,7 @@ router.use('/students', students);
 router.use('/instructors', instructors);
 router.use('/tests', tests);
 router.use('/results', results);
-router.use('/apptest', apptest);
+app.use('/apptest', apptest);
 router.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 new OpenApiValidator({
