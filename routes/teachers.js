@@ -36,7 +36,7 @@ const HttpStatus = require('http-status-codes');
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/:id', function(req,res) {
+router.get('/:id', function(req, res, next) {
     var result = {};
     data.Teacher.findAll({
             where: {
@@ -50,7 +50,6 @@ router.get('/:id', function(req,res) {
             result['response'] = "Query Successful";
             res.status(result.responseCode);
             res.json(result);
-            return;
         }).catch(function (err) {
             console.log('Error querying a student');
             console.log(err)
@@ -60,7 +59,6 @@ router.get('/:id', function(req,res) {
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
-            return;
         })
 });
 
@@ -80,7 +78,7 @@ router.get('/:id', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/', function(req,res) {
+router.get('/', function(req, res, next) {
     var result = {};
     data.Teacher.findAll({
             raw: true
@@ -95,7 +93,6 @@ router.get('/', function(req,res) {
                 element.data = JSON.parse(element.data)
             });            
             res.json(result);
-            return;
         }).catch(function(err){
             console.log('Error querying all teachers');
             console.log(err)
@@ -105,7 +102,6 @@ router.get('/', function(req,res) {
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
-            return;
         })
 });
 
@@ -131,7 +127,6 @@ router.post('/', function (req, res) {
         res.status(result.responseCode);
         res.header('Location', uri);
         res.json(result);
-        return;
     }).catch(function (err) {
         console.log('Error creating new instructor record');
         console.log(err)
@@ -141,14 +136,13 @@ router.post('/', function (req, res) {
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
-        return;
     })
 })
 
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function(req,res) {
+router.use(function(req, res, next) {
     var result = {};
     result['data'] = {
         "endpoint" : "/teachers"
@@ -157,7 +151,6 @@ router.use(function(req,res) {
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
-    return;
 });
 
 

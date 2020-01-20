@@ -32,7 +32,6 @@ router.get('/:id', function(req, res) {
             result['response'] = "Query Successful";
             res.status(result.responseCode);
             res.json(result);
-            return;
         }).catch(function (err) {
             console.log('Error querying a student');
             console.log(err)
@@ -42,7 +41,6 @@ router.get('/:id', function(req, res) {
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
-            return;
         })
 })
 
@@ -59,7 +57,6 @@ router.get('/', function (req, res) {
                 element.data = JSON.parse(element.data)
             });
             res.json(result);
-            return;
         }).catch(function (err) {
             console.log('Error querying all students');
             console.log(err)
@@ -69,7 +66,6 @@ router.get('/', function (req, res) {
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
-            return;
         })
 })
 
@@ -95,7 +91,6 @@ router.post('/', function (req, res) {
         res.status(result.responseCode);
         res.header('Location', uri);
         res.json(result);
-        return;
     }).catch(function (err) {
         console.log('Error creating new student record');
         console.log(err)
@@ -105,7 +100,6 @@ router.post('/', function (req, res) {
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
-        return;
     })
 })
 
@@ -121,7 +115,6 @@ router.use(function (req, res) {
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
-    return;
 });
 
 // required to make routes work

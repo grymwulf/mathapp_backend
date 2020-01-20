@@ -17,6 +17,7 @@ services:
       - ./db:/var/lib/mysql
   node:
     image: node:latest
+    restart: always
     user: 'node'
     working_dir: /home/node/app
     environment:

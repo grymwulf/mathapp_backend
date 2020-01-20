@@ -18,7 +18,7 @@ const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
 // basic getter to get record by primary key
-router.get('/:id', function(req,res) {
+router.get('/:id', function(req,res, next) {
     var result = {};
     data.Result.findAll({
             where: {
@@ -32,7 +32,6 @@ router.get('/:id', function(req,res) {
             result['response'] = "Query Successful";
             res.status(result.responseCode);
             res.json(result);
-            return;
         }).catch(function (err) {
             console.log('Error querying a student');
             console.log(err)
@@ -42,12 +41,11 @@ router.get('/:id', function(req,res) {
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
-            return;
         })
 });
 
 // get all results
-router.get('/', function(req,res) {
+router.get('/', function(req, res, next) {
     var result = {};
 
     data.Result.findAll({
@@ -62,7 +60,6 @@ router.get('/', function(req,res) {
                 element.data = JSON.parse(element.data)
             });
             res.json(result);
-            return;
         })
         .catch(function(err){
             console.log('Error querying all results');
@@ -72,12 +69,11 @@ router.get('/', function(req,res) {
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
             res.json(result);
-            return;
         })
 });
 
 // post data to endpoint
-router.post('/', function (req, res) {
+router.post('/', function (req, res, next) {
     var result = {};
     console.log(`Post: `);
     console.log(req.body);
@@ -98,7 +94,6 @@ router.post('/', function (req, res) {
         res.status(result.responseCode);
         res.header('Location', uri);
         res.json(result);
-        return;
     }).catch(function (err) {
         console.log('Error creating new result record');
         console.log(err)
@@ -108,14 +103,13 @@ router.post('/', function (req, res) {
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
-        return;
     })
 })
 
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function(req,res) {
+router.use(function(req, res, next) {
     var result = {};
     result['data'] = {
         "endpoint" : "/results"
@@ -124,7 +118,6 @@ router.use(function(req,res) {
     result['response'] = "Not Implemented";
     res.status(result.responseCode);
     res.json(result);
-    return;
 });
 
 // required to make routes work

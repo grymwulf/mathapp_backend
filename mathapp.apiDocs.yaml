@@ -515,6 +515,10 @@ components:
           type: integer
           description: ID for Student's Teacher
           default: 0
+      required:
+        - student_firstname
+        - student_lastname
+        - teacher_id
     new_teacher:
       type: object
       properties:

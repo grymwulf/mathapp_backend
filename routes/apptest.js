@@ -22,7 +22,7 @@ const HttpStatus = require('http-status-codes');
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function (req, res) {
+router.use(function (req, res, next) {
     var all_teachers = data.Teacher.findAll();
     var all_tests = data.Test.findAll();
     var all_results = data.Result.findAll();
@@ -67,7 +67,6 @@ router.use(function (req, res) {
             result['response'] = 'INTERNAL_SERVER_ERROR';
             res.status(result.responseCode);
             res.json(result);
-            return;
         });
 });
 
