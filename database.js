@@ -18,6 +18,7 @@ const StudentModel = require('./models/student');
 const ResultModel = require('./models/result');
 const TeacherModel = require('./models/teacher');
 const TestModel = require('./models/test');
+const ExperimentModel = require('./models/experiment');
 // fix for working with windows
 require('dotenv').config();
 
@@ -62,6 +63,7 @@ const Student = StudentModel(sequelize, Sequelize);
 const Result = ResultModel(sequelize, Sequelize);
 const Test = TestModel(sequelize, Sequelize);
 const Teacher = TeacherModel(sequelize, Sequelize);
+const Experiment = ExperimentModel(sequelize, Sequelize);
 
 
 // create foriegn keys
@@ -102,5 +104,6 @@ module.exports = {
     Student,
     Teacher,
     Result,
-    Test
+    Test,
+    Experiment
 };
