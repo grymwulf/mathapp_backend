@@ -23,11 +23,7 @@ const HttpStatus = require('http-status-codes');
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(function (req, res, next) {
-    var all_teachers = data.Teacher.findAll();
-    var all_tests = data.Test.findAll();
-    var all_results = data.Result.findAll();
-    var all_students = data.Student.findAll();
-    var all_experiments = data.Experiment.findAll();
+
 
     var result = {};
     var db_data = {};
@@ -35,8 +31,13 @@ router.use(function (req, res, next) {
         "attempts": 1,
         "boolean": false};
     console.log("starting promise");
-    Promise.resolve(function() {data.Experiment.create({ "data": experiment_data})})
-    .then(
+    data.Experiment.create({ "data": experiment_data})
+    .then(() => {
+        var all_teachers = data.Teacher.findAll();
+        var all_tests = data.Test.findAll();
+        var all_results = data.Result.findAll();
+        var all_students = data.Student.findAll();
+        var all_experiments = data.Experiment.findAll();
         Promise
             .all([all_teachers, all_tests, all_results,
                 all_students, all_experiments])
@@ -76,7 +77,7 @@ router.use(function (req, res, next) {
                 res.status(result.responseCode);
                 res.json(result);
             })
-    )
+        })
 });
 
 // required to make routes work
