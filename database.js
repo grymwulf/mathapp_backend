@@ -67,11 +67,14 @@ const Teacher = TeacherModel(sequelize, Sequelize);
 // create foriegn keys
 
 Test.hasMany(Result);
-Teacher.hasMany(Test)
-Teacher.hasMany(Student);
-Student.hasMany(Result);
-Test.belongsTo(Student);
+Result.belongsTo(Test);
+Teacher.hasMany(Test);
 Test.belongsTo(Teacher);
+Teacher.hasMany(Student);
+Student.belongsTo(Teacher);
+Student.hasMany(Test);
+Test.belongsTo(Student);
+
 
 
 const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";

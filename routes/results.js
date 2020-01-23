@@ -16,7 +16,6 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
-const Test = require('../models/test')
 
 // basic getter to get record by primary key
 router.get('/:id', function(req,res) {
@@ -48,7 +47,7 @@ router.get('/:id', function(req,res) {
 });
 
 // getter to get record(s) by test
-router.get('/:testId', (req, res) => {
+router.get('/test/:testId', (req, res) => {
     var result = {};
     data.Result.findAll({
         where: {
@@ -57,7 +56,7 @@ router.get('/:testId', (req, res) => {
     })
     .then((resultData) => {
         result['data'] = resultData;
-        result['endpoint'] = `results/:testId`;
+        result['endpoint'] = `results/test/:testId`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
         res.status(result.responseCode);
@@ -67,7 +66,7 @@ router.get('/:testId', (req, res) => {
         console.log('Error querying results by test');
         console.log(err);
         result['data'] = {};
-        result['endpoint'] = `/results/:testId`;
+        result['endpoint'] = `/results/test/:testId`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
@@ -76,11 +75,11 @@ router.get('/:testId', (req, res) => {
     })
 });
 
-router.get('/:studentId', (req, res) => {
+router.get('/student/:studentId', (req, res) => {
     var result = {};
     data.Result.findAll({
         include: {
-            model: Test,
+            model: data.Test,
             required: true,
             where: {
                 studentId: req.params.studentId
@@ -89,7 +88,7 @@ router.get('/:studentId', (req, res) => {
     })
     .then((resultData) => {
         result['data'] = resultData;
-        result['endpoint'] = `results/:studentId`;
+        result['endpoint'] = `results/student/:studentId`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
         res.status(result.responseCode);
@@ -99,7 +98,7 @@ router.get('/:studentId', (req, res) => {
         console.log('Error querying results by student');
         console.log(err);
         result['data'] = {};
-        result['endpoint'] = `/results/:testId`;
+        result['endpoint'] = `/results/student/:studentId`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
@@ -112,9 +111,7 @@ router.get('/:studentId', (req, res) => {
 router.get('/', function(req,res) {
     var result = {};
 
-    data.Result.findAll({
-            raw: true
-        })
+    data.Result.findAll()
         .then(function(results) {
             result['data'] = results;
             result['responseCode'] = HttpStatus.OK;
