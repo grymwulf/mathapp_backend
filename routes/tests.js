@@ -162,6 +162,35 @@ router.get('/:date_submitted', function(req,res) {
         })
 });
 
+// basic getter to get record by time completed 
+router.get('/:time_completed', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/:time_completed`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/:date_completed`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
 
 // implementing a basic getter to get all known tests in the DB
 router.get('/', function (req, res) {
@@ -192,6 +221,7 @@ router.get('/', function (req, res) {
             return;
         })
 })
+
 
 // get data store it, return a URI + id for stored data
 router.post('/', function (req, res) {
