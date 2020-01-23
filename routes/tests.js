@@ -47,7 +47,7 @@ router.get('/:id', function(req,res) {
 });
 
 // basic getter to get record by teacher id
-router.get('/:teacher', function(req,res) {
+router.get('/teacher/:teacherId', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
@@ -56,7 +56,7 @@ router.get('/:teacher', function(req,res) {
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `/tests/:teacher`;
+            result['endpoint'] = `tests/teacher/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -66,7 +66,7 @@ router.get('/:teacher', function(req,res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/tests/:teacher`;
+            result['endpoint'] = `tests/teacher/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
