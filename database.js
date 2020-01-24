@@ -67,7 +67,6 @@ const Answer = AnswerModel(sequelize, Sequelize);
 
 // create foriegn keys
 
-Test.hasMany(Result);
 Result.belongsTo(Test);
 Result.hasMany(Answer);
 Answer.belongsTo(Result);

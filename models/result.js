@@ -12,7 +12,8 @@
     Proprietary and confidential
 */
 
-const Sequelize = require('sequelize')
+const {Test} = require('../database')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
     return sequelize.define('result', {
@@ -29,7 +30,17 @@ module.exports = (sequelize, type) => {
 
         attempt_number: {
             type: Sequelize.INTEGER,
-            require: true
+            require: true,
+            unique: 'attemptUniqueness'
+        },
+
+        testId: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: Test,
+                key: 'id'
+            },
+            unique: 'attemptUniqueness'
         }
 
     },{
