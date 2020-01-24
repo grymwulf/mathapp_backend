@@ -16,7 +16,6 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
-const student = require('../models/student') 
 
 
 // get a specific teacher
@@ -110,13 +109,12 @@ router.get('/', function(req,res) {
         })
 });
 
+
 // get teacher using student id
-router.get('/:studentId', (req, res) => {
+router.get('/student/:studentId', (req, res) => {
     var result = {};
     data.Teacher.findAll({
     include: {
-            model: student,
-            required: true,
             where: {
                 studentId: req.params.studentId
             }
@@ -124,7 +122,7 @@ router.get('/:studentId', (req, res) => {
     })
         .then(function (teachers) {
             result['data'] = teachers;
-            result['endpoint'] = "/teachers/:studentId`;
+            result['endpoint'] = '/teacher/student/:studentId';
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -137,7 +135,7 @@ router.get('/:studentId', (req, res) => {
             console.log('Error querying all teachers');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = "/teachers";
+            result['endpoint'] = '/teacher/student/:studentId';
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
