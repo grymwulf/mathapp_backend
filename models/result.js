@@ -22,38 +22,14 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-        student_answer: {
-            type: Sequelize.INTEGER,
-            require: true,
-            set(value) {
-                this.setDataValue('student_answer', parseInt(value));
-            }
-        },
-
-        correctly_answered: {
-            type: Sequelize.BOOLEAN,
-            require: true,
-        },
-
-        operation: {
-            type: Sequelize.STRING,
+        time_taken: {
+            type: Sequelize.TIME,
             require: true
         },
 
-        operand1: {
+        attempt_number: {
             type: Sequelize.INTEGER,
-            require: true,
-            set(value) {
-                this.setDataValue('operand1', parseInt(value));
-            }
-        },
-
-        operand2: {
-            type: Sequelize.INTEGER,
-            require: true,
-            set(value) {
-                this.setDataValue('operand2', parseInt(value));
-            }
+            require: true
         }
 
     },{
