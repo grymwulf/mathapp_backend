@@ -24,12 +24,15 @@ module.exports = (sequelize, type) => {
 
         student_answer: {
             type: Sequelize.INTEGER,
-            require: true
+            require: true,
+            set(value) {
+                this.setDataValue('student_answer', parseInt(value));
+            }
         },
 
-        correct_answer: {
-            type: Sequelize.INTEGER,
-            require: true
+        correctly_answered: {
+            type: Sequelize.BOOLEAN,
+            require: true,
         },
 
         operation: {
@@ -39,12 +42,18 @@ module.exports = (sequelize, type) => {
 
         operand1: {
             type: Sequelize.INTEGER,
-            require: true
+            require: true,
+            set(value) {
+                this.setDataValue('operand1', parseInt(value));
+            }
         },
 
         operand2: {
             type: Sequelize.INTEGER,
-            require: true
+            require: true,
+            set(value) {
+                this.setDataValue('operand2', parseInt(value));
+            }
         }
 
     },{
