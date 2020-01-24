@@ -27,7 +27,7 @@ router.get('/:id', function (req, res) {
         },
         include: {
             model: data.Answer,
-            required: false,
+            required: true,
             where: {
                 resultId: req.params.id
             }
