@@ -82,9 +82,7 @@ router.get('/:id', function(req,res) {
  */
 router.get('/', function(req,res) {
     var result = {};
-    data.Teacher.findAll({
-            raw: true
-        })
+    data.Teacher.findAll()
         .then(function (teachers) {
             result['data'] = teachers;
             result['endpoint'] = "/teachers";
@@ -110,7 +108,22 @@ router.get('/', function(req,res) {
 });
 
 
-// get teacher using student id
+// get list of all teachers
+/**
+ * @api (get) /teachers/students/studentid
+ * 
+ * @apiName Get students teacher
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom the student belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/student/:studentId', (req, res) => {
     var result = {};
     data.Teacher.findAll({
