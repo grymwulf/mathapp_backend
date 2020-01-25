@@ -25,17 +25,18 @@ module.exports = (sequelize, type) => {
 
         time_taken: {
             type: Sequelize.TIME,
-            require: true
+            allowNull: false
         },
 
         attempt_number: {
             type: Sequelize.INTEGER,
-            require: true,
+            allowNull: false,
             unique: 'attemptUniqueness'
         },
 
         testId: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             references: {
                 model: Test,
                 key: 'id'
