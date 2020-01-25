@@ -66,18 +66,15 @@ const Teacher = TeacherModel(sequelize, Sequelize);
 const Answer = AnswerModel(sequelize, Sequelize);
 
 // create foriegn keys
-
-Result.belongsTo(Test);
 Result.hasMany(Answer);
 Answer.belongsTo(Result);
+Test.hasMany(Result);
 Teacher.hasMany(Test);
 Test.belongsTo(Teacher);
 Teacher.hasMany(Student);
 Student.belongsTo(Teacher);
 Student.hasMany(Test);
 Test.belongsTo(Student);
-
-
 
 const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";
 if (APP_ENVIRONMENT === "dev") {
