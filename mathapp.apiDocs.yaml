@@ -1,6 +1,6 @@
 openapi: '3.0.0'
 info:
-  version: "1-oas3"
+  version: "0.1.0"
   title: 'MathApp.API'
   description: 'This is the backend API for the ASU STEM Academy Math APP Project'
 servers:
@@ -375,7 +375,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  result:
+                  results:
                     type: object
                     $ref: '#/components/schemas/result'
         '400':
@@ -515,6 +515,10 @@ components:
           type: integer
           description: ID for Student's Teacher
           default: 0
+      required:
+        - student_firstname
+        - student_lastname
+        - teacher_id
     new_teacher:
       type: object
       properties:
@@ -550,9 +554,6 @@ components:
       description: Update test details
       type: object
       properties:
-        practice:
-          type: boolean
-          description: Is it a practice test?
         tries:
           type: integer
           description: Number of tries remaining
