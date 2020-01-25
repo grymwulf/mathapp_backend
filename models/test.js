@@ -24,6 +24,25 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
+	//category: practice(false) or graded(true)
+	category: {
+		type: Sequelize.BOOLEAN,
+		allowNull: false,
+		defaultValue: false
+	},
+
+	//level: difficulty of test i.e. 1+, 2+, 3+, etc.
+	level: {
+		type: Sequelize.STRING(50),
+		allowNull: false
+	},
+	
+	//attempts_remaining: number of attempts left to take test
+	attempts_remaining: {
+		type: Sequelize.INTEGER,
+		allowNull: false
+	},
+
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
     },{
