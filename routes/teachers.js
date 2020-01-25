@@ -63,6 +63,97 @@ router.get('/:id', function(req,res) {
             return;
         })
 });
+// get a specific teacher
+/**
+ * @api (get) /teachers/:lastName
+ * 
+ * @apiName GetInstructorByLastName
+ * 
+ * @apiGroup Instructors
+ * 
+ * @apiParam (Number) input Instructors Last Name to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for instructor
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/:lastName', function(req,res) {
+    var result = {};
+    data.Teacher.findAll({
+            where: {
+                lastName: req.params.lastName
+            }
+        })
+        .then( instructorData => {
+            result['data'] = instructorData;
+            result['endpoint'] = `/teachers/:lastName`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a teacher');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/teachers/:lastName`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+// get a specific teacher
+/**
+ * @api (get) /teachers/:firstName
+ * 
+ * @apiName GetInstructorByFirstName
+ * 
+ * @apiGroup Instructors
+ * 
+ * @apiParam (Number) input Instructors First Name to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for instructor
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/:firstName', function(req,res) {
+    var result = {};
+    data.Teacher.findAll({
+            where: {
+                firstName: req.params.firstName
+            }
+        })
+        .then( instructorData => {
+            result['data'] = instructorData;
+            result['endpoint'] = `/teachers/:firstName`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a teacher');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/teachers/:firstName`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
 // get list of all teachers
 /**
