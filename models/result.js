@@ -12,7 +12,8 @@
     Proprietary and confidential
 */
 
-const Sequelize = require('sequelize')
+const {Test} = require('../database')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
     return sequelize.define('result', {
@@ -22,29 +23,24 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-        student_answer: {
-            type: Sequelize.INTEGER,
+        time_taken: {
+            type: Sequelize.TIME,
             require: true
         },
 
-        correct_answer: {
+        attempt_number: {
             type: Sequelize.INTEGER,
-            require: true
+            require: true,
+            unique: 'attemptUniqueness'
         },
 
-        operation: {
-            type: Sequelize.STRING,
-            require: true
-        },
-
-        operand1: {
+        testId: {
             type: Sequelize.INTEGER,
-            require: true
-        },
-
-        operand2: {
-            type: Sequelize.INTEGER,
-            require: true
+            references: {
+                model: Test,
+                key: 'id'
+            },
+            unique: 'attemptUniqueness'
         }
 
     },{

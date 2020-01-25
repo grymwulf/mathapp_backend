@@ -57,7 +57,6 @@ This application has been updated to work with docker-compose, and as such if yo
 1. In the app base directory, run the command 'ant docker.start' - please be aware that there is a large delay in getting the node application running - due to the development environment, it runs 'npm install' each time it starts the containers.  Please wait until you get the console logging indicating the node application has started successfully.
 2. To stop the application use 'ant docker.stop'
 
-# Generate API Docs:
- - `apidoc -i /routes -o /doc`
- - Sample Instructors route endpoint documented as an example for the rest of the coders. 
+# API Documentation
+1. API Documentation is served via Swagger UI at the base URL for the API Server.  It has been formally written in the OpenAPI3 standard.
  

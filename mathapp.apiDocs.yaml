@@ -554,9 +554,6 @@ components:
       description: Update test details
       type: object
       properties:
-        practice:
-          type: boolean
-          description: Is it a practice test?
         tries:
           type: integer
           description: Number of tries remaining
