@@ -18,6 +18,7 @@ const StudentModel = require('./models/student');
 const ResultModel = require('./models/result');
 const TeacherModel = require('./models/teacher');
 const TestModel = require('./models/test');
+const AnswerModel = require('./models/answer');
 // fix for working with windows
 require('dotenv').config();
 
@@ -62,16 +63,20 @@ const Student = StudentModel(sequelize, Sequelize);
 const Result = ResultModel(sequelize, Sequelize);
 const Test = TestModel(sequelize, Sequelize);
 const Teacher = TeacherModel(sequelize, Sequelize);
+const Answer = AnswerModel(sequelize, Sequelize);
 
 
 // create foriegn keys
 
-Test.hasMany(Result);
-Teacher.hasMany(Test)
-Teacher.hasMany(Student);
-Student.hasMany(Result);
-Test.belongsTo(Student);
+Result.belongsTo(Test);
+Result.hasMany(Answer);
+Answer.belongsTo(Result);
+Teacher.hasMany(Test);
 Test.belongsTo(Teacher);
+Teacher.hasMany(Student);
+Student.belongsTo(Teacher);
+Student.hasMany(Test);
+Test.belongsTo(Student);
 
 
 const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT || "live";
@@ -102,5 +107,6 @@ module.exports = {
     Student,
     Teacher,
     Result,
-    Test
+    Test,
+    Answer
 };
