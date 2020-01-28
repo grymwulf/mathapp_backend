@@ -68,6 +68,7 @@ const Answer = AnswerModel(sequelize, Sequelize);
 // create foriegn keys
 Result.hasMany(Answer);
 Answer.belongsTo(Result);
+Test.hasMany(Result);
 Result.belongsTo(Test)
 Teacher.hasMany(Test);
 Test.belongsTo(Teacher);
