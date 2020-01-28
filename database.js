@@ -100,11 +100,13 @@ if (APP_ENVIRONMENT === "dev") {
 
 /*
     Export our DataModels for use in routes
+    Export local sequelize for transactions
 */
 module.exports = {
     Student,
     Teacher,
     Result,
     Test,
-    Answer
+    Answer,
+    sequelize
 };

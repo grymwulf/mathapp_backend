@@ -19,7 +19,7 @@ const HttpStatus = require('http-status-codes');
 const Sequelize = require('sequelize');
 
 // basic getter to get record by primary key
-router.get('/:id', function(req,res, next) {
+router.get('/:id', (req, res) => {
     var result = {};
     data.Result.findAll({
         where: {
@@ -30,30 +30,74 @@ router.get('/:id', function(req,res, next) {
             required: true,
             where: {
                 resultId: req.params.id
+            },
+            attributes: {
+                exclude: ['id', 'resultId']
             }
         }
+    }).then((resultData) => {
+        result['data'] = resultData;
+        result['endpoint'] = `/results/:id`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a result by id');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/:id`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
     })
-        .then((resultData) => {
-            result['data'] = resultData;
-            result['endpoint'] = `/results/:id`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-        }).catch(function (err) {
-            console.log('Error querying a result by id');
-            console.log(err);
-            result['data'] = {};
-            result['endpoint'] = `/results/:id`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-        })
 });
 
-// get all results
-router.get('/', function(req, res, next) {
+/*router.get('/:id/summary', async (req, res) => {
+    var result = {};
+    data.Result.findAll({
+        attributes: {
+            include: [
+                [Sequelize.fn('COUNT', Sequelize.col('correctly_answered')), 'answerCount']
+            ]
+        },
+        where: {
+            id: req.params.id
+        },
+        include: {
+            model: data.Answer,
+            required:  true,
+            where: {
+                resultId: req.params.id
+            },
+            attributes: []
+        }
+    }).then((resultData) => {
+        result['data'] = resultData;
+        result['endpoint'] = `results/:id/summary`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch((err) => {
+        console.log('Error querying results summary');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/:id/summary`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});*/
+
+// getter to get record(s) by test
+router.get('/test/:testId', (req, res) => {
     var result = {};
     data.Result.findAll({
         where: {
@@ -64,28 +108,30 @@ router.get('/', function(req, res, next) {
             required: true,
             where: {
                 resultId: Sequelize.col('result.id')
+            },
+            attributes: {
+                exclude: ['id', 'resultId']
             }
         }
+    }).then((resultData) => {
+        result['data'] = resultData;
+        result['endpoint'] = `results/test/:testId`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch((err) => {
+        console.log('Error querying results by test');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/test/:testId`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
     })
-        .then((resultData) => {
-            result['data'] = resultData;
-            result['endpoint'] = `results/test/:testId`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch((err) => {
-            console.log('Error querying results by test');
-            console.log(err);
-            result['data'] = {};
-            result['endpoint'] = `/results/test/:testId`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
 });
 
 router.get('/student/:studentId', (req, res) => {
@@ -101,28 +147,30 @@ router.get('/student/:studentId', (req, res) => {
             required: true,
             where: {
                 resultId: Sequelize.col('result.id')
+            },
+            attributes: {
+                exclude: ['id', 'resultId']
             }
         }
+    }).then((resultData) => {
+        result['data'] = resultData;
+        result['endpoint'] = `results/student/:studentId`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch((err) => {
+        console.log('Error querying results by student');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/student/:studentId`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
     })
-        .then((resultData) => {
-            result['data'] = resultData;
-            result['endpoint'] = `results/student/:studentId`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch((err) => {
-            console.log('Error querying results by student');
-            console.log(err);
-            result['data'] = {};
-            result['endpoint'] = `/results/student/:studentId`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
 });
 
 router.get('/teacher/:teacherId', (req, res) => {
@@ -138,32 +186,34 @@ router.get('/teacher/:teacherId', (req, res) => {
             required: true,
             where: {
                 resultId: Sequelize.col('result.id')
+            },
+            attributes: {
+                exclude: ['id', 'resultId']
             }
         }
+    }).then((resultData) => {
+        result['data'] = resultData;
+        result['endpoint'] = `results/teacher/:teacherId`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch((err) => {
+        console.log('Error querying results by teacher');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/teacher/:teacherId`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
     })
-        .then((resultData) => {
-            result['data'] = resultData;
-            result['endpoint'] = `results/teacher/:teacherId`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch((err) => {
-            console.log('Error querying results by teacher');
-            console.log(err);
-            result['data'] = {};
-            result['endpoint'] = `/results/teacher/:teacherId`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
 });
 
 // get all results
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
     var result = {};
 
     data.Result.findAll({
@@ -174,40 +224,46 @@ router.get('/', function (req, res) {
                 resultId: Sequelize.col('result.id')
             }
         }
+    }).then(function (results) {
+        result['data'] = results;
+        result['endpoint'] = `/results/`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying all results');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
     })
-        .then(function (results) {
-            result['data'] = results;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-        })
-        .catch(function (err) {
-            console.log('Error querying all results');
-            console.log(err);
-            result['data'] = {};
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-        })
 });
 
 // post data to endpoint
-router.post('/', function (req, res, next) {
+router.post('/', async (req, res) => {
     var result = {};
     console.log(`Post: `);
     console.log(req.body);
+
+    var addResult = await data.sequelize.transaction();
 
     try {
         var newResult = await data.Result.create({
             time_taken: req.body.time_taken,
             attempt_number: req.body.attempt_number,
             testId: req.body.testId
+        },{
+            transaction: addResult
         });
 
         console.log(`New result data received: Entry ${newResult.id} created.`);
-        console.log(`Result added was: ${JSON.stringify(newResult)}.`);
+        console.log(`Result added was: ${newResult}.`);
         console.log(`There are ${Object.keys(req.body.answers).length} answers.`);
 
         for (i = 0; i < Object.keys(req.body.answers).length; i++) {
@@ -221,10 +277,13 @@ router.post('/', function (req, res, next) {
                     == eval(answerData.operand1 + answerData.operation
                         + answerData.operand2)),
                 resultId: newResult.id
+            },{
+                transaction: addResult
             });
             console.log(`New answer added to result ${newResult.id}: ` +
                 `Answer ${newAnswer.id} created`);
         }
+        await addResult.commit();
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
         result['data'] = {
@@ -237,8 +296,9 @@ router.post('/', function (req, res, next) {
         res.status(result.responseCode);
         res.header('Location', uri);
         res.json(result);
-    }).catch(function (err) {
-        console.log('Error creating new result record');
+        return;
+    } catch (err) {
+        await addResult.rollback();
         console.log(err)
         console.log('Error creating new result record');
         console.log(err);
@@ -248,8 +308,8 @@ router.post('/', function (req, res, next) {
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
-    })
-})
+    }
+});
 
 // default handler
 // anything not implemented gets a response not implemented
