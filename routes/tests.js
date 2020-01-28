@@ -104,6 +104,35 @@ router.get('/:level', function(req,res) {
         })
 });
 
+// basic getter to get record by attempts remaining
+router.get('/:attempts_remaining', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/:attempts_remaining`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/:attempts_remaining`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
 
 // basic getter to get record by teacher id
 router.get('/teacher/:teacherId', function(req,res) {
