@@ -56,26 +56,42 @@ router.get('/:id', (req, res) => {
     })
 });
 
-/*router.get('/:id/summary', async (req, res) => {
+router.get('/:id/summary', async (req, res) => {
     var result = {};
-    data.Result.findAll({
-        attributes: {
-            include: [
-                [Sequelize.fn('COUNT', Sequelize.col('correctly_answered')), 'answerCount']
-            ]
-        },
-        where: {
-            id: req.params.id
-        },
-        include: {
-            model: data.Answer,
-            required:  true,
+    try {
+        var correctCount = await data.Result.count({
             where: {
-                resultId: req.params.id
+                id: req.params.id
             },
-            attributes: []
-        }
-    }).then((resultData) => {
+            include: {
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: req.params.id,
+                    correctly_answered: true
+                }
+            }
+        });
+        var resultData = await data.Result.findAll({
+            where: {
+                id: req.params.id
+            },
+            include: {
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: req.params.id
+                },
+                attributes: []
+            },
+            attributes: {
+                include: [
+                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'questionsAnswered']
+                ]
+            }
+        });
+        //brute force method, since sequelize.fn and sequelize.where weren't working as intended
+        resultData[0].dataValues.correctlyAnswered = correctCount;
         result['data'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
@@ -83,7 +99,7 @@ router.get('/:id', (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    }).catch((err) => {
+    } catch(err) {
         console.log('Error querying results summary');
         console.log(err);
         result['data'] = {};
@@ -93,8 +109,8 @@ router.get('/:id', (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    })
-});*/
+    }
+});
 
 // getter to get record(s) by test
 router.get('/test/:testId', (req, res) => {
@@ -273,9 +289,9 @@ router.post('/', async (req, res) => {
                 operation: answerData.operation,
                 operand1: answerData.operand1,
                 operand2: answerData.operand2,
-                correctly_answered: JSON.stringify(answerData.student_answer
+                correctly_answered: answerData.student_answer
                     == eval(answerData.operand1 + answerData.operation
-                        + answerData.operand2)),
+                    + answerData.operand2),
                 resultId: newResult.id
             },{
                 transaction: addResult
@@ -283,6 +299,7 @@ router.post('/', async (req, res) => {
             console.log(`New answer added to result ${newResult.id}: ` +
                 `Answer ${newAnswer.id} created`);
         }
+        
         await addResult.commit();
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
@@ -308,14 +325,14 @@ router.post('/', async (req, res) => {
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
-        return;;
+        return;
     }
 });
 
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function (req, res) {
+router.use((req, res) => {
     var result = {};
     result['data'] = {
         "endpoint": "/results"
