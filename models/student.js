@@ -38,21 +38,12 @@ module.exports = (sequelize, type) => {
 
         level: {
             type: Sequelize.STRING,
-            allowNull: false
-            isInt: true,
+            allowNull: false,
             isNumeric: true
         },
-        
-        teacherId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            references: {
-                model: Teacher,
-                key: 'id'
-            },
-
+    
         // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT
+        data: Sequelize.TEXT,
     },{
         timestamps: false
     })
