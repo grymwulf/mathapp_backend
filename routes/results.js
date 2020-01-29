@@ -86,7 +86,7 @@ router.get('/:id/summary', async (req, res) => {
             },
             attributes: {
                 include: [
-                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'questionsAnswered']
+                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'totalQuestions']
                 ]
             }
         });
@@ -265,14 +265,26 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     var result = {};
     console.log(`Post: `);
-    console.log(req.body);
+    console.log(req.body);    
 
-    var addResult = await data.sequelize.transaction();
+    try {
+        var addResult = await data.sequelize.transaction();
+    } catch(err) {
+        console.log(err)
+        console.log('Error creating new transaction');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = "/results";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
 
     try {
         var newResult = await data.Result.create({
             time_taken: req.body.time_taken,
-            attempt_number: req.body.attempt_number,
             testId: req.body.testId
         },{
             transaction: addResult
@@ -299,7 +311,7 @@ router.post('/', async (req, res) => {
             console.log(`New answer added to result ${newResult.id}: ` +
                 `Answer ${newAnswer.id} created`);
         }
-        
+
         await addResult.commit();
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
@@ -314,7 +326,7 @@ router.post('/', async (req, res) => {
         res.header('Location', uri);
         res.json(result);
         return;
-    } catch (err) {
+    } catch(err) {
         await addResult.rollback();
         console.log(err)
         console.log('Error creating new result record');
