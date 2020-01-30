@@ -51,7 +51,7 @@ router.get('/student/:firstName', function(req, res) {
     var result = {};
     data.Student.findAll({
             where: {
-                id: req.params.id
+                firstName: req.params.firstName
             }
         })
         .then( studentData => {
@@ -80,7 +80,7 @@ router.get('/student/:lastName', function(req, res) {
     var result = {};
     data.Student.findAll({
             where: {
-                id: req.params.id
+                lastName: req.params.lastName
             }
         })
         .then( studentData => {
@@ -102,7 +102,38 @@ router.get('/student/:lastName', function(req, res) {
             res.json(result);
             return;
         })
+});
+
+// getter to get record(s) by student's/students' level
+router.get('/student/:level', function(req, res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                level: req.params.level
+            }
+        })
+        .then( studentData => {
+            result['data'] = studentData;
+            result['endpoint'] = `/student/:level`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying students by level');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/students/:level`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
 })
+
+
 
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
