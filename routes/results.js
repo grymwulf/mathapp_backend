@@ -19,6 +19,23 @@ const HttpStatus = require('http-status-codes');
 const Sequelize = require('sequelize');
 
 // basic getter to get record by primary key
+/**
+ * @api (get) /results/:id
+ * 
+ * @apiName GetTestResultsByID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Result batch ID to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/:id', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -56,6 +73,23 @@ router.get('/:id', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /results/:id/summary
+ * 
+ * @apiName GetSummaryTestResultsByID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Result batch ID to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/:id/summary', async (req, res) => {
     var result = {};
     try {
@@ -90,7 +124,6 @@ router.get('/:id/summary', async (req, res) => {
                 ]
             }
         });
-        //brute force method, since sequelize.fn and sequelize.where weren't working as intended
         resultData[0].dataValues.correctlyAnswered = correctCount;
         result['data'] = resultData;
         result['endpoint'] = `results/:id/summary`;
@@ -113,6 +146,23 @@ router.get('/:id/summary', async (req, res) => {
 });
 
 // getter to get record(s) by test
+/**
+ * @api (get) /results/test/:id
+ * 
+ * @apiName GetResultsByTestID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Test ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results table entries for test 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/test/:testId', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -150,6 +200,23 @@ router.get('/test/:testId', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /results/student/:id
+ * 
+ * @apiName GetResultsByStudentID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input student ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results entires for student
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/student/:studentId', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -189,6 +256,23 @@ router.get('/student/:studentId', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /results/teacher/:id
+ * 
+ * @apiName GetResultsByTeacherID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input teacher ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results entries by teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/teacher/:teacherId', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -229,6 +313,21 @@ router.get('/teacher/:teacherId', (req, res) => {
 });
 
 // get all results
+/**
+ * @api (get) /results/
+ * 
+ * @apiName GetTestResults
+ * 
+ * @apiGroup Results
+ * 
+ * @apiSuccess (JSON) data All current table entry for result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/', (req, res) => {
     var result = {};
 
@@ -262,6 +361,20 @@ router.get('/', (req, res) => {
 });
 
 // post data to endpoint
+/**
+ * @api (post) /results/
+ * 
+ * @apiName PostTestResults
+ * 
+ * @apiGroup Results
+ * 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.post('/', async (req, res) => {
     var result = {};
     console.log(`Post: `);
