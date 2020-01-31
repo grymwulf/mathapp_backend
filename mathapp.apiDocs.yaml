@@ -291,7 +291,7 @@ paths:
                       $ref: '#/components/schemas/result'
         '400':
           $ref: '#/components/responses/400Error'
-        '404'
+        '404':
           $ref: '#/components/responses/404Error'
     post:
       description: Submit test results
