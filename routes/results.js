@@ -368,6 +368,7 @@ router.get('/', (req, res) => {
  * 
  * @apiGroup Results
  * 
+ * @apiSuccess (JSON) data id and uri of new result
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
