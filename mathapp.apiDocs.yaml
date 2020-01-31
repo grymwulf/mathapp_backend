@@ -274,7 +274,46 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
-  /results/students/{student_id}:
+  /results:
+    get:
+      description: Get all results for all tests
+      operationId: results.get
+      responses:
+        '200':
+          description: All results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/result'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404'
+          $ref: '#/components/responses/404Error'
+    post:
+      description: Submit test results
+      operationId: results.add_result
+      requestBody:
+        description: Submitted test results
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/new_result'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Record locator
+        '400':
+          $ref: '#/components/responses/400Error'
+  /results/student/{student_id}:
     get:
       description: Get results for all tests by the specified student
       operationId: results.get_by_student
@@ -301,35 +340,7 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
-    post:
-      description: Submit test results for a student
-      operationId: results.add_result
-      parameters:
-        - name: student_id
-          description: Student ID to lookup
-          in: path
-          schema:
-            type: integer
-            minimum: 1
-          required: true
-      requestBody:
-        description: Submitted test results
-        required: true
-        content: 
-          application/json:
-            schema:
-              $ref: '#/components/schemas/new_result'
-      responses:
-        '201':
-          description: Created
-          headers:
-            Location:
-              schema:
-                type: string
-              description: Record Locator
-        '400':
-          $ref: '#/components/responses/400Error'
-  /results/tests/{test_id}:
+  /results/test/{test_id}:
     get:
       description: Get results for a specific test by the test ID
       operationId: results.get_by_test_id
