@@ -47,7 +47,7 @@ router.get('/:id', function(req, res) {
 })
 
 // getter to get record(s) by student first name
-router.get('/student/:firstName', function(req, res) {
+router.get('/students/:firstName', function(req, res) {
     var result = {};
     data.Student.findAll({
             where: {
@@ -56,7 +56,7 @@ router.get('/student/:firstName', function(req, res) {
         })
         .then( studentData => {
             result['data'] = studentData;
-            result['endpoint'] = `/student/:firstName`;
+            result['endpoint'] = `/students/:firstName`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
