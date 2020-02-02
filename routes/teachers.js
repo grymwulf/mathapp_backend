@@ -198,6 +198,107 @@ router.get('/', function(req,res) {
         })
 });
 
+// get list of all teachers
+/**
+ * @api (get) /teachers/tests/type
+ * 
+ * @apiName Get teachers by test type
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom the test type belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/test/:type', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+    include: {
+	model: data.Test,
+	required: true,
+        where: {
+                type: req.params.type
+            }
+        }
+    })
+        .then(function (teachers) {
+            result['data'] = teachers;
+            result['endpoint'] = '/teacher/test/:type';
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            teachers.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });            
+            res.json(result);
+            return;
+        }).catch(function(err){
+            console.log('Error querying all teachers');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = '/teacher/test/:type';
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+// get list of all teachers
+/**
+ * @api (get) /teachers/tests/testid
+ * 
+ * @apiName Get teachers by test id
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom the test belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/test/:testId', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+    include: {
+	model: data.Test,
+	required: true,
+        where: {
+                testId: req.params.testId
+            }
+        }
+    })
+        .then(function (teachers) {
+            result['data'] = teachers;
+            result['endpoint'] = '/teacher/test/:testId';
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            teachers.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });            
+            res.json(result);
+            return;
+        }).catch(function(err){
+            console.log('Error querying all teachers');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = '/teacher/test/:testId';
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
 // get list of all teachers
 /**
@@ -247,6 +348,7 @@ router.get('/student/:studentId', (req, res) => {
             return;
         })
 });
+
 
 // post data to endpoint
 router.post('/', function (req, res) {
