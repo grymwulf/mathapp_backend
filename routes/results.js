@@ -19,6 +19,23 @@ const HttpStatus = require('http-status-codes');
 const Sequelize = require('sequelize');
 
 // basic getter to get record by primary key
+/**
+ * @api (get) /results/:id
+ * 
+ * @apiName GetTestResultsByID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Result batch ID to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/:id', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -56,26 +73,58 @@ router.get('/:id', (req, res) => {
     })
 });
 
-/*router.get('/:id/summary', async (req, res) => {
+/**
+ * @api (get) /results/:id/summary
+ * 
+ * @apiName GetSummaryTestResultsByID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Result batch ID to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/:id/summary', async (req, res) => {
     var result = {};
-    data.Result.findAll({
-        attributes: {
-            include: [
-                [Sequelize.fn('COUNT', Sequelize.col('correctly_answered')), 'answerCount']
-            ]
-        },
-        where: {
-            id: req.params.id
-        },
-        include: {
-            model: data.Answer,
-            required:  true,
+    try {
+        var correctCount = await data.Result.count({
             where: {
-                resultId: req.params.id
+                id: req.params.id
             },
-            attributes: []
-        }
-    }).then((resultData) => {
+            include: {
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: req.params.id,
+                    correctly_answered: true
+                }
+            }
+        });
+        var resultData = await data.Result.findAll({
+            where: {
+                id: req.params.id
+            },
+            include: {
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: req.params.id
+                },
+                attributes: []
+            },
+            attributes: {
+                include: [
+                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'totalQuestions']
+                ]
+            }
+        });
+        resultData[0].dataValues.correctlyAnswered = correctCount;
         result['data'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
@@ -83,7 +132,7 @@ router.get('/:id', (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    }).catch((err) => {
+    } catch(err) {
         console.log('Error querying results summary');
         console.log(err);
         result['data'] = {};
@@ -93,10 +142,27 @@ router.get('/:id', (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    })
-});*/
+    }
+});
 
 // getter to get record(s) by test
+/**
+ * @api (get) /results/test/:id
+ * 
+ * @apiName GetResultsByTestID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Test ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results table entries for test 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/test/:testId', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -134,6 +200,23 @@ router.get('/test/:testId', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /results/student/:id
+ * 
+ * @apiName GetResultsByStudentID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input student ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results entires for student
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/student/:studentId', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -173,6 +256,23 @@ router.get('/student/:studentId', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /results/teacher/:id
+ * 
+ * @apiName GetResultsByTeacherID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input teacher ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results entries by teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/teacher/:teacherId', (req, res) => {
     var result = {};
     data.Result.findAll({
@@ -213,6 +313,21 @@ router.get('/teacher/:teacherId', (req, res) => {
 });
 
 // get all results
+/**
+ * @api (get) /results/
+ * 
+ * @apiName GetTestResults
+ * 
+ * @apiGroup Results
+ * 
+ * @apiSuccess (JSON) data All current table entry for result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/', (req, res) => {
     var result = {};
 
@@ -246,17 +361,44 @@ router.get('/', (req, res) => {
 });
 
 // post data to endpoint
+/**
+ * @api (post) /results/
+ * 
+ * @apiName PostTestResults
+ * 
+ * @apiGroup Results
+ * 
+ * @apiSuccess (JSON) data id and uri of new result
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.post('/', async (req, res) => {
     var result = {};
     console.log(`Post: `);
-    console.log(req.body);
+    console.log(req.body);    
 
-    var addResult = await data.sequelize.transaction();
+    try {
+        var addResult = await data.sequelize.transaction();
+    } catch(err) {
+        console.log(err)
+        console.log('Error creating new transaction');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = "/results";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
 
     try {
         var newResult = await data.Result.create({
             time_taken: req.body.time_taken,
-            attempt_number: req.body.attempt_number,
             testId: req.body.testId
         },{
             transaction: addResult
@@ -273,9 +415,9 @@ router.post('/', async (req, res) => {
                 operation: answerData.operation,
                 operand1: answerData.operand1,
                 operand2: answerData.operand2,
-                correctly_answered: JSON.stringify(answerData.student_answer
+                correctly_answered: answerData.student_answer
                     == eval(answerData.operand1 + answerData.operation
-                        + answerData.operand2)),
+                    + answerData.operand2),
                 resultId: newResult.id
             },{
                 transaction: addResult
@@ -283,6 +425,7 @@ router.post('/', async (req, res) => {
             console.log(`New answer added to result ${newResult.id}: ` +
                 `Answer ${newAnswer.id} created`);
         }
+
         await addResult.commit();
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
@@ -297,7 +440,7 @@ router.post('/', async (req, res) => {
         res.header('Location', uri);
         res.json(result);
         return;
-    } catch (err) {
+    } catch(err) {
         await addResult.rollback();
         console.log(err)
         console.log('Error creating new result record');
@@ -308,14 +451,14 @@ router.post('/', async (req, res) => {
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
-        return;;
+        return;
     }
 });
 
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function (req, res) {
+router.use((req, res) => {
     var result = {};
     result['data'] = {
         "endpoint": "/results"

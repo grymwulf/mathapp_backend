@@ -12,7 +12,6 @@
     Proprietary and confidential
 */
 
-const {Test} = require('../database')
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
@@ -26,22 +25,6 @@ module.exports = (sequelize, type) => {
         time_taken: {
             type: Sequelize.TIME,
             allowNull: false
-        },
-
-        attempt_number: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            unique: 'attemptUniqueness'
-        },
-
-        testId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            references: {
-                model: Test,
-                key: 'id'
-            },
-            unique: 'attemptUniqueness'
         }
 
     },{
