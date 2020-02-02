@@ -218,7 +218,9 @@ router.get('/test/:type', (req, res) => {
     var result = {};
     data.Teacher.findAll({
     include: {
-            where: {
+	model: data.Test,
+	required: true,
+        where: {
                 type: req.params.type
             }
         }
