@@ -269,7 +269,9 @@ router.get('/test/:testId', (req, res) => {
     var result = {};
     data.Teacher.findAll({
     include: {
-            where: {
+	model: data.Test,
+	required: true,
+        where: {
                 testId: req.params.testId
             }
         }
