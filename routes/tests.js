@@ -46,17 +46,17 @@ router.get('/:id', function(req,res) {
         })
 });
 
-// basic getter to get record by category
-router.get('/:category', function(req,res) {
+// basic getter to get all tests by category
+router.get('/category/:category', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
-                id: req.params.id
-            }
+                category: req.params.category
+            },
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `/tests/:category`;
+            result['endpoint'] = `/tests/category/:category`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -66,7 +66,7 @@ router.get('/:category', function(req,res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/tests/:category`;
+            result['endpoint'] = `/tests/category/:category`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -191,6 +191,36 @@ router.get('/student/studentId', function(req,res) {
             return;
         })
 });
+
+// implementing a basic getter to get all known tests in the DB
+router.get('/', function (req, res) {
+    var result = {};
+    data.Test.findAll({
+            raw: true
+        })
+        .then(function (tests) {
+            result['data'] = tests;
+            result['endpoint'] = "/tests";
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            tests.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying all tests');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = "/tests";
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+}) 
 
 
 // get data store it, return a URI + id for stored data
