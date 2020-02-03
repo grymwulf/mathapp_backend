@@ -67,7 +67,7 @@ const Teacher = TeacherModel(sequelize, Sequelize);
 // create foriegn keys
 
 Test.hasMany(Result);
-Teacher.hasMany(Test)
+Teacher.hasMany(Test);
 Teacher.hasMany(Student);
 Student.hasMany(Result);
 Test.belongsTo(Student);

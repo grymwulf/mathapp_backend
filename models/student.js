@@ -33,13 +33,12 @@ module.exports = (sequelize, type) => {
 
         lastName: {
             type: Sequelize.STRING,
-            allowNull: false,         
+            allowNull: false        
         },
 
         level: {
             type: Sequelize.STRING,
-            allowNull: false,
-            isNumeric: true
+            allowNull: false
         },
     
         // implement a data field to store data for testing get/post
