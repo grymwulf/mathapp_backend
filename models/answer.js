@@ -36,12 +36,24 @@ module.exports = (sequelize, type) => {
         },
 
         operation: {
-            type: Sequelize.STRING,
+            type: Sequelize.ENUM,
+            values: ['+', '-', '*', '/'],
+            validate: {
+                isIn: {
+                    args: [['+', '-', '*', '/']],
+                    msg: "Must be basic arithmetic operation"
+                }
+            },
             allowNull: false
         },
 
         operand1: {
             type: Sequelize.INTEGER,
+            validate: {
+                min: 0,
+                max: 14,
+                isInt: true
+            },
             allowNull: false,
             set(value) {
                 this.setDataValue('operand1', parseInt(value));
@@ -50,6 +62,11 @@ module.exports = (sequelize, type) => {
 
         operand2: {
             type: Sequelize.INTEGER,
+            validate: {
+                min: 0,
+                max: 14,
+                isInt: true
+            },
             allowNull: false,
             set(value) {
                 this.setDataValue('operand2', parseInt(value));

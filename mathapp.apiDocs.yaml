@@ -418,7 +418,7 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
         '404':
-          $ref: '#components/responese/404Error'
+          $ref: '#/components/responses/404Error'
 # Reusable Definitions     
 components:
   schemas:
@@ -485,7 +485,7 @@ components:
         test_id:
           type: integer
           description: Test ID of test this submission is for
-        questions:
+        answers:
           type: array
           items:
             properties:
@@ -531,7 +531,7 @@ components:
         testId:
           type: integer
           description: Test ID of the test the result belongs to
-        questions:
+        answers:
           type: array
           items:
             properties:
