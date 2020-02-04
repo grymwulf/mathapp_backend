@@ -105,7 +105,7 @@ router.get('/lastName/:lastName', function(req,res) {
 });
 
 // getter to get record(s) by student's/students' level
-router.get('/student/:level', function(req, res) {
+router.get('/level/:level', function(req, res) {
     var result = {};
     data.Student.findAll({
             where: {
@@ -114,7 +114,7 @@ router.get('/student/:level', function(req, res) {
         })
         .then( studentData => {
             result['data'] = studentData;
-            result['endpoint'] = `/student/:level`;
+            result['endpoint'] = `/student/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -124,7 +124,7 @@ router.get('/student/:level', function(req, res) {
             console.log('Error querying students by level');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/students/:level`;
+            result['endpoint'] = `/students/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
