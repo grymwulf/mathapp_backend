@@ -76,16 +76,16 @@ router.get('/category/:category', function(req,res) {
 });
 
 // basic getter to get record by level
-router.get('/:level', function(req,res) {
+router.get('/level/:level', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
-                id: req.params.id
+                level: req.params.level
             }
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `/tests/:level`;
+            result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -95,7 +95,7 @@ router.get('/:level', function(req,res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/tests/:level`;
+            result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);

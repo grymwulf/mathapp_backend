@@ -34,6 +34,7 @@ module.exports = (sequelize, type) => {
 	//level: difficulty of test i.e. 1+, 2+, 3+, etc.
 	level: {
 		type: Sequelize.STRING(50),
+		allowNull: false
 	},
 	
 	//attempts_remaining: number of attempts left to take test
