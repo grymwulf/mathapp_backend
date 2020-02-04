@@ -104,7 +104,8 @@ router.get('/lastName/:lastName', function(req,res) {
         })
 });
 
-// getter to get record(s) by student's/students' level
+
+// basic getter to get student record(s) by level
 router.get('/level/:level', function(req, res) {
     var result = {};
     data.Student.findAll({
@@ -132,8 +133,6 @@ router.get('/level/:level', function(req, res) {
             return;
         })
 })
-
-
 
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
