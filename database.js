@@ -69,7 +69,7 @@ const Answer = AnswerModel(sequelize, Sequelize);
 Result.hasMany(Answer);
 Answer.belongsTo(Result);
 Test.hasMany(Result);
-Result.belongsTo(Test)
+Result.belongsTo(Test);
 Teacher.hasMany(Test);
 Test.belongsTo(Teacher);
 Teacher.hasMany(Student);
