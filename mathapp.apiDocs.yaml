@@ -274,7 +274,6 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
-  /results/students/{student_id}:
   /results:
     get:
       description: Get all results for all tests
@@ -314,7 +313,7 @@ paths:
               description: Record locator
         '400':
           $ref: '#/components/responses/400Error'
-  /results/student/{student_id}:
+  /results/students/{student_id}:
     get:
       description: Get results for all tests by the specified student
       operationId: results.get_by_student
