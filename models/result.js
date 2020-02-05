@@ -12,7 +12,7 @@
     Proprietary and confidential
 */
 
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
     return sequelize.define('result', {
@@ -22,29 +22,9 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-        student_answer: {
-            type: Sequelize.INTEGER,
-            require: true
-        },
-
-        correct_answer: {
-            type: Sequelize.INTEGER,
-            require: true
-        },
-
-        operation: {
-            type: Sequelize.STRING,
-            require: true
-        },
-
-        operand1: {
-            type: Sequelize.INTEGER,
-            require: true
-        },
-
-        operand2: {
-            type: Sequelize.INTEGER,
-            require: true
+        time_taken: {
+            type: Sequelize.TIME,
+            allowNull: false
         }
 
     },{
