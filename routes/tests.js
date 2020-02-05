@@ -17,7 +17,23 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
-// basic getter to get record by primary key
+/**
+ * @api (get) /tests/:id
+ * 
+ * @apiName GetTestsByID
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch ID to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/:id', function(req,res) {
     var result = {};
     data.Test.findAll({
@@ -46,7 +62,23 @@ router.get('/:id', function(req,res) {
         })
 });
 
-// basic getter to get all tests by category
+/**
+ * @api (get) /tests/category/:category
+ * 
+ * @apiName GetTestsByCategory
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch Category to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/category/:category', function(req,res) {
     var result = {};
     data.Test.findAll({
@@ -75,7 +107,23 @@ router.get('/category/:category', function(req,res) {
         })
 });
 
-// basic getter to get record by level
+/**
+ * @api (get) /tests/level/:level
+ * 
+ * @apiName GetTestsByLevel
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch Level to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/level/:level', function(req,res) {
     var result = {};
     data.Test.findAll({
@@ -104,17 +152,33 @@ router.get('/level/:level', function(req,res) {
         })
 });
 
-// basic getter to get record by attempts remaining
-router.get('/:attempts_remaining', function(req,res) {
+/**
+ * @api (get) /tests/attempts_remaining/:attempts_remaining
+ * 
+ * @apiName GetTestsByAttempts_Remaining
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch Attempts_Remaining to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/attempts_remaining/:attempts_remaining', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
-                id: req.params.id
+                attempts_remaining: req.params.attempts_remaining
             }
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `/tests/:attempts_remaining`;
+            result['endpoint'] = `/tests/attempts_remaining/:attempts_remaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -124,7 +188,7 @@ router.get('/:attempts_remaining', function(req,res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/tests/:attempts_remaining`;
+            result['endpoint'] = `/tests/attempts_remaining/:attempts_remaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
