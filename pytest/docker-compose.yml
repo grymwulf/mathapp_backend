@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+    postgres:
+        image: postgres:latest
+        environment:
+            POSTGRES_USER: "mathapp_api"
+            POSTGRES_PASSWORD: "password_mathapp_api"
+            POSTGRES_DB: "mathapp"
+        ports:
+            - 5432:5432
+        expose:
+            - 5432
+        volumes:
+            - mathapp-db:/var/lib/postgresql/data
+volumes:
+    mathapp-db:
+        external: true
