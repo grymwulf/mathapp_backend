@@ -24,9 +24,13 @@ module.exports = (sequelize, type) => {
 
         student_answer: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
             set(value) {
-                this.setDataValue('student_answer', parseInt(value));
+                if (value === null) {
+                    this.setDataValue('student_answer', null)
+                } else {
+                    this.setDataValue('student_answer', parseInt(value));
+                }
             }
         },
 
