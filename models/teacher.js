@@ -1,4 +1,4 @@
-fistName/*
+/*
     Copyright 2019 SER401 Project 14 Team - All Rights Reserved
 
     Team Members: 
@@ -10,12 +10,12 @@ fistName/*
 
     Unauthorized copying of this file, via any medium is strictly prohibited
     Proprietary and confidential
-*/
+    */
 
-const Sequelize = require('sequelize');
+    const Sequelize = require('sequelize');
 
-module.exports = (sequelize, type) => {
-    return sequelize.define('teacher', {
+    module.exports = (sequelize, type) => {
+        return sequelize.define('teacher', {
 
         // id: primary ID of teacher, should match any 
         // tracking ID for underlying student info
@@ -25,13 +25,13 @@ module.exports = (sequelize, type) => {
             autoIncrement: true,
             primaryKey: true
         },
-   	firstName: {
+        firstName: {
             type: Sequelize.STRING(50),
-             allowNull: false, 
+            allowNull: false, 
         },
-   	lastName: {
+        lastName: {
             type: Sequelize.STRING(50),
-       	     allowNull: false, 
+            allowNull: false, 
         },
 
         // implement a data field to store data for testing get/post
@@ -39,4 +39,4 @@ module.exports = (sequelize, type) => {
     },{
         timestamps: false
     })
-}
+    }
