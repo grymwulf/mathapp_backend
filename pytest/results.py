@@ -9,3 +9,9 @@ def get_by_test_id(test_id):
 
 def get_by_result_id(result_id):
     return "Get by Result ID"
+
+def get_all():
+    return "Get all results"
+
+def get_summary_by_result_id(result_id):
+    return "Get result summary"

@@ -1,4 +1,4 @@
-import sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
 import connexion
 from flask import redirect
 

@@ -403,7 +403,6 @@ paths:
           in: path
           schema:
             type: integer
-            minumum: 1
           required: true
       responses:
         '200':
@@ -414,11 +413,11 @@ paths:
                 properties:
                   results:
                     type: object
-                    $ref: '#components/schemas/result_summary'
+                    $ref: '#/components/schemas/result_summary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
-          $ref: '#components/responese/404Error'
+          $ref: '#/components/responses/404Error'
 # Reusable Definitions     
 components:
   schemas:
@@ -504,12 +503,12 @@ components:
               operation:
                 type: string
                 description: +, -, *, /
-              operand1:
+              operand_1:
                 type: integer
                 description: Operand preceding the operation
-              operand2:
+              operand_2:
                 type: integer
-                decription: Operand subequent to operation
+                description: Operand subequent to operation
     result_summary:
       type: object
       properties:
