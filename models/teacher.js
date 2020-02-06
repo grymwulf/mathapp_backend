@@ -1,4 +1,4 @@
-/*
+fistName/*
     Copyright 2019 SER401 Project 14 Team - All Rights Reserved
 
     Team Members: 
@@ -26,12 +26,12 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
    	firstName: {
-            type: Sequelize.STRING,
-            require: true
+            type: Sequelize.STRING(50),
+             allowNull: false, 
         },
    	lastName: {
-            type: Sequelize.STRING,
-       	    require: true
+            type: Sequelize.STRING(50),
+       	     allowNull: false, 
         },
 
         // implement a data field to store data for testing get/post
