@@ -43,8 +43,8 @@ router.get('/:id', function(req,res) {
                 id: req.params.id
             }
         })
-        .then( instructorData => {
-            result['data'] = instructorData;
+        .then( teacherData => {
+            result['data'] = teacherData;
             result['endpoint'] = `/teachers/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -81,26 +81,26 @@ router.get('/:id', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/:lastName', function(req,res) {
+router.get('/lastName/:lastName', function(req, res) {
     var result = {};
     data.Teacher.findAll({
             where: {
                 lastName: req.params.lastName
             }
         })
-        .then( instructorData => {
-            result['data'] = instructorData;
-            result['endpoint'] = `/teachers/:lastName`;
+        .then( teacherData => {
+            result['data'] = teacherData;
+            result['endpoint'] = `/teacher/lastName/:lastName`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a teacher');
+            console.log('Error querying a teacher by their last name');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/teachers/:lastName`;
+            result['endpoint'] = `/teachers/lastName/:lastName`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -113,11 +113,11 @@ router.get('/:lastName', function(req,res) {
 /**
  * @api (get) /teachers/:firstName
  * 
- * @apiName GetInstructorByFirstName
+ * @apiName GetTeacherByFirstName
  * 
- * @apiGroup Instructors
+ * @apiGroup Teachers
  * 
- * @apiParam (Number) input Instructors First Name to pull
+ * @apiParam (Number) input Teachers First Name to pull
  * 
  * @apiSuccess (JSON) data Current table entry for instructor
  * @apiSuccess (JSON) responseCode HTTP Response Code
@@ -127,16 +127,16 @@ router.get('/:lastName', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/:firstName', function(req,res) {
+router.get('/firstName/:firstName', function(req,res) {
     var result = {};
     data.Teacher.findAll({
             where: {
                 firstName: req.params.firstName
             }
         })
-        .then( instructorData => {
-            result['data'] = instructorData;
-            result['endpoint'] = `/teachers/:firstName`;
+        .then( teacherData => {
+            result['data'] = teacherData;
+            result['endpoint'] = `/teachers/firstName/:firstName`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -146,7 +146,7 @@ router.get('/:firstName', function(req,res) {
             console.log('Error querying a teacher');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/teachers/:firstName`;
+            result['endpoint'] = `/teachers/firstName/:firstName`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -175,7 +175,7 @@ router.get('/', function(req,res) {
     var result = {};
     data.Teacher.findAll()
         .then(function (teachers) {
-            result['data'] = teachers;
+            result['teachers'] = teachers;
             result['endpoint'] = "/teachers";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
