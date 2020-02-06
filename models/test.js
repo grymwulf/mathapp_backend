@@ -40,6 +40,12 @@ module.exports = (sequelize, type) => {
 	//attempts_remaining: number of attempts left to take test
 	attempts_remaining: {
 		type: Sequelize.INTEGER,
+		allowNull: false
+	},
+
+	teacherId: {
+		type: Sequelize.INTEGER,
+		allowNull: false
 	},
 
         // implement a data field to store data for testing get/post

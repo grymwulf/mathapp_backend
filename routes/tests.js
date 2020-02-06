@@ -199,16 +199,16 @@ router.get('/attempts_remaining/:attempts_remaining', function(req,res) {
 
 
 // basic getter to get record by teacher id
-router.get('/teacher/:teacherId', function(req,res) {
+router.get('/teachers/:teacherId', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
-                id: req.params.id
+                teacherId: req.params.teacherId
             }
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `tests/teacher/:teacherId`;
+            result['endpoint'] = `tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -218,7 +218,7 @@ router.get('/teacher/:teacherId', function(req,res) {
             console.log('Error querying a student');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `tests/teacher/:teacherId`;
+            result['endpoint'] = `tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
