@@ -66,9 +66,18 @@ const Teacher = TeacherModel(sequelize, Sequelize);
 const Answer = AnswerModel(sequelize, Sequelize);
 
 // create foriegn keys
-Result.hasMany(Answer);
+
+Result.hasMany(Answer, {
+    foreignKey: {
+        allowNull: false
+    }
+});
 Answer.belongsTo(Result);
-Test.hasMany(Result);
+Test.hasMany(Result, {
+    foreignKey: {
+        allowNull: false
+    }
+});
 Result.belongsTo(Test);
 Teacher.hasMany(Test);
 Test.belongsTo(Teacher);
@@ -94,9 +103,6 @@ if (APP_ENVIRONMENT === "dev") {
     });
 }
 // sync database
-
-
-
 
 /*
     Export our DataModels for use in routes

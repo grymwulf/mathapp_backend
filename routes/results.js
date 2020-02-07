@@ -201,6 +201,89 @@ router.get('/test/:testId', (req, res) => {
 });
 
 /**
+ * @api (get) /results/test/:id/summary
+ * 
+ * @apiName GetSummaryResultsByTestID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input Test ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results table entries for test 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/test/:testId/summary', async (req, res) => {
+    var result = {};
+
+    try {
+        var resultData = await data.Result.findAll({
+            where: {
+                testId: req.params.testId
+            },
+            include: {
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: Sequelize.col('result.id')
+                },
+                attributes: []
+            }
+        })
+        for (i = 0; i < resultData.length; i++) {
+            var correctCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id,
+                        correctly_answered: true
+                    }
+                }
+            });
+            var totalCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id
+                    }
+                }
+            });
+            resultData[i].dataValues.totalQuestions = totalCount;
+            resultData[i].dataValues.correctlyAnswered = correctCount;
+        }
+        result['data'] = resultData;
+        result['endpoint'] = `results/test/:testId/summary`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    } catch (err) {
+        console.log('Error querying results by test');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/test/:testId/summary`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/**
  * @api (get) /results/student/:id
  * 
  * @apiName GetResultsByStudentID
@@ -383,20 +466,6 @@ router.post('/', async (req, res) => {
 
     try {
         var addResult = await data.sequelize.transaction();
-    } catch(err) {
-        console.log(err)
-        console.log('Error creating new transaction');
-        console.log(err);
-        result['data'] = {};
-        result['endpoint'] = "/results";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-
-    try {
         var newResult = await data.Result.create({
             time_taken: req.body.time_taken,
             testId: req.body.testId
