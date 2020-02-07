@@ -339,6 +339,86 @@ router.get('/student/:studentId', (req, res) => {
     })
 });
 
+router.get('/student/:studentId/summary', async (req, res) => {
+    var result = {};
+
+    try {
+        var resultData = await data.Result.findAll({
+            include: {
+                model: data.Test,
+                required: true,
+                where: {
+                    studentId: req.params.studentId
+                },
+                attributes: [],
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: Sequelize.col('result.id')
+                },
+                attributes: []
+            }
+        });
+        for (i = 0; i < resultData.length; i++) {
+            var correctCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.studentId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id,
+                        correctly_answered: true
+                    }
+                }
+            });
+            var totalCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.studentId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id
+                    }
+                }
+            });
+            resultData[i].dataValues.totalQuestions = totalCount;
+            resultData[i].dataValues.correctlyAnswered = correctCount;
+        }
+        result['data'] = resultData;
+        result['endpoint'] = `results/student/:studentId/summary`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    } catch(err) {
+        console.log('Error querying results by student');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/student/:studentId/summary`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+
+});
+
 /**
  * @api (get) /results/teacher/:id
  * 

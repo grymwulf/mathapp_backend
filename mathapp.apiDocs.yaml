@@ -340,6 +340,33 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
+  /results/student/{student_id}/summary:
+    get:
+      description: Get summary results for specified student
+      operationId: results.get_summary_by_student
+      parameters:
+        - name: student_id
+          description: Student ID to lookup
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#components/schemas/result_summary'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
   /results/test/{test_id}:
     get:
       description: Get results for a specific test by the test ID
