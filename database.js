@@ -66,6 +66,7 @@ const Teacher = TeacherModel(sequelize, Sequelize);
 const Answer = AnswerModel(sequelize, Sequelize);
 
 // create foriegn keys
+
 Result.hasMany(Answer, {
     foreignKey: {
         allowNull: false

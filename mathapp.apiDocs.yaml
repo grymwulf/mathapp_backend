@@ -277,7 +277,7 @@ paths:
   /results:
     get:
       description: Get all results for all tests
-      operationId: results.get
+      operationId: results.get_all
       responses:
         '200':
           description: All results
@@ -313,7 +313,7 @@ paths:
               description: Record locator
         '400':
           $ref: '#/components/responses/400Error'
-  /results/student/{student_id}:
+  /results/students/{student_id}:
     get:
       description: Get results for all tests by the specified student
       operationId: results.get_by_student
@@ -457,7 +457,6 @@ paths:
           in: path
           schema:
             type: integer
-            minumum: 1
           required: true
       responses:
         '200':
@@ -468,7 +467,7 @@ paths:
                 properties:
                   results:
                     type: object
-                    $ref: '#components/schemas/result_summary'
+                    $ref: '#/components/schemas/result_summary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -482,9 +481,12 @@ components:
         id:
           type: integer
           description: Student ID
-        student_name:
+        student_firstname:
           type: string
-          description: Student's Name
+          description: Student's First Name
+        student_lastname:
+          type: string
+          description: Student's Last Name
         teacher_id:
           type: string
           description: Student's Teacher
@@ -500,9 +502,12 @@ components:
         teacher_id:
           type: integer
           description: ID number for teacher
-        teacher_name:
+        teacher_firstname:
           type: string
-          description: Teacher's Name
+          description: Teacher's First Name
+        teacher_lastname:
+          type: string
+          description: Teacher's Last Name
     test:
       type: object
       properties:
@@ -552,12 +557,12 @@ components:
               operation:
                 type: string
                 description: +, -, *, /
-              operand1:
+              operand_1:
                 type: integer
                 description: Operand preceding the operation
-              operand2:
+              operand_2:
                 type: integer
-                decription: Operand subequent to operation
+                description: Operand subequent to operation
     result_summary:
       type: object
       properties:
