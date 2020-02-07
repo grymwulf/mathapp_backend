@@ -26,16 +26,25 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
+        //Student's first name
         firstName: {
             type: Sequelize.STRING,
             allowNull: false
         },
 
+        //Student's last name
         lastName: {
             type: Sequelize.STRING,
             allowNull: false        
         },
 
+        //Stars student has earned
+        stars: {
+            type: Sequelize.INTEGER(50),
+            allowNull: false
+        },
+
+        //Level of student
         level: {
             type: Sequelize.STRING,
             allowNull: false
