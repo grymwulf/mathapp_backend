@@ -49,7 +49,12 @@ module.exports = (sequelize, type) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-    
+
+        teacherId: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT,
     },{

@@ -115,7 +115,7 @@ router.get('/level/:level', function(req, res) {
         })
         .then( studentData => {
             result['data'] = studentData;
-            result['endpoint'] = `/student/level/:level`;
+            result['endpoint'] = `/students/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -132,7 +132,70 @@ router.get('/level/:level', function(req, res) {
             res.json(result);
             return;
         })
-})
+});
+
+/**
+ * @api (get) /students/teacher/:teacherId
+ * 
+ * @apiName GetStudentsByTeacherID
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input teacher ID to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+/**
+ * @api (get) /students/teacher/:teacherId
+ * 
+ * @apiName GetStudentsByTeacherID
+ * 
+ * @apiGroup Student
+ * 
+ * @apiParam (Number) input teacher ID to pull
+ * 
+ * @apiSuccess (JSON) data Current results entries by teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/teacherId/:teacherId', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                teacherId: req.params.teacherId
+            }
+    })
+    .then( studentData => {
+        result['data'] = studentData;
+        result['endpoint'] = `/students/teacherId/:teacherId`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by teacher ID');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = `/students/teacherId/:teacherId`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
 
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
@@ -159,61 +222,6 @@ router.get('/', function (req, res) {
         })
 })
 
-/**
- * @api (get) /students/teacher/:id
- * 
- * @apiName GetStudentsByTeacherID
- * 
- * @apiGroup Students
- * 
- * @apiParam (Number) input teacher ID to pull
- * 
- * @apiSuccess (JSON) data Current students entries by teacher
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-router.get('/teacher/:teacherId', (req, res) => {
-    var result = {};
-    data.Result.findAll({
-        include: {
-            model: data.Test,
-            required: true,
-            where: {
-                teacherId: req.params.teacherId
-            },
-            model: data.Answer,
-            required: true,
-            where: {
-                resultId: Sequelize.col('result.id')
-            },
-            attributes: {
-                exclude: ['id', 'resultId']
-            }
-        }
-    }).then((resultData) => {
-        result['data'] = resultData;
-        result['endpoint'] = `results/teacher/:teacherId`;
-        result['responseCode'] = HttpStatus.OK;
-        result['response'] = "Query Successful";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }).catch((err) => {
-        console.log('Error querying results by teacher');
-        console.log(err);
-        result['data'] = {};
-        result['endpoint'] = `/results/teacher/:teacherId`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-});
 
 // get data store it, return a URI + id for stored data
 router.post('/', function (req, res) {
