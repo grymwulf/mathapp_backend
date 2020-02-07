@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 SER401 Project 14 Team - All Rights Reserved
+    Copyright 2019 SER402 Project 14 Team - All Rights Reserved
 
     Team Members: 
     RAYMOND ACEVEDO
@@ -26,8 +26,37 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
+        //Student's first name
+        firstName: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+
+        //Student's last name
+        lastName: {
+            type: Sequelize.STRING,
+            allowNull: false        
+        },
+
+        //Stars student has earned
+        stars: {
+            type: Sequelize.INTEGER(50),
+            allowNull: false
+        },
+
+        //Level of student
+        level: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+
+        teacherId: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+
         // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT
+        data: Sequelize.TEXT,
     },{
         timestamps: false
     })
