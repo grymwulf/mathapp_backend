@@ -46,6 +46,53 @@ router.get('/:id', function(req, res) {
         })
 });
 
+/**
+ * @api (get) /students/firstName/:firstName
+ * 
+ * @apiName GetStudentsByFirstName
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input first name to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by first name
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+// getter to get record(s) by student first name
+router.get('/firstName/:firstName', function(req, res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                firstName: req.params.firstName
+            }
+        })
+        .then( studentData => {
+            result['data'] = studentData;
+            result['endpoint'] = `/students/firstName/:firstName`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/students/firstName/:firstName`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
 // basic getter to get student record(s) by level
 router.get('/level/:level', function(req, res) {
     var result = {};
@@ -75,6 +122,8 @@ router.get('/level/:level', function(req, res) {
         })
 });
 
+
+
 /**
  * @api (get) /students/teacher/:teacherId
  * 
@@ -93,23 +142,6 @@ router.get('/level/:level', function(req, res) {
  * @apiError (JSON) response Server Response
  */
 
-/**
- * @api (get) /students/teacher/:teacherId
- * 
- * @apiName GetStudentsByTeacherID
- * 
- * @apiGroup Student
- * 
- * @apiParam (Number) input teacher ID to pull
- * 
- * @apiSuccess (JSON) data Current results entries by teacher
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
 router.get('/teacherId/:teacherId', function(req,res) {
     var result = {};
     data.Student.findAll({
