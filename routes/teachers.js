@@ -16,6 +16,7 @@
     const router = express.Router();
     const data = require('../database');
     const HttpStatus = require('http-status-codes');
+    const Sequelize = require('sequelize'); 
 
 /**
  * @api (get) /teachers/:id
@@ -39,10 +40,13 @@
     data.Teacher.findAll({
         where: {
             id: req.params.id
+        },
+        attributes: {
+            exclude: ['data']
         }
     })
     .then( teacherData => {
-        result['data'] = teacherData;
+        result['teacher'] = teacherData;
         result['endpoint'] = `/teachers/:id`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -52,7 +56,7 @@
     }).catch(function (err) {
         console.log('Error querying of teacher by id');
         console.log(err)
-        result['data'] = {};
+        result['teacher'] = {};
         result['endpoint'] = `/teachers/:id`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -84,11 +88,14 @@
     data.Teacher.findAll({
         where: {
             lastName: req.params.lastName
+        },
+        attributes: {
+            exclude: ['data']
         }
     })
     .then( teacherData => {
-        result['data'] = teacherData;
-        result['endpoint'] = `/teacher/lastName/:lastName`;
+        result['teacher'] = teacherData;
+        result['endpoint'] = `/teachers/lastName/:lastName`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
         res.status(result.responseCode);
@@ -97,7 +104,7 @@
     }).catch(function (err) {
         console.log('Error querying a teacher by their last name');
         console.log(err)
-        result['data'] = {};
+        result['teacher'] = {};
         result['endpoint'] = `/teachers/lastName/:lastName`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -130,10 +137,13 @@
     data.Teacher.findAll({
         where: {
             firstName: req.params.firstName
+        },
+        attributes: {
+            exclude: ['data']
         }
     })
     .then( teacherData => {
-        result['data'] = teacherData;
+        result['teacher'] = teacherData;
         result['endpoint'] = `/teachers/firstName/:firstName`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -143,7 +153,7 @@
     }).catch(function (err) {
         console.log('Error querying a teacher by their first name');
         console.log(err)
-        result['data'] = {};
+        result['teacher'] = {};
         result['endpoint'] = `/teachers/firstName/:firstName`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -175,7 +185,7 @@
         raw: true
     })
     .then(function (teachers) {
-        result['data'] = teachers;
+        result['teacher'] = teachers;
         result['endpoint'] = "/teachers";
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -188,7 +198,7 @@
     }).catch(function(err){
         console.log('Error querying all teachers');
         console.log(err)
-        result['data'] = {};
+        result['teacher'] = {};
         result['endpoint'] = "/teachers";
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -218,15 +228,15 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-         model: data.Test,
-         required: true,
-         where: {
+           model: data.Test,
+           required: true,
+           where: {
             type: req.params.type
         }
     }
 })
     .then(function (teachers) {
-        result['data'] = teachers;
+        result['teacher'] = teachers;
         result['endpoint'] = '/teacher/test/:type';
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -239,7 +249,7 @@
     }).catch(function(err){
         console.log('Error querying all teachers');
         console.log(err)
-        result['data'] = {};
+        result['teacher'] = {};
         result['endpoint'] = '/teacher/test/:type';
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -265,33 +275,36 @@
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
- router.get('/test/:testId', (req, res) => {
+ router.get('/test/id/:id', (req, res) => {
     var result = {};
     data.Teacher.findAll({
-        include: {
-         model: data.Test,
-         required: true,
-         where: {
-            testId: req.params.testId
-        }
+      attributes: {
+        exclude: ['data']
+    },
+    include: {
+       model: data.Test,
+       required: true,
+       where: {
+        id: req.params.id
+    },
+    attributes: {
+        exclude: ['teacherId', 'data', 'studentId']
     }
+}
 })
     .then(function (teachers) {
-        result['data'] = teachers;
-        result['endpoint'] = '/teacher/test/:testId';
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/test/id/:id';
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
         res.status(result.responseCode);
-        teachers.forEach(element => {
-            element.data = JSON.parse(element.data)
-        });            
         res.json(result);
         return;
     }).catch(function(err){
         console.log('Error querying all teachers');
         console.log(err)
-        result['data'] = {};
-        result['endpoint'] = '/teacher/test/:testId';
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/test/id/:id';
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
