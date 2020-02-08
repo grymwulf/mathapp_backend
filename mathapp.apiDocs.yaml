@@ -1,6 +1,6 @@
 openapi: '3.0.0'
 info:
-  version: "1-oas3"
+  version: "0.1.0"
   title: 'MathApp.API'
   description: 'This is the backend API for the ASU STEM Academy Math APP Project'
 servers:
@@ -274,6 +274,45 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
+  /results:
+    get:
+      description: Get all results for all tests
+      operationId: results.get_all
+      responses:
+        '200':
+          description: All results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/result'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+    post:
+      description: Submit test results
+      operationId: results.add_result
+      requestBody:
+        description: Submitted test results
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/new_result'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Record locator
+        '400':
+          $ref: '#/components/responses/400Error'
   /results/students/{student_id}:
     get:
       description: Get results for all tests by the specified student
@@ -301,35 +340,7 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
-    post:
-      description: Submit test results for a student
-      operationId: results.add_result
-      parameters:
-        - name: student_id
-          description: Student ID to lookup
-          in: path
-          schema:
-            type: integer
-            minimum: 1
-          required: true
-      requestBody:
-        description: Submitted test results
-        required: true
-        content: 
-          application/json:
-            schema:
-              $ref: '#/components/schemas/new_result'
-      responses:
-        '201':
-          description: Created
-          headers:
-            Location:
-              schema:
-                type: string
-              description: Record Locator
-        '400':
-          $ref: '#/components/responses/400Error'
-  /results/tests/{test_id}:
+  /results/test/{test_id}:
     get:
       description: Get results for a specific test by the test ID
       operationId: results.get_by_test_id
@@ -356,6 +367,33 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
+  /results/test/{test_id}/summary:
+    get:
+      description: Get summary results for a specific test by the test ID
+      operationId: results.get_summary_by_test_id
+      parameters:
+        - name: test_id
+          description: Test tracking ID number to look up the results for
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: Aggregate results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#components/schemas/result_summary'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
   /results/{result_id}:
     get:
       description: Get result by result tracking ID
@@ -375,9 +413,34 @@ paths:
             application/json:
               schema:
                 properties:
-                  result:
+                  results:
                     type: object
                     $ref: '#/components/schemas/result'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+  /results/{result_id}/summary:
+    get:
+      description: Get result summary by result tracking ID
+      operationId: results.get_summary_by_result_id
+      parameters:
+        - name: result_id
+          description: Result tracking ID number to look up
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results summary
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: object
+                    $ref: '#/components/schemas/result_summary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -391,9 +454,12 @@ components:
         id:
           type: integer
           description: Student ID
-        student_name:
+        student_firstname:
           type: string
-          description: Student's Name
+          description: Student's First Name
+        student_lastname:
+          type: string
+          description: Student's Last Name
         teacher_id:
           type: string
           description: Student's Teacher
@@ -409,9 +475,12 @@ components:
         teacher_id:
           type: integer
           description: ID number for teacher
-        teacher_name:
+        teacher_firstname:
           type: string
-          description: Teacher's Name
+          description: Teacher's First Name
+        teacher_lastname:
+          type: string
+          description: Teacher's Last Name
     test:
       type: object
       properties:
@@ -441,61 +510,75 @@ components:
       properties:
         result_id:
           type: integer
-          description: Tracking number for test submission
+          description: Tracking number for test attempt submission
+        time_taken:
+          type: string
+          description: Time taken for the individual test attempt ("HH:MM:SS")
         test_id:
           type: integer
           description: Test ID of test this submission is for
-        student_id:
-          type: integer
-          description: Student ID of the student who submitted the test
-        operator:
-          type: string
-          description: Mathematical Operator
-          pattern: '[\+\-\/\*]'
-        number_correct:
-          type: integer
-          description: Number of questions answered correctly
-        number_incorrect:
-          type: integer
-          description: Number of questions answerred incorrectly
-        number_questions:
-          type: integer
-          description: Number of questions in the test
-        base_number:
-          type: integer
-          description: Base number for submitted test
-        practice_test:
-          type: boolean
-          description: Was the test a practice test?
-        questions:
+        answers:
           type: array
           items:
             properties:
-              number:
+              student_answer:
                 type: integer
-                description: 2nd Number
-              answer:
+                description: Answer student submitted 
+              correctly_answered:
+                type: boolean
+                description: Whether the student's answer was correct
+              operation:
+                type: string
+                description: +, -, *, /
+              operand_1:
                 type: integer
-                description: Answer student submitted
+                description: Operand preceding the operation
+              operand_2:
+                type: integer
+                description: Operand subequent to operation
+    result_summary:
+      type: object
+      properties:
+        result_id:
+          type: integer
+          description: Tracking number for test attempt submission
+        time_taken:
+          type: string
+          description: Time taken for the individual test attempt ("HH:MM:SS")
+        test_id:
+          type: integer
+          description: Test ID of test this submission is for
+        totalQuestions:
+          type: integer
+          description: Number of questions in the test attempt
+        correctlyAnswered:
+          type: integer
+          description: Number of questions the student answered correctly
     new_result:
       type: object
       properties:
-        test_id:
+        time_taken:
+          type: string
+          description: Time taken for the individual test attempt ("HH:MM:SS")
+        testId:
           type: integer
-          description: Tracking number for test
-        student_id:
-          type: integer
-          description: Student ID of the student who's results these are
-        questions:
+          description: Test ID of the test the result belongs to
+        answers:
           type: array
           items:
             properties:
-              number:
-                type: integer
-                description: 2nd Number
-              answer:
+              student_answer:
                 type: integer
                 description: Answer the student submitted
+              operation:
+                type: string
+                description: +, -, *, /
+              operand1:
+                type: integer
+                description: Operand preceding the operation
+              operand2:
+                type: integer
+                description: Operand subsequent to operation
     error:
       type: object
       properties:
@@ -515,6 +598,10 @@ components:
           type: integer
           description: ID for Student's Teacher
           default: 0
+      required:
+        - student_firstname
+        - student_lastname
+        - teacher_id
     new_teacher:
       type: object
       properties:
@@ -550,9 +637,6 @@ components:
       description: Update test details
       type: object
       properties:
-        practice:
-          type: boolean
-          description: Is it a practice test?
         tries:
           type: integer
           description: Number of tries remaining
