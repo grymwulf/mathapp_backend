@@ -42,16 +42,6 @@ module.exports = (sequelize, type) => {
 		type: Sequelize.INTEGER,
 		allowNull: false
 	},
-	//teacherId: id of the teacher
-	teacherId: {
-		type: Sequelize.INTEGER,
-		allowNull: false
-	},
-	//studentId: id of the student
-	studentId: {
-		type: Sequelize.INTEGER,
-		allowNull: false
-	},
 
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT
