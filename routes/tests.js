@@ -288,6 +288,51 @@ router.get('/students/:studentId', function(req,res) {
         })
 });
 
+/**
+ * @api (get) /tests/teachers/:teacherId/students/:studentId
+ * 
+ * @apiName GetTestsByteacherId&studentId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch teacherId & studentId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                studentId: req.params.studentId
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
 // implementing a basic getter to get all known tests in the DB
 router.get('/', function (req, res) {
     var result = {};
