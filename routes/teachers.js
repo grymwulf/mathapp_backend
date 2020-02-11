@@ -208,7 +208,8 @@
     })
 });
 
-// get list of all teachers
+// Test Model endpoints 
+
 /**
  * @api (get) /teachers/tests/type
  * 
@@ -228,9 +229,9 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-           model: data.Test,
-           required: true,
-           where: {
+         model: data.Test,
+         required: true,
+         where: {
             type: req.params.type
         }
     }
@@ -259,9 +260,9 @@
     })
 });
 
-// get list of all teachers
+
 /**
- * @api (get) /teachers/tests/testid
+ * @api (get) /teachers/test/id/id
  * 
  * @apiName Get teachers by test id
  * 
@@ -282,9 +283,9 @@
         exclude: ['data']
     },
     include: {
-       model: data.Test,
-       required: true,
-       where: {
+     model: data.Test,
+     required: true,
+     where: {
         id: req.params.id
     },
     attributes: {
@@ -313,7 +314,60 @@
     })
 });
 
-// get list of all teachers
+
+/**
+ * @api (get) /teachers/test/level/:level
+ * 
+ * @apiName Get teachers by test level
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom the test level belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/test/level/:level', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+      attributes: {
+        exclude: ['data']
+    },
+    include: {
+     model: data.Test,
+     required: true,
+     where: {
+        level: req.params.level
+    },
+    attributes: {
+        exclude: ['teacherId', 'data', 'studentId']
+    }
+}
+})
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/test/level/:level';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying all teachers');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/test/level/:level';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
 /**
  * @api (get) /teachers/students/studentid
  * 
