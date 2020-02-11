@@ -26,7 +26,7 @@ module.exports = (sequelize, type) => {
     category: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: true
     },
 
     //level: difficulty of test i.e. 1+, 2+, 3+, etc.
