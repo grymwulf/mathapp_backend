@@ -120,11 +120,11 @@ router.get('/:id/summary', async (req, res) => {
             },
             attributes: {
                 include: [
-                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'totalQuestions']
+                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'total_questions']
                 ]
             }
         });
-        resultData[0].dataValues.correctlyAnswered = correctCount;
+        resultData[0].dataValues.correctly_answered = correctCount;
         result['data'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
@@ -260,8 +260,8 @@ router.get('/test/:testId/summary', async (req, res) => {
                     }
                 }
             });
-            resultData[i].dataValues.totalQuestions = totalCount;
-            resultData[i].dataValues.correctlyAnswered = correctCount;
+            resultData[i].dataValues.total_questions = totalCount;
+            resultData[i].dataValues.correctly_answered = correctCount;
         }
         result['data'] = resultData;
         result['endpoint'] = `results/test/:testId/summary`;
@@ -339,6 +339,23 @@ router.get('/student/:studentId', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /results/student/:id/summary
+ * 
+ * @apiName GetSummaryResultsByStudentID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input student ID to pull
+ * 
+ * @apiSuccess (JSON) data Current summary results entires for student
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/student/:studentId/summary', async (req, res) => {
     var result = {};
 
@@ -395,8 +412,8 @@ router.get('/student/:studentId/summary', async (req, res) => {
                     }
                 }
             });
-            resultData[i].dataValues.totalQuestions = totalCount;
-            resultData[i].dataValues.correctlyAnswered = correctCount;
+            resultData[i].dataValues.total_questions = totalCount;
+            resultData[i].dataValues.correctly_answered = correctCount;
         }
         result['data'] = resultData;
         result['endpoint'] = `results/student/:studentId/summary`;
@@ -562,11 +579,11 @@ router.post('/', async (req, res) => {
             var newAnswer = await data.Answer.create({
                 student_answer: answerData.student_answer,
                 operation: answerData.operation,
-                operand1: answerData.operand1,
-                operand2: answerData.operand2,
+                operand_1: answerData.operand_1,
+                operand_2: answerData.operand_2,
                 correctly_answered: answerData.student_answer
-                    == eval(answerData.operand1 + answerData.operation
-                    + answerData.operand2),
+                    == eval(answerData.operand_1 + answerData.operation
+                    + answerData.operand_2),
                 resultId: newResult.id
             },{
                 transaction: addResult

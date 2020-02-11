@@ -541,7 +541,7 @@ components:
         time_taken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
-        test_id:
+        testId:
           type: integer
           description: Test ID of test this submission is for
         answers:
@@ -572,13 +572,13 @@ components:
         time_taken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
-        test_id:
+        testId:
           type: integer
           description: Test ID of test this submission is for
-        totalQuestions:
+        total_questions:
           type: integer
           description: Number of questions in the test attempt
-        correctlyAnswered:
+        correctly_answered:
           type: integer
           description: Number of questions the student answered correctly
     new_result:
@@ -600,10 +600,10 @@ components:
               operation:
                 type: string
                 description: +, -, *, /
-              operand1:
+              operand_1:
                 type: integer
                 description: Operand preceding the operation
-              operand2:
+              operand_2:
                 type: integer
                 description: Operand subsequent to operation
     error:
