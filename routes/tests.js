@@ -309,6 +309,7 @@ router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
+		teacherId: req.params.teacherId,
                 studentId: req.params.studentId
             }
         })
@@ -325,6 +326,52 @@ router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (get) /tests/category/:category/attempts_remaining/:attempts_remaining
+ * 
+ * @apiName GetTestsByteacherId&studentId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch category & attempts_remaining to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/category/:category/attempts_remaining/:attempts_remaining', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+		category: req.params.category,
+                attempts_remaining: req.params.attempts_remaining
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/category/:category/attempts_remaining/:attempts_remaining`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/category/:category/attempts_remaining/:attempts_remaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
