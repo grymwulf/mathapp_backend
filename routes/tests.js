@@ -50,7 +50,7 @@ router.get('/:id', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/:id`;
@@ -81,9 +81,12 @@ router.get('/:id', function(req,res) {
  */
 router.get('/category/:category', function(req,res) {
     var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
     data.Test.findAll({
             where: {
-                category: req.params.category
+                category: value
             },
         })
         .then( testData => {
@@ -95,7 +98,7 @@ router.get('/category/:category', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/category/:category`;
@@ -140,7 +143,7 @@ router.get('/level/:level', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/level/:level`;
@@ -185,7 +188,7 @@ router.get('/attempts_remaining/:attempts_remaining', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/attempts_remaining/:attempts_remaining`;
@@ -230,7 +233,7 @@ router.get('/teachers/:teacherId', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/teachers/:teacherId`;
@@ -276,7 +279,7 @@ router.get('/students/:studentId', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/students/:studentId`;
@@ -322,7 +325,7 @@ router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
@@ -368,7 +371,7 @@ router.get('/category/:category/attempts_remaining/:attempts_remaining', functio
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a student');
+            console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/category/:category/attempts_remaining/:attempts_remaining`;
