@@ -53,7 +53,7 @@ router.get('/:id', function(req, res) {
  * 
  * @apiGroup Students
  * 
- * @apiParam (Number) input first name to pull
+ * @apiParam (String) input first name to pull
  * 
  * @apiSuccess (JSON) data Current students entries by first name
  * @apiSuccess (JSON) responseCode HTTP Response Code
@@ -101,7 +101,7 @@ router.get('/firstName/:firstName', function(req, res) {
  * 
  * @apiGroup Students
  * 
- * @apiParam (Number) input last name to pull
+ * @apiParam (String) input last name to pull
  * 
  * @apiSuccess (JSON) data Current students entries by last name
  * @apiSuccess (JSON) responseCode HTTP Response Code
@@ -133,6 +133,53 @@ router.get('/lastName/:lastName', function(req,res) {
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/student/lastName/:lastName`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (get) /students/stars/:stars
+ * 
+ * @apiName GetStudentsByStars
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input number of stars to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by stars
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+// getter to get record(s) of student by number of stars
+router.get('/stars/:stars', function(req, res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                stars: req.params.stars
+            }
+        })
+        .then( studentData => {
+            result['data'] = studentData;
+            result['endpoint'] = `/students/stars/:stars`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/students/stars/:stars`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
