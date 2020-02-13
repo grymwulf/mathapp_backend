@@ -188,11 +188,7 @@
         result['teacher'] = teachers;
         result['endpoint'] = "/teachers";
         result['responseCode'] = HttpStatus.OK;
-        result['response'] = "Query Successful";
         res.status(result.responseCode);
-        teachers.forEach(element => {
-            element.data = JSON.parse(element.data)
-        });            
         res.json(result);
         return;
     }).catch(function(err){
@@ -207,59 +203,6 @@
         return;
     })
 });
-
-// Test Model endpoints 
-
-/**
- * @api (get) /teachers/tests/type
- * 
- * @apiName Get teachers by test type
- * 
- * @apiGroup Teachers
- * 
- * @apiSuccess (JSON) Teacher whom the test type belongs to
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
- router.get('/test/:type', (req, res) => {
-    var result = {};
-    data.Teacher.findAll({
-        include: {
-         model: data.Test,
-         required: true,
-         where: {
-            type: req.params.type
-        }
-    }
-})
-    .then(function (teachers) {
-        result['teacher'] = teachers;
-        result['endpoint'] = '/teacher/test/:type';
-        result['responseCode'] = HttpStatus.OK;
-        result['response'] = "Query Successful";
-        res.status(result.responseCode);
-        teachers.forEach(element => {
-            element.data = JSON.parse(element.data)
-        });            
-        res.json(result);
-        return;
-    }).catch(function(err){
-        console.log('Error querying all teachers');
-        console.log(err)
-        result['teacher'] = {};
-        result['endpoint'] = '/teacher/test/:type';
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-});
-
 
 /**
  * @api (get) /teachers/test/id/id
@@ -283,9 +226,9 @@
         exclude: ['data']
     },
     include: {
-     model: data.Test,
-     required: true,
-     where: {
+       model: data.Test,
+       required: true,
+       where: {
         id: req.params.id
     },
     attributes: {
@@ -337,9 +280,9 @@
         exclude: ['data']
     },
     include: {
-     model: data.Test,
-     required: true,
-     where: {
+       model: data.Test,
+       required: true,
+       where: {
         level: req.params.level
     },
     attributes: {
@@ -369,13 +312,13 @@
 });
 
 /**
- * @api (get) /teachers/students/studentid
+ * @api (post) /teachers/
  * 
- * @apiName Get students teacher
+ * @apiName Post new teacher
  * 
  * @apiGroup Teachers
  * 
- * @apiSuccess (JSON) Teacher whom the student belongs to
+ * @apiSuccess (JSON) Teacher 
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -383,54 +326,32 @@
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
- router.get('/student/:studentId', (req, res) => {
-    var result = {};
-    data.Teacher.findAll({
-        include: {
-            where: {
-                studentId: req.params.studentId
-            }
-        }
-    })
-    .then(function (teachers) {
-        result['data'] = teachers;
-        result['endpoint'] = '/teacher/student/:studentId';
-        result['responseCode'] = HttpStatus.OK;
-        result['response'] = "Query Successful";
-        res.status(result.responseCode);
-        teachers.forEach(element => {
-            element.data = JSON.parse(element.data)
-        });            
-        res.json(result);
-        return;
-    }).catch(function(err){
-        console.log('Error querying all teachers');
-        console.log(err)
-        result['data'] = {};
-        result['endpoint'] = '/teacher/student/:studentId';
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-});
-
-
-// post data to endpoint
-router.post('/', function (req, res) {
+ router.post('/', async (req, res) =>{
     var result = {};
     console.log(`Post: `);
     console.log(req.body);
-    data.Teacher.create({
-        "data": JSON.stringify(req.body)
-    }).then(newTeacher => {
+    
+    //retrieves firstName and lastName from input json 
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+
+
+    try{
+        var newTeacher = await data.Teacher.create({
+            id: req.body.id,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        });
+
         console.log(`New teachers data received: Entry ${newTeacher.id} created.`);
-        console.log(`Data added was: ${newTeacher.data}.`);
+        console.log(`Data added was: ${newTeacher}.`);
+
         var uri = req.protocol + '://' + req.get('host') +
         req.baseUrl + req.path + newTeacher.id;
-        result['data'] = {
-            'id': newTeacher.id,
+        result['new teacher'] = {
+            'id': newTeacher.id,   // auto-generated id
+            'firstName':firstName,
+            'lastName': lastName,
             'uri': uri
         };
         result['endpoint'] = "/teachers";
@@ -440,18 +361,18 @@ router.post('/', function (req, res) {
         res.header('Location', uri);
         res.json(result);
         return;
-    }).catch(function (err) {
-        console.log('Error creating new instructor record');
+    }catch (err) {
+        console.log('Error creating new teacher record');
         console.log(err)
-        result['data'] = {};
+        result['new teacher'] = {};
         result['endpoint'] = "/teachers";
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
         res.json(result);
         return;
-    })
-})
+    }
+});
 
 // default handler
 // anything not implemented gets a response not implemented
