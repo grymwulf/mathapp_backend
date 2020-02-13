@@ -33,8 +33,6 @@
             type: Sequelize.STRING(50),
             allowNull: false, 
         },
-        // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT
     },{
         timestamps: false
     })
