@@ -340,7 +340,7 @@ router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
 /**
  * @api (get) /tests/category/:category/attempts_remaining/:attempts_remaining
  * 
- * @apiName GetTestsByteacherId&studentId
+ * @apiName GetTestsBycategory&attempts_remaining
  * 
  * @apiGroup Tests
  * 
@@ -356,9 +356,12 @@ router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
  */
 router.get('/category/:category/attempts_remaining/:attempts_remaining', function(req,res) {
     var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
     data.Test.findAll({
             where: {
-		category: req.params.category,
+		category: value,
                 attempts_remaining: req.params.attempts_remaining
             }
         })
@@ -381,6 +384,63 @@ router.get('/category/:category/attempts_remaining/:attempts_remaining', functio
             res.json(result);
             return;
         })
+});
+
+router.post('/', async (req, res) =>{
+	var result = {};
+	console.log(`Post: `);
+	console.log(req.body);
+	
+	var category = req.body.category;
+    	//if (value === 'true') value = true;
+    	//if (value === 'false') value = false;
+
+	var level = req.body.level;
+	var attempts_remaining = req.body.attempts_remaining;
+	var teacherId = req.body.teacherId;
+	var studentId = req.body.studentId;
+	
+	try{
+	    var newTest = await data.Test.create({
+		id: req.body.id,
+		category: req.body.category,
+		level: req.body.level,
+		attempts_remaining: req.body.attempts_remaining,
+		teacherId: req.body.teacherId,
+		studentId: req.body.studentId
+	});
+
+	console.log(`New tests data received: Entry ${newTest.id} created.`);
+
+	var uri = req.protocol + '://' + req.get('host') +
+	req.baseUrl + req.path + newTest.id;
+	result['new test'] = {
+		'id': newTest.id,
+		'category': category,
+		'level': level,
+		'attempts_remaining': attempts_remaining,
+		'teacherId': teacherId,
+		'studentId': studentId,
+		'uri': uri
+	};
+	result['endpoint'] = "/tests";
+	result['responseCode'] = HttpStatus.CREATED;
+	result['response'] = "Created"
+	res.status(result.responseCode);
+	res.header('Location', uri);
+	res.json(result);
+	return;
+     }catch(err) {
+	console.log('Error creating new test record');
+	console.log(err)
+	result['data'] = {};
+	result['endpoint'] = "/tests";
+	result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+	result['response'] = "Internal Server Error";
+	res.status(result.responseCode);
+	res.json(result);
+	return;
+     }
 });
 
 // implementing a basic getter to get all known tests in the DB
@@ -413,42 +473,6 @@ router.get('/', function (req, res) {
         })
 }) 
 
-
-// get data store it, return a URI + id for stored data
-router.post('/', function (req, res) {
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-    data.Test.create({
-        "data": JSON.stringify(req.body)
-    }).then(newTest => {
-        console.log(`New test data received: Entry ${newTest.id} created.`);
-        console.log(`Data added was: ${newTest.data}.`);
-        var uri = req.protocol + '://' + req.get('host') +
-            req.baseUrl + req.path + newTest.id;
-        result['data'] = {
-            'id': newTest.id,
-            'uri': uri
-        };
-        result['endpoint'] = "/tests";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    }).catch(function (err) {
-        console.log('Error creating new test record');
-        console.log(err)
-        result['data'] = {};
-        result['endpoint'] = "/tests";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-})
 
 // default handler
 // anything not implemented gets a response not implemented

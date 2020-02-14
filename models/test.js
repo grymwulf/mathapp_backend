@@ -34,17 +34,15 @@ module.exports = (sequelize, type) => {
 	//level: difficulty of test i.e. 1+, 2+, 3+, etc.
 	level: {
 		type: Sequelize.STRING(50),
-		allowNull: false
+		allowNull: true
 	},
 	
 	//attempts_remaining: number of attempts left to take test
 	attempts_remaining: {
 		type: Sequelize.INTEGER,
-		allowNull: false
+		allowNull: true
 	},
 
-        // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT
     },{
         timestamps: false
     })
