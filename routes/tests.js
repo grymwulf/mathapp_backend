@@ -386,6 +386,71 @@ router.get('/category/:category/attempts_remaining/:attempts_remaining', functio
         })
 });
 
+/**
+ * @api (get) /tests/category/:category/students/:studentId
+ * 
+ * @apiName GetTestsBycategory&studentId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch category & studentId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/category/:category/students/:studentId', function(req,res) {
+    var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    data.Test.findAll({
+            where: {
+		category: value,
+                studentId: req.params.studentId
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/category/:category/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/category/:category/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+/**
+ * @api (post) /tests/
+ * 
+ * @apiName PostTests
+ * 
+ * @apiGroup Tests
+ * 
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
 router.post('/', async (req, res) =>{
 	var result = {};
 	console.log(`Post: `);
