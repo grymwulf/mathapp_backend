@@ -433,7 +433,6 @@ router.get('/student/:studentId/summary', async (req, res) => {
         res.json(result);
         return;
     }
-
 });
 
 /**
@@ -490,6 +489,102 @@ router.get('/teacher/:teacherId', (req, res) => {
         res.json(result);
         return;
     })
+});
+
+/**
+ * @api (get) /results/teacher/:id/summary
+ * 
+ * @apiName GetSummaryResultsByTeacherID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input teacher ID to pull
+ * 
+ * @apiSuccess (JSON) data Current summary results entires for teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/teacher/:teacherId/summary', async (req, res) => {
+    var result = {};
+
+    try {
+        var resultData = await data.Result.findAll({
+            include: {
+                model: data.Test,
+                required: true,
+                where: {
+                    studentId: req.params.teacherId
+                },
+                attributes: [],
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: Sequelize.col('result.id')
+                },
+                attributes: []
+            }
+        });
+        for (i = 0; i < resultData.length; i++) {
+            var correctCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.teacherId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id,
+                        correctly_answered: true
+                    }
+                }
+            });
+            var totalCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.teacherId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id
+                    }
+                }
+            });
+            resultData[i].dataValues.total_questions = totalCount;
+            resultData[i].dataValues.correctly_answered = correctCount;
+        }
+        result['data'] = resultData;
+        result['endpoint'] = `results/teacher/:teacherId/summary`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    } catch(err) {
+        console.log('Error querying results by teacher');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/teacher/:teacherId/summary`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
 });
 
 // get all results
@@ -571,7 +666,6 @@ router.post('/', async (req, res) => {
         });
 
         console.log(`New result data received: Entry ${newResult.id} created.`);
-        console.log(`Result added was: ${newResult}.`);
         console.log(`There are ${Object.keys(req.body.answers).length} answers.`);
 
         for (i = 0; i < Object.keys(req.body.answers).length; i++) {
@@ -589,7 +683,7 @@ router.post('/', async (req, res) => {
                 transaction: addResult
             });
             console.log(`New answer added to result ${newResult.id}: ` +
-                `Answer ${newAnswer.id} created`);
+                `Answer ${newAnswer.id} `);
         }
 
         await addResult.commit();
