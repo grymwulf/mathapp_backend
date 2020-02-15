@@ -290,6 +290,71 @@ router.get('/', function (req, res) {
         })
 })
 
+/**
+ * @api (post) /teachers/
+ * 
+ * @apiName Post new teacher
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.post('/', async (req, res) =>{
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+    
+    //retrieves firstName and lastName from input json 
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+
+
+    try{
+        var newTeacher = await data.Teacher.create({
+            id: req.body.id,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            stars: req.body.stars,
+            level: req.body.level,
+            teacherId: req.body.teacherId
+        });
+
+        console.log(`New student data received: Entry ${newStudent.id} created.`);
+        console.log(`Data added was: ${newStudent}.`);
+
+        var uri = req.protocol + '://' + req.get('host') +
+        req.baseUrl + req.path + newStudent.id;
+        result['new teacher'] = {
+            'id': newStudent.id,   // auto-generated id
+            'firstName':firstName,
+            'lastName': lastName,
+            'uri': uri
+        };
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    }catch (err) {
+        console.log('Error creating new student record');
+        console.log(err)
+        result['new student'] = {};
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
 
 // get data store it, return a URI + id for stored data
 router.post('/', function (req, res) {
@@ -326,6 +391,8 @@ router.post('/', function (req, res) {
         return;
     })
 })
+
+
 
 // default handler
 // anything not implemented gets a response not implemented
