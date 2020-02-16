@@ -291,13 +291,13 @@ router.get('/', function (req, res) {
 })
 
 /**
- * @api (post) /teachers/
+ * @api (post) /students/
  * 
- * @apiName Post new teacher
+ * @apiName Post new student
  * 
- * @apiGroup Teachers
+ * @apiGroup Students
  * 
- * @apiSuccess (JSON) Teacher 
+ * @apiSuccess (JSON) Students 
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -313,16 +313,18 @@ router.post('/', async (req, res) =>{
     //retrieves firstName and lastName from input json 
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
+    //var stars = req.body.stars
+    //var level = req.body.level
 
 
     try{
-        var newTeacher = await data.Teacher.create({
+        var newStudent = await data.Student.create({
             id: req.body.id,
             firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            stars: req.body.stars,
-            level: req.body.level,
-            teacherId: req.body.teacherId
+            lastName: req.body.lastName
+            //stars: req.body.stars,
+            //level: req.body.level,
+            //teacherId: req.body.teacherId
         });
 
         console.log(`New student data received: Entry ${newStudent.id} created.`);
@@ -330,7 +332,7 @@ router.post('/', async (req, res) =>{
 
         var uri = req.protocol + '://' + req.get('host') +
         req.baseUrl + req.path + newStudent.id;
-        result['new teacher'] = {
+        result['new student'] = {
             'id': newStudent.id,   // auto-generated id
             'firstName':firstName,
             'lastName': lastName,
@@ -355,43 +357,6 @@ router.post('/', async (req, res) =>{
         return;
     }
 });
-
-// get data store it, return a URI + id for stored data
-router.post('/', function (req, res) {
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-    data.Student.create({
-        "data": JSON.stringify(req.body)
-    }).then(newStudent => {
-        console.log(`New student test data received: Entry ${newStudent.id} created.`);
-        console.log(`Data added was: ${newStudent.data}.`);
-        var uri = req.protocol + '://' + req.get('host') +
-            req.baseUrl + req.path + newStudent.id;
-        result['data'] = {
-            'id': newStudent.id,
-            'uri': uri
-        };
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    }).catch(function (err) {
-        console.log('Error creating new student record');
-        console.log(err)
-        result['data'] = {};
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-})
-
 
 
 // default handler

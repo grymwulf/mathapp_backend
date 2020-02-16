@@ -29,25 +29,25 @@ module.exports = (sequelize, type) => {
         //Student's first name
         firstName: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         },
 
         //Student's last name
         lastName: {
             type: Sequelize.STRING,
-            allowNull: false        
+            allowNull: true        
         },
 
         //Stars student has earned
         stars: {
             type: Sequelize.INTEGER(50),
-            allowNull: false
+            allowNull: true
         },
 
         //Level of student
         level: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         },
         
         // implement a data field to store data for testing get/post
