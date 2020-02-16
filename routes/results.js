@@ -132,7 +132,7 @@ router.get('/:id/summary', async (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    } catch(err) {
+    } catch (err) {
         console.log('Error querying results summary');
         console.log(err);
         result['data'] = {};
@@ -422,7 +422,7 @@ router.get('/student/:studentId/summary', async (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    } catch(err) {
+    } catch (err) {
         console.log('Error querying results by student');
         console.log(err);
         result['data'] = {};
@@ -574,7 +574,7 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    } catch(err) {
+    } catch (err) {
         console.log('Error querying results by teacher');
         console.log(err);
         result['data'] = {};
@@ -654,14 +654,14 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     var result = {};
     console.log(`Post: `);
-    console.log(req.body);    
+    console.log(req.body);
 
     try {
         var addResult = await data.sequelize.transaction();
         var newResult = await data.Result.create({
             time_taken: req.body.time_taken,
             testId: req.body.testId
-        },{
+        }, {
             transaction: addResult
         });
 
@@ -677,16 +677,24 @@ router.post('/', async (req, res) => {
                 operand_2: answerData.operand_2,
                 correctly_answered: answerData.student_answer
                     == eval(answerData.operand_1 + answerData.operation
-                    + answerData.operand_2),
+                        + answerData.operand_2),
                 resultId: newResult.id
-            },{
+            }, {
                 transaction: addResult
             });
             console.log(`New answer added to result ${newResult.id}: ` +
                 `Answer ${newAnswer.id} `);
         }
 
+        await data.Test.decrement('attempts_remaining', {
+            where: {
+                id: req.body.testId
+            },
+            transaction: addResult
+        });
+
         await addResult.commit();
+
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
         result['data'] = {
@@ -700,7 +708,7 @@ router.post('/', async (req, res) => {
         res.header('Location', uri);
         res.json(result);
         return;
-    } catch(err) {
+    } catch (err) {
         await addResult.rollback();
         console.log(err)
         console.log('Error creating new result record');
