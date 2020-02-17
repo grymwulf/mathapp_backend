@@ -92,3 +92,5 @@ docker/mathapp_api/docker_volume
 db/
 !db/db_data
 backend/
+
+.DS_Store

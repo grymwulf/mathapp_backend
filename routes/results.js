@@ -120,11 +120,11 @@ router.get('/:id/summary', async (req, res) => {
             },
             attributes: {
                 include: [
-                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'totalQuestions']
+                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'total_questions']
                 ]
             }
         });
-        resultData[0].dataValues.correctlyAnswered = correctCount;
+        resultData[0].dataValues.correctly_answered = correctCount;
         result['data'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
@@ -132,7 +132,7 @@ router.get('/:id/summary', async (req, res) => {
         res.status(result.responseCode);
         res.json(result);
         return;
-    } catch(err) {
+    } catch (err) {
         console.log('Error querying results summary');
         console.log(err);
         result['data'] = {};
@@ -260,8 +260,8 @@ router.get('/test/:testId/summary', async (req, res) => {
                     }
                 }
             });
-            resultData[i].dataValues.totalQuestions = totalCount;
-            resultData[i].dataValues.correctlyAnswered = correctCount;
+            resultData[i].dataValues.total_questions = totalCount;
+            resultData[i].dataValues.correctly_answered = correctCount;
         }
         result['data'] = resultData;
         result['endpoint'] = `results/test/:testId/summary`;
@@ -340,6 +340,102 @@ router.get('/student/:studentId', (req, res) => {
 });
 
 /**
+ * @api (get) /results/student/:id/summary
+ * 
+ * @apiName GetSummaryResultsByStudentID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input student ID to pull
+ * 
+ * @apiSuccess (JSON) data Current summary results entires for student
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/student/:studentId/summary', async (req, res) => {
+    var result = {};
+
+    try {
+        var resultData = await data.Result.findAll({
+            include: {
+                model: data.Test,
+                required: true,
+                where: {
+                    studentId: req.params.studentId
+                },
+                attributes: [],
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: Sequelize.col('result.id')
+                },
+                attributes: []
+            }
+        });
+        for (i = 0; i < resultData.length; i++) {
+            var correctCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.studentId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id,
+                        correctly_answered: true
+                    }
+                }
+            });
+            var totalCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.studentId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id
+                    }
+                }
+            });
+            resultData[i].dataValues.total_questions = totalCount;
+            resultData[i].dataValues.correctly_answered = correctCount;
+        }
+        result['data'] = resultData;
+        result['endpoint'] = `results/student/:studentId/summary`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    } catch (err) {
+        console.log('Error querying results by student');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/student/:studentId/summary`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/**
  * @api (get) /results/teacher/:id
  * 
  * @apiName GetResultsByTeacherID
@@ -393,6 +489,102 @@ router.get('/teacher/:teacherId', (req, res) => {
         res.json(result);
         return;
     })
+});
+
+/**
+ * @api (get) /results/teacher/:id/summary
+ * 
+ * @apiName GetSummaryResultsByTeacherID
+ * 
+ * @apiGroup Results
+ * 
+ * @apiParam (Number) input teacher ID to pull
+ * 
+ * @apiSuccess (JSON) data Current summary results entires for teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/teacher/:teacherId/summary', async (req, res) => {
+    var result = {};
+
+    try {
+        var resultData = await data.Result.findAll({
+            include: {
+                model: data.Test,
+                required: true,
+                where: {
+                    studentId: req.params.teacherId
+                },
+                attributes: [],
+                model: data.Answer,
+                required: true,
+                where: {
+                    resultId: Sequelize.col('result.id')
+                },
+                attributes: []
+            }
+        });
+        for (i = 0; i < resultData.length; i++) {
+            var correctCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.teacherId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id,
+                        correctly_answered: true
+                    }
+                }
+            });
+            var totalCount = await data.Result.count({
+                where: {
+                    id: resultData[i].dataValues.id
+                },
+                include: {
+                    model: data.Test,
+                    required: true,
+                    where: {
+                        studentId: req.params.teacherId
+                    },
+                    model: data.Answer,
+                    required: true,
+                    where: {
+                        resultId: resultData[i].dataValues.id
+                    }
+                }
+            });
+            resultData[i].dataValues.total_questions = totalCount;
+            resultData[i].dataValues.correctly_answered = correctCount;
+        }
+        result['data'] = resultData;
+        result['endpoint'] = `results/teacher/:teacherId/summary`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    } catch (err) {
+        console.log('Error querying results by teacher');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = `/results/teacher/:teacherId/summary`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
 });
 
 // get all results
@@ -462,19 +654,18 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     var result = {};
     console.log(`Post: `);
-    console.log(req.body);    
+    console.log(req.body);
 
     try {
         var addResult = await data.sequelize.transaction();
         var newResult = await data.Result.create({
             time_taken: req.body.time_taken,
             testId: req.body.testId
-        },{
+        }, {
             transaction: addResult
         });
 
         console.log(`New result data received: Entry ${newResult.id} created.`);
-        console.log(`Result added was: ${newResult}.`);
         console.log(`There are ${Object.keys(req.body.answers).length} answers.`);
 
         for (i = 0; i < Object.keys(req.body.answers).length; i++) {
@@ -482,20 +673,28 @@ router.post('/', async (req, res) => {
             var newAnswer = await data.Answer.create({
                 student_answer: answerData.student_answer,
                 operation: answerData.operation,
-                operand1: answerData.operand1,
-                operand2: answerData.operand2,
+                operand_1: answerData.operand_1,
+                operand_2: answerData.operand_2,
                 correctly_answered: answerData.student_answer
-                    == eval(answerData.operand1 + answerData.operation
-                    + answerData.operand2),
+                    == eval(answerData.operand_1 + answerData.operation
+                        + answerData.operand_2),
                 resultId: newResult.id
-            },{
+            }, {
                 transaction: addResult
             });
             console.log(`New answer added to result ${newResult.id}: ` +
-                `Answer ${newAnswer.id} created`);
+                `Answer ${newAnswer.id} `);
         }
 
+        await data.Test.decrement('attempts_remaining', {
+            where: {
+                id: req.body.testId
+            },
+            transaction: addResult
+        });
+
         await addResult.commit();
+
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
         result['data'] = {
@@ -509,7 +708,7 @@ router.post('/', async (req, res) => {
         res.header('Location', uri);
         res.json(result);
         return;
-    } catch(err) {
+    } catch (err) {
         await addResult.rollback();
         console.log(err)
         console.log('Error creating new result record');
