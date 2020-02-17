@@ -94,3 +94,5 @@ db/
 backend/
 pytest/venv
 pytest/__pycache__
+
+.DS_Store

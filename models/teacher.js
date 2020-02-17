@@ -25,6 +25,14 @@ module.exports = (sequelize, type) => {
             autoIncrement: true,
             primaryKey: true
         },
+   	firstName: {
+            type: Sequelize.STRING,
+            require: true
+        },
+   	lastName: {
+            type: Sequelize.STRING,
+       	    require: true
+        },
 
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT,
