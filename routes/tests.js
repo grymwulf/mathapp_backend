@@ -249,11 +249,11 @@ router.get('/teachers/:teacherId', function(req,res) {
 /**
  * @api (get) /tests/students/:studentId
  * 
- * @apiName GetTestsByteacherId
+ * @apiName GetTestsBystudentId
  * 
  * @apiGroup Tests
  * 
- * @apiParam (Number) input Test batch teacherId to pull
+ * @apiParam (Number) input Test batch studentId to pull
  * 
  * @apiSuccess (JSON) data Current table entry for test
  * @apiSuccess (JSON) responseCode HTTP Response Code
@@ -283,6 +283,52 @@ router.get('/students/:studentId', function(req,res) {
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (get) /tests/students/:studentId/attempts_remaining/:attempts_remaining
+ * 
+ * @apiName GetTestsBystudentId&attempts_remaining
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch studentId & attempts_remaining to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/students/:studentId/attempts_remaining/:attempts_remaining', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                studentId: req.params.studentId,
+		attempts_remaining: req.params.attempts_remaining
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/students/:studentId/attempts_remaining/:attempts_remaining`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/students/:studentId/attempts_remaining/:attempts_remaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
