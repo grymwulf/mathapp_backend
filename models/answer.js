@@ -51,7 +51,7 @@ module.exports = (sequelize, type) => {
             allowNull: false
         },
 
-        operand1: {
+        operand_1: {
             type: Sequelize.INTEGER,
             validate: {
                 min: 0,
@@ -60,11 +60,11 @@ module.exports = (sequelize, type) => {
             },
             allowNull: false,
             set(value) {
-                this.setDataValue('operand1', parseInt(value));
+                this.setDataValue('operand_1', parseInt(value));
             }
         },
 
-        operand2: {
+        operand_2: {
             type: Sequelize.INTEGER,
             validate: {
                 min: 0,
@@ -73,7 +73,7 @@ module.exports = (sequelize, type) => {
             },
             allowNull: false,
             set(value) {
-                this.setDataValue('operand2', parseInt(value));
+                this.setDataValue('operand_2', parseInt(value));
             }
         }
 

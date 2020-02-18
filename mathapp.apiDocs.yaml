@@ -313,7 +313,58 @@ paths:
               description: Record locator
         '400':
           $ref: '#/components/responses/400Error'
-  /results/students/{student_id}:
+  /results/{result_id}:
+    get:
+      description: Get result by result tracking ID
+      operationId: results.get_by_result_id
+      parameters:
+        - name: result_id
+          description: Result tracking ID number to look up
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: object
+                    $ref: '#/components/schemas/result'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+  /results/{result_id}/summary:
+    get:
+      description: Get result summary by result tracking ID
+      operationId: results.get_summary_by_result_id
+      parameters:
+        - name: result_id
+          description: Result tracking ID number to look up
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results summary
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: object
+                    $ref: '#/components/schemas/result_summary'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+  /results/student/{student_id}:
     get:
       description: Get results for all tests by the specified student
       operationId: results.get_by_student
@@ -336,6 +387,87 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/result'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+  /results/student/{student_id}/summary:
+    get:
+      description: Get summary results for specified student
+      operationId: results.get_summary_by_student
+      parameters:
+        - name: student_id
+          description: Student ID to lookup
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#components/schemas/result_summary'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+  /results/teacher/{teacher_id}:
+    get:
+      description: Get results for all tests by the specified teacher
+      operationId: results.get_by_teacher
+      parameters:
+        - name: teacher_id
+          description: Teacher ID to lookup
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/result'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+  /results/teacher/{teacher_id}/summary:
+    get:
+      description: Get summary results for specified teacher
+      operationId: results.get_summary_by_teacher
+      parameters:
+        - name: teacher_id
+          description: Teacher ID to lookup
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      responses:
+        '200':
+          description: Aggregate Results
+          content:
+            application/json:
+              schema:
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#components/schemas/result_summary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -390,57 +522,6 @@ paths:
                     type: array
                     items:
                       $ref: '#components/schemas/result_summary'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '404':
-          $ref: '#/components/responses/404Error'
-  /results/{result_id}:
-    get:
-      description: Get result by result tracking ID
-      operationId: results.get_by_result_id
-      parameters:
-        - name: result_id
-          description: Result tracking ID number to look up
-          in: path
-          schema:
-            type: integer
-            minimum: 1
-          required: true
-      responses:
-        '200':
-          description: Aggregate Results
-          content:
-            application/json:
-              schema:
-                properties:
-                  results:
-                    type: object
-                    $ref: '#/components/schemas/result'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '404':
-          $ref: '#/components/responses/404Error'
-  /results/{result_id}/summary:
-    get:
-      description: Get result summary by result tracking ID
-      operationId: results.get_summary_by_result_id
-      parameters:
-        - name: result_id
-          description: Result tracking ID number to look up
-          in: path
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: Aggregate Results summary
-          content:
-            application/json:
-              schema:
-                properties:
-                  results:
-                    type: object
-                    $ref: '#/components/schemas/result_summary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -514,7 +595,7 @@ components:
         time_taken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
-        test_id:
+        testId:
           type: integer
           description: Test ID of test this submission is for
         answers:
@@ -545,13 +626,13 @@ components:
         time_taken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
-        test_id:
+        testId:
           type: integer
           description: Test ID of test this submission is for
-        totalQuestions:
+        total_questions:
           type: integer
           description: Number of questions in the test attempt
-        correctlyAnswered:
+        correctly_answered:
           type: integer
           description: Number of questions the student answered correctly
     new_result:
@@ -573,10 +654,10 @@ components:
               operation:
                 type: string
                 description: +, -, *, /
-              operand1:
+              operand_1:
                 type: integer
                 description: Operand preceding the operation
-              operand2:
+              operand_2:
                 type: integer
                 description: Operand subsequent to operation
     error:

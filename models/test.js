@@ -22,11 +22,12 @@
             primaryKey: true
         },
 
+
     //category: practice(false, 0) or graded(true, 1)
     category: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: false
     },
 
     //level: difficulty of test i.e. 1+, 2+, 3+, etc.
