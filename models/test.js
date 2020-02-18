@@ -8,12 +8,12 @@
     SHELTON LACY 
     Unauthorized copying of this file, via any medium is strictly prohibited
     Proprietary and confidential
-*/
+    */
 
-const Sequelize = require('sequelize');
+    const Sequelize = require('sequelize');
 
-module.exports = (sequelize, type) => {
-    return sequelize.define('test', {
+    module.exports = (sequelize, type) => {
+        return sequelize.define('test', {
 
         // id: primary ID for the test
         id: {
@@ -41,14 +41,7 @@ module.exports = (sequelize, type) => {
         allowNull: false
     },
 
-    teacherId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-
-        // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT
-    },{
-        timestamps: false
-    })
-}
+},{
+    timestamps: false
+})
+    }
