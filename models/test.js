@@ -37,8 +37,8 @@ module.exports = (sequelize, type) => {
 		allowNull: true
 	},
 	
-	//attempts_remaining: number of attempts left to take test
-	attempts_remaining: {
+	//attemptsRemaining: number of attempts left to take test
+	attemptsRemaining: {
 		type: Sequelize.INTEGER,
 		allowNull: true
 	},
