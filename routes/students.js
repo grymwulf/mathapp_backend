@@ -265,6 +265,52 @@ router.get('/teacherId/:teacherId', function(req,res) {
     })
 });
 
+/**
+ * @api (get) /students/id/:id
+ * 
+ * @apiName GetStudentsByStudentID
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input student ID to pull
+ * 
+ * @apiSuccess (JSON) data Current student entries by id
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/id/:id', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                id: req.params.id
+            }
+    })
+    .then( studentData => {
+        result['data'] = studentData;
+        result['endpoint'] = `/students/id/:id`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by student id');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = `/students/id/:id`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
     var result = {};
