@@ -535,64 +535,65 @@ components:
         id:
           type: integer
           description: Student ID
-        student_firstname:
+        firstName:
           type: string
           description: Student's First Name
-        student_lastname:
+        lastName:
           type: string
           description: Student's Last Name
-        teacher_id:
-          type: string
-          description: Student's Teacher
         stars:
           type: integer
           description: Stars student has earned
         level:
           type: integer
           description: Level of student
+        teacherId:
+          type: string
+          description: Student's Teacher
     teacher:
       type: object
       properties:
-        teacher_id:
+        id:
           type: integer
           description: ID number for teacher
-        teacher_firstname:
+        firstName:
           type: string
           description: Teacher's First Name
-        teacher_lastname:
+        lastName:
           type: string
           description: Teacher's Last Name
     test:
       type: object
       properties:
-        test_id:
+        id:
           type: integer
           description: ID number for test
-        test_description:
-          type: string
-          description: Description of test
-        operator:
-          type: string
-          description: Operator test uses
-        base_number:
+        category:
+          type: boolean
+          description: assessment (true), practice (false)
+        baseNumber:
           type: integer
           description: Base number of the test
-        practice:
-          type: boolean
-          description: Is it a practice test?
-        tries:
+        operator:
+          type: string
+          description: Operator for the test either +, -, *, /
+          pattern: '[\+\-\/\*]'
+        attemptsRemaining:
           type: integer
           description: Number of times available, -1 for always available
-        number_questions:
+        studentId:
           type: integer
-          description: Number of questions to ask
+          description: Student taking the test
+        teacherId:
+          type: integer
+          description: Teacher assigning the test
     result:
       type: object
       properties:
-        result_id:
+        id:
           type: integer
           description: Tracking number for test attempt submission
-        time_taken:
+        timeTaken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
         testId:
@@ -602,43 +603,103 @@ components:
           type: array
           items:
             properties:
-              student_answer:
+              studentAnswer:
                 type: integer
                 description: Answer student submitted 
-              correctly_answered:
+              correctlyAnswered:
                 type: boolean
                 description: Whether the student's answer was correct
               operation:
                 type: string
-                description: +, -, *, /
-              operand_1:
+                description: Operator for the test either +, -, *, /
+                pattern: '[\+\-\/\*]'
+              operand1:
                 type: integer
                 description: Operand preceding the operation
-              operand_2:
+              operand2:
                 type: integer
                 description: Operand subequent to operation
     result_summary:
       type: object
       properties:
-        result_id:
+        id:
           type: integer
           description: Tracking number for test attempt submission
-        time_taken:
+        timeTaken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
         testId:
           type: integer
           description: Test ID of test this submission is for
-        total_questions:
+        totalQuestions:
           type: integer
           description: Number of questions in the test attempt
-        correctly_answered:
+        correctlyAnswered:
           type: integer
           description: Number of questions the student answered correctly
+    new_student:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Student's First Name
+        lastName:
+          type: string
+          description: Student's Last Name
+        teacherId:
+          type: integer
+          description: ID for Student's Teacher
+          default: 0
+      required:
+        - firstName
+        - lastName
+        - teacherId
+    new_teacher:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Teacher's First Name
+        lastName:
+          type: string
+          description: Teacher's Last Name
+      required:
+        - firstName
+        - lastName
+    new_test:
+      description: Create a new test for students to take
+      type: object
+      properties:
+        category:
+          type: boolean
+          description: assessment (true), practice (false)
+          default: false
+        baseNumber:
+          type: integer
+          description: Base number of the test
+        operator:
+          type: string
+          description: Operator for the test either +, -, *, /
+          pattern: '[\+\-\/\*]'
+        attemptsAllowed:
+          type: integer
+          description: Number of times available, -1 for always available
+          default: 1
+        studentId:
+          type: integer
+          description: Student taking the test
+        teacherId:
+          type: integer
+          description: Teacher assigning the test
+      required:
+        - category
+        - attemptsAllowed
+        - studentId
+        - teacherId
     new_result:
       type: object
       properties:
-        time_taken:
+        timeTaken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
         testId:
@@ -648,79 +709,40 @@ components:
           type: array
           items:
             properties:
-              student_answer:
+              studentAnswer:
                 type: integer
                 description: Answer the student submitted
               operation:
                 type: string
-                description: +, -, *, /
-              operand_1:
+                description: Operator for the test either +, -, *, /
+                pattern: '[\+\-\/\*]'
+              operand1:
                 type: integer
                 description: Operand preceding the operation
-              operand_2:
+              operand2:
                 type: integer
                 description: Operand subsequent to operation
+            required:
+              - operation
+              - operand1
+              - operand2
+      required:
+        - testId
+    update_test:
+      description: Update test details
+      type: object
+      properties:
+        attemptsRemaining:
+          type: integer
+          description: Number of tries remaining
+      required:
+        - attemptsRemaining
     error:
       type: object
       properties:
         message:
           type: string
           description: Error Message from server
-    new_student:
-      type: object
-      properties:
-        student_firstname:
-          type: string
-          description: Student's First Name
-        student_lastname:
-          type: string
-          description: Student's Last Name
-        teacher_id:
-          type: integer
-          description: ID for Student's Teacher
-          default: 0
-      required:
-        - student_firstname
-        - student_lastname
-        - teacher_id
-    new_teacher:
-      type: object
-      properties:
-        teacher_firstname:
-          type: string
-          description: Teacher's First Name
-        teacher_lastname:
-          type: string
-          description: Teacher's Last Name
-    new_test:
-      description: Create a new test for students to take
-      type: object
-      properties:
-        test_description:
-          type: string
-          description: Description of the Test
-        operator:
-          type: string
-          description: Operator for the test either +, -, *, /
-          pattern: '[\+\-\/\*]'
-        base_number:
-          type: integer
-          description: Base number of the test
-        practice:
-          type: boolean
-          description: Is it a practice test?
-          default: true
-        tries:
-          type: integer
-          description: Number of times available, -1 for always available
-          default: 1
-    update_test:
-      description: Update test details
-      type: object
-      properties:
-        tries:
-          type: integer
-          description: Number of tries remaining
   responses:
     400Error:
       description: Invalid Request
