@@ -63,7 +63,7 @@ router.get('/:id', function(req,res) {
 });
 
 /**
- * @api (get) /tests/:id/category/:category
+ * @api (get) /tests/id/:id/category/:category
  * 
  * @apiName GetTestsById&Category
  * 
@@ -254,6 +254,53 @@ router.get('/level/:level', function(req,res) {
             return;
         })
 });
+
+/**
+ * @api (get) /tests/id/:id/level/:level
+ * 
+ * @apiName GetTestsById&Category
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch ID & Category to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/id/:id/level/:level', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                id: req.params.id,
+	        level: req.params.level
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/id/:id/level/:level`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/id/:id/level/:level`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
 
 /**
  * @api (get) /tests/attemptsRemaining/:attemptsRemaining
