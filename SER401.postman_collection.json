@@ -84,7 +84,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"data\":\"testing instructors\"\n}",
+					"raw": "{\n\t\"data\":\"testing teachers\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -92,13 +92,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/instructors",
+					"raw": "localhost:8000/teachers",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"instructors"
+						"teachers"
 					]
 				}
 			},
@@ -297,7 +297,7 @@
 			"response": []
 		},
 		{
-			"name": "Test Get: Instructors",
+			"name": "Test Get: Teachers",
 			"event": [
 				{
 					"listen": "test",
@@ -308,7 +308,7 @@
 							"    pm.response.to.have.status(200);",
 							"})",
 							"pm.test(\"Has proper data\", function() {",
-							"    pm.expect(pm.response.text()).to.include(\"testing instructors\");",
+							"    pm.expect(pm.response.text()).to.include(\"testing teachers\");",
 							"})"
 						],
 						"type": "text/javascript"
@@ -319,13 +319,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8000/instructors",
+					"raw": "localhost:8000/teachers",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"instructors"
+						"teachers"
 					]
 				}
 			},
