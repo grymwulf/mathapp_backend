@@ -1,15 +1,15 @@
 {
   "shared": {
     "operations": {
-      "no_operation_id": "warning",
+      "no_operation_id": "off",
       "operation_id_case_convention": [
-        "warning",
-        "lower_snake_case"
+        "off",
+        "lower_camel_case"
       ],
-      "no_summary": "warning",
-      "no_array_responses": "error",
-      "parameter_order": "warning",
-      "unused_tag": "warning"
+      "no_summary": "off",
+      "no_array_responses": "off",
+      "parameter_order": "off",
+      "unused_tag": "off"
     },
     "pagination": {
       "pagination_style": "warning"
@@ -32,11 +32,11 @@
       "snake_case_only": "off",
       "paths_case_convention": [
         "error",
-        "lower_snake_case"
+        "lower_camel_case"
       ]
     },
     "responses": {
-      "inline_response_schema": "warning"
+      "inline_response_schema": "off"
     },
     "security_definitions": {
       "unused_security_schemes": "warning",
@@ -58,7 +58,7 @@
       ],
       "enum_case_convention": [
         "error",
-        "lower_snake_case"
+        "lower_camel_case"
       ]
     },
     "walker": {
