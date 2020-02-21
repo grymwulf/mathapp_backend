@@ -102,7 +102,7 @@ router.get('/:id/summary', async (req, res) => {
                 required: true,
                 where: {
                     resultId: req.params.id,
-                    correctly_answered: true
+                    correctlyAnswered: true
                 }
             }
         });
@@ -120,11 +120,11 @@ router.get('/:id/summary', async (req, res) => {
             },
             attributes: {
                 include: [
-                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'total_questions']
+                    [Sequelize.fn('COUNT', Sequelize.col('resultId')), 'totalQuestions']
                 ]
             }
         });
-        resultData[0].dataValues.correctly_answered = correctCount;
+        resultData[0].dataValues.correctlyAnswered = correctCount;
         result['data'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
@@ -244,7 +244,7 @@ router.get('/test/:testId/summary', async (req, res) => {
                     required: true,
                     where: {
                         resultId: resultData[i].dataValues.id,
-                        correctly_answered: true
+                        correctlyAnswered: true
                     }
                 }
             });
@@ -260,8 +260,8 @@ router.get('/test/:testId/summary', async (req, res) => {
                     }
                 }
             });
-            resultData[i].dataValues.total_questions = totalCount;
-            resultData[i].dataValues.correctly_answered = correctCount;
+            resultData[i].dataValues.totalQuestions = totalCount;
+            resultData[i].dataValues.correctlyAnswered = correctCount;
         }
         result['data'] = resultData;
         result['endpoint'] = `results/test/:testId/summary`;
@@ -391,7 +391,7 @@ router.get('/student/:studentId/summary', async (req, res) => {
                     required: true,
                     where: {
                         resultId: resultData[i].dataValues.id,
-                        correctly_answered: true
+                        correctlyAnswered: true
                     }
                 }
             });
@@ -412,8 +412,8 @@ router.get('/student/:studentId/summary', async (req, res) => {
                     }
                 }
             });
-            resultData[i].dataValues.total_questions = totalCount;
-            resultData[i].dataValues.correctly_answered = correctCount;
+            resultData[i].dataValues.totalQuestions = totalCount;
+            resultData[i].dataValues.correctlyAnswered = correctCount;
         }
         result['data'] = resultData;
         result['endpoint'] = `results/student/:studentId/summary`;
@@ -543,7 +543,7 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
                     required: true,
                     where: {
                         resultId: resultData[i].dataValues.id,
-                        correctly_answered: true
+                        correctlyAnswered: true
                     }
                 }
             });
@@ -564,8 +564,8 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
                     }
                 }
             });
-            resultData[i].dataValues.total_questions = totalCount;
-            resultData[i].dataValues.correctly_answered = correctCount;
+            resultData[i].dataValues.totalQuestions = totalCount;
+            resultData[i].dataValues.correctlyAnswered = correctCount;
         }
         result['data'] = resultData;
         result['endpoint'] = `results/teacher/:teacherId/summary`;
@@ -612,6 +612,9 @@ router.get('/', (req, res) => {
             required: true,
             where: {
                 resultId: Sequelize.col('result.id')
+            },
+            attributes: {
+                exclude: ['id', 'resultId']
             }
         }
     }).then(function (results) {
@@ -659,7 +662,7 @@ router.post('/', async (req, res) => {
     try {
         var addResult = await data.sequelize.transaction();
         var newResult = await data.Result.create({
-            time_taken: req.body.time_taken,
+            timeTaken: req.body.timeTaken,
             testId: req.body.testId
         }, {
             transaction: addResult
@@ -671,13 +674,13 @@ router.post('/', async (req, res) => {
         for (i = 0; i < Object.keys(req.body.answers).length; i++) {
             var answerData = req.body.answers[i]
             var newAnswer = await data.Answer.create({
-                student_answer: answerData.student_answer,
+                studentAnswer: answerData.studentAnswer,
                 operation: answerData.operation,
-                operand_1: answerData.operand_1,
-                operand_2: answerData.operand_2,
-                correctly_answered: answerData.student_answer
-                    == eval(answerData.operand_1 + answerData.operation
-                        + answerData.operand_2),
+                operand1: answerData.operand1,
+                operand2: answerData.operand2,
+                correctlyAnswered: answerData.studentAnswer
+                    == eval(answerData.operand1 + answerData.operation
+                        + answerData.operand2),
                 resultId: newResult.id
             }, {
                 transaction: addResult
