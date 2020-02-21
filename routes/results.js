@@ -149,7 +149,7 @@ router.get('/:id/summary', async (req, res) => {
 /**
  * @api (get) /results/test/:id
  * 
- * @apiName GetResultsByTestID
+ * @apiName GetResultsBytestId
  * 
  * @apiGroup Results
  * 
@@ -203,7 +203,7 @@ router.get('/test/:testId', (req, res) => {
 /**
  * @api (get) /results/test/:id/summary
  * 
- * @apiName GetSummaryResultsByTestID
+ * @apiName GetSummaryResultsBytestId
  * 
  * @apiGroup Results
  * 
@@ -286,7 +286,7 @@ router.get('/test/:testId/summary', async (req, res) => {
 /**
  * @api (get) /results/student/:id
  * 
- * @apiName GetResultsByStudentID
+ * @apiName GetResultsBystudentId
  * 
  * @apiGroup Results
  * 
@@ -342,7 +342,7 @@ router.get('/student/:studentId', (req, res) => {
 /**
  * @api (get) /results/student/:id/summary
  * 
- * @apiName GetSummaryResultsByStudentID
+ * @apiName GetSummaryResultsBystudentId
  * 
  * @apiGroup Results
  * 
@@ -438,7 +438,7 @@ router.get('/student/:studentId/summary', async (req, res) => {
 /**
  * @api (get) /results/teacher/:id
  * 
- * @apiName GetResultsByTeacherID
+ * @apiName GetResultsByteacherId
  * 
  * @apiGroup Results
  * 
@@ -494,7 +494,7 @@ router.get('/teacher/:teacherId', (req, res) => {
 /**
  * @api (get) /results/teacher/:id/summary
  * 
- * @apiName GetSummaryResultsByTeacherID
+ * @apiName GetSummaryResultsByteacherId
  * 
  * @apiGroup Results
  * 
