@@ -18,6 +18,12 @@
     const HttpStatus = require('http-status-codes');
     const Sequelize = require('sequelize'); 
 
+
+////////////////////////////
+//   TEACHER SECTION      //
+//                        //
+////////////////////////////
+
 /**
  * @api (post) /teachers/
  * 
@@ -255,6 +261,46 @@
         return;
     })
 });
+
+////////////////////////////
+//   TEACHER SECTION      //
+//      TWO INPUTS        //
+////////////////////////////
+
+
+router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
+    var result = {};
+    data.Teacher.findAll({
+        where: { 
+            firstName: req.params.firstName,
+            lastName: req.params.lastName
+        },
+        attributes: {
+            exclude: ['teacherId', 'studentId']
+        }
+    })
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/firstName/:firstName/lastName/:lastName';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying all teachers by first and last name');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/firstName/:firstName/lastName/:lastName';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+
 
 ////////////////////////////
 //   TEST SECTION         //
