@@ -128,7 +128,7 @@ router.get('/id/:id/category/:category', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get(‘/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
+router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
@@ -157,6 +157,51 @@ router.get(‘/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
         })
 });
 
+/**
+ * @api (get) /tests/id/:id/teacherId/:teacherId
+ * 
+ * @apiName GetTestsById&teacherId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch ID & teacherId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/id/:id/teacherId/:teacherId', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                id: req.params.id,
+	        teacherId:req.params.teacherId
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/id/:id/teacherId/:teacherId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/id/:id/teacherId/:teacherId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
 /**
  * @api (get) /tests/category/:category
