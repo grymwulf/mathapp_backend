@@ -40,4 +40,4 @@ services:
     # there may be a more effective solution, but it works so :meh:
     command: >
       bash -c "rm -rf /home/nose/app/node_modules
-      && npm install --prefer-offline --no-package-lock && npm start"
+      && yarn install && yarn run start"
