@@ -17,6 +17,54 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
+/**
+ * @api (get) /students/teacherId/:teacherId/students/id/:level
+ * 
+ * @apiName GetStudentsByTeacherID&Level
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input teacher ID and level to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by teacher
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/teacherId/:teacherId/level/:level', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                teacherId: req.params.teacherId,
+				level: req.params.level
+            }
+    })
+    .then( studentData => {
+        result['data'] = studentData;
+        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:level `;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by teacher ID and specific level');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:level `;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+
 // basic getter to get record by primary key
 router.get('/:id', function(req, res) {
     var result = {};
