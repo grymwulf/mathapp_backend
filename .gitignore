@@ -94,3 +94,4 @@ db/
 backend/
 
 .DS_Store
+validation.txt
