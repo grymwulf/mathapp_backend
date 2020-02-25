@@ -4,7 +4,6 @@
   "description": "Backend for MathApp ASU Capstone Project",
   "main": "app.js",
   "scripts": {
-    "prestart": "npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --ignore prestage/ --ignore backend/ app.js"
   },
