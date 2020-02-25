@@ -10,10 +10,10 @@
     Proprietary and confidential
     */
 
-    const Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 
-    module.exports = (sequelize, type) => {
-        return sequelize.define('test', {
+module.exports = (sequelize, type) => {
+    return sequelize.define('test', {
 
         // id: primary ID for the test
         id: {
@@ -23,26 +23,49 @@
         },
 
 
-    //category: practice(false, 0) or graded(true, 1)
-    category: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
+        //category: practice(false, 0) or graded(true, 1)
+        category: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
 
-    //level: difficulty of test i.e. 1+, 2+, 3+, etc.
-    level: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-    },
-    
-    //attempts_remaining: number of attempts left to take test
-    attempts_remaining: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
+        //level: difficulty of test i.e. 1+, 2+, 3+, etc.
+        level: {
+            type: Sequelize.VIRTUAL,
+            allowNull: false,
+            get() {
+                return `${baseNumber}${operation}`;
+            },
+            set(value) {
+                throw new Error("Do not set level directly");
+            }
+        },
 
-},{
-    timestamps: false
-})
-    }
+        //attempts_remaining: number of attempts left to take test
+        attemptsRemaining: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+
+        baseNumber: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+
+        operation: {
+            type: Sequelize.ENUM,
+            values: ['+', '-', '*', '/'],
+            validate: {
+                isIn: {
+                    args: [['+', '-', '*', '/']],
+                    msg: "Must be basic arithmetic operation"
+                }
+            },
+            allowNull: false
+        }
+
+    }, {
+        timestamps: false
+    })
+}
