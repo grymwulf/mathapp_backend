@@ -158,7 +158,7 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
 });
 
 /**
- * @api (get) /tests/id/:id/teacherId/:teacherId
+ * @api (get) /tests/id/:id/teachers/:teacherId
  * 
  * @apiName GetTestsById&teacherId
  * 
@@ -174,7 +174,7 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/id/:id/teacherId/:teacherId', function(req,res) {
+router.get('/id/:id/teachers/:teacherId', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
@@ -184,7 +184,7 @@ router.get('/id/:id/teacherId/:teacherId', function(req,res) {
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `/tests/id/:id/teacherId/:teacherId`;
+            result['endpoint'] = `/tests/id/:id/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -194,7 +194,7 @@ router.get('/id/:id/teacherId/:teacherId', function(req,res) {
             console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/tests/id/:id/teacherId/:teacherId`;
+            result['endpoint'] = `/tests/id/:id/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -204,7 +204,53 @@ router.get('/id/:id/teacherId/:teacherId', function(req,res) {
 });
 
 /**
- * @api (get) /tests/id/:id/teacherId/:teacherId/studentId/studentId
+ * @api (get) /tests/id/:id/students/:studentId
+ * 
+ * @apiName GetTestsById&studentId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch ID & studentId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/id/:id/students/:studentId', function(req,res) {
+    var result = {};
+    data.Test.findAll({
+            where: {
+                id: req.params.id,
+	        studentId:req.params.studentId
+            }
+        })
+        .then( testData => {
+            result['data'] = testData;
+            result['endpoint'] = `/tests/id/:id/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/id/:id/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (get) /tests/id/:id/teachers/:teachers/students/:studentId
  * 
  * @apiName GetTestsById&teacherId&studentId
  * 
@@ -220,7 +266,7 @@ router.get('/id/:id/teacherId/:teacherId', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/id/:id/teacherId/:teacherId/studentId/:studentId', function(req,res) {
+router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) {
     var result = {};
     data.Test.findAll({
             where: {
@@ -231,7 +277,7 @@ router.get('/id/:id/teacherId/:teacherId/studentId/:studentId', function(req,res
         })
         .then( testData => {
             result['data'] = testData;
-            result['endpoint'] = `/tests/id/:id/teacherId/:teacherId/studentId/:studentId`;
+            result['endpoint'] = `/tests/id/:id/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
@@ -241,7 +287,7 @@ router.get('/id/:id/teacherId/:teacherId/studentId/:studentId', function(req,res
             console.log('Error querying a test');
             console.log(err)
             result['data'] = {};
-            result['endpoint'] = `/tests/id/:id/teacherId/:teacherId/studentId/:studentId`;
+            result['endpoint'] = `/tests/id/:id/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -396,11 +442,11 @@ router.get('/level/:level', function(req,res) {
 /**
  * @api (get) /tests/id/:id/level/:level
  * 
- * @apiName GetTestsById&Category
+ * @apiName GetTestsById&Level
  * 
  * @apiGroup Tests
  * 
- * @apiParam (Number) input Test batch ID & Category to pull
+ * @apiParam (Number) input Test batch ID & Level to pull
  * 
  * @apiSuccess (JSON) data Current table entry for test
  * @apiSuccess (JSON) responseCode HTTP Response Code
