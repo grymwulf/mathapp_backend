@@ -54,8 +54,8 @@ module.exports = (sequelize, type) => {
         operand1: {
             type: Sequelize.INTEGER,
             validate: {
-                min: 0,
-                max: 14,
+                min: process.env.APP_MIN_OPERAND,
+                max: process.env.APP_MAX_OPERAND,
                 isInt: true
             },
             allowNull: false,
@@ -67,8 +67,8 @@ module.exports = (sequelize, type) => {
         operand2: {
             type: Sequelize.INTEGER,
             validate: {
-                min: 0,
-                max: 14,
+                min: process.env.APP_MIN_OPERAND,
+                max: process.env.APP_MAX_OPERAND,
                 isInt: true
             },
             allowNull: false,

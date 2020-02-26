@@ -68,6 +68,34 @@ paths:
           $ref: '#/components/responses/400Error'
         '404':
           $ref: '#/components/responses/404Error'
+    patch:
+      summary: Update student details
+      #operationID:
+      parameters:
+        - name: studentId
+          description: Student ID to update
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateStudent'
+      responses:
+        '204':
+          description: Accepted
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Record Locator
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
   /students/{studentId}/tests:
     get:
       summary: Get active tests for a student
@@ -114,7 +142,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/new_test'
+              $ref: '#/components/schemas/newTest'
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -150,7 +178,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/new_teacher'
+              $ref: '#/components/schemas/newTeacher'
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -250,7 +278,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/update_test'
+              $ref: '#/components/schemas/updateTest'
       responses:
         '204':
           description: Accepted
@@ -292,7 +320,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/new_result'
+              $ref: '#/components/schemas/newResult'
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -344,7 +372,7 @@ paths:
                 properties:
                   results:
                     type: object
-                    $ref: '#/components/schemas/result_summary'
+                    $ref: '#/components/schemas/resultSummary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -400,7 +428,7 @@ paths:
                     description: Student result summary
                     type: array
                     items:
-                      $ref: '#/components/schemas/result_summary'
+                      $ref: '#/components/schemas/resultSummary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -456,7 +484,7 @@ paths:
                     description: Aggregate summary results
                     type: array
                     items:
-                      $ref: '#/components/schemas/result_summary'
+                      $ref: '#/components/schemas/resultSummary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -512,7 +540,7 @@ paths:
                     description: Summary results for a test
                     type: array
                     items:
-                      $ref: '#/components/schemas/result_summary'
+                      $ref: '#/components/schemas/resultSummary'
         '400':
           $ref: '#/components/responses/400Error'
         '404':
@@ -562,16 +590,12 @@ components:
         id:
           type: integer
           description: ID number for test
-        category:
+        practice:
           type: boolean
-          description: assessment (true), practice (false)
-        baseNumber:
-          type: integer
-          description: Base number of the test
-        operator:
+          description: practice (true), asessment (false)
+        level:
           type: string
-          description: Operator for the test either +, -, *, /
-          pattern: '[\+\-\/\*]'
+          description: Level of the test
         attemptsRemaining:
           type: integer
           description: Number of times available, -1 for always available
@@ -615,7 +639,7 @@ components:
               operand2:
                 type: integer
                 description: Operand subequent to operation
-    result_summary:
+    resultSummary:
       description: Summary of results
       type: object
       properties:
@@ -652,7 +676,7 @@ components:
         - firstName
         - lastName
         - teacherId
-    new_teacher:
+    newTeacher:
       description: New Teacher
       type: object
       properties:
@@ -665,20 +689,20 @@ components:
       required:
         - firstName
         - lastName
-    new_test:
+    newTest:
       description: Create a new test for students to take
       type: object
       properties:
-        category:
+        practice:
           type: boolean
-          description: assessment (true), practice (false)
-          default: false
+          description: practice (true), assessment (false)
+          default: true
         baseNumber:
           type: integer
           description: Base number of the test
-        operator:
+        operation:
           type: string
-          description: Operator for the test either +, -, *, /
+          description: Operation for the test either +, -, *, /
           pattern: '[\+\-\/\*]'
         attemptsAllowed:
           type: integer
@@ -695,7 +719,7 @@ components:
         - attemptsAllowed
         - studentId
         - teacherId
-    new_result:
+    newResult:
       description: Create a new result record
       type: object
       properties:
@@ -715,7 +739,7 @@ components:
                 description: Answer the student submitted
               operation:
                 type: string
-                description: Operator for the test either +, -, *, /
+                description: Operation for the test either +, -, *, /
                 pattern: '[\+\-\/\*]'
               operand1:
                 type: integer
@@ -729,7 +753,27 @@ components:
               - operand2
       required:
         - testId
-    update_test:
+    updateStudent:
+      description: Update student details
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Student's first name
+        lastName:
+          type: string
+          description: Student's last name
+        stars:
+          type: integer
+          description: Student's accolade count
+        baseNumber:
+          type: integer
+          description: Operand for student level (i.e. 3 for 3+)
+        operation:
+          type: string
+          description: Operation for student level (i.e. '+' for 3+) either +,-,*,/
+          pattern: '[\+\-\/\*]'
+    updateTest:
       description: Update test details
       type: object
       properties:
