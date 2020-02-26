@@ -689,7 +689,7 @@ router.post('/', async (req, res) => {
                 `Answer ${newAnswer.id} `);
         }
 
-        await data.Test.decrement('attempts_remaining', {
+        await data.Test.decrement('attemptsRemaining', {
             where: {
                 id: req.body.testId
             },
