@@ -409,6 +409,53 @@ router.get('/test/id/:id', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /students/teacherId/:teacherId/students/id/:stars
+ * 
+ * @apiName GetStudentsByTeacherID&Stars
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input teacher ID and stars to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by teacher and stars earned
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/teacherId/:teacherId/stars/:stars', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                teacherId: req.params.teacherId,
+				stars: req.params.stars
+            }
+    })
+    .then( studentData => {
+        result['data'] = studentData;
+        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by teacher ID and specific amount of stars earned');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
 // implementing a basic getter to get all known students in the DB
 router.get('/', function (req, res) {
     var result = {};
