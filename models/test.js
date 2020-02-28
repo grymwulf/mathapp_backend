@@ -29,18 +29,6 @@ module.exports = (sequelize, type) => {
             defaultValue: false
         },
 
-        //level: difficulty of test i.e. 1+, 2+, 3+, etc.
-        level: {
-            type: Sequelize.VIRTUAL,
-            allowNull: false,
-            get() {
-                return `${baseNumber}${operation}`;
-            },
-            set(value) {
-                throw new Error("Do not set level directly");
-            }
-        },
-
         //attempts_remaining: number of attempts left to take test
         attemptsRemaining: {
             type: Sequelize.INTEGER,
@@ -62,6 +50,17 @@ module.exports = (sequelize, type) => {
                 }
             },
             allowNull: false
+        },
+        
+        //level: difficulty of test i.e. 1+, 2+, 3+, etc.
+        level: {
+            type: Sequelize.VIRTUAL,
+            get() {
+                return `${this.baseNumber}${this.operation}`;
+            },
+            set(value) {
+                throw new Error("Do not set level directly");
+            }
         }
 
     }, {

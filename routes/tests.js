@@ -39,9 +39,6 @@ router.get('/:id', function (req, res) {
     data.Test.findAll({
         where: {
             id: req.params.id
-        },
-        attributes: {
-            exclude: ['baseNumber', 'operation']
         }
     })
         .then(testData => {
@@ -372,10 +369,12 @@ router.get('/category/:category/level/:level', function(req,res) {
     var value = req.params.category;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
+    var paramLevel = req.params.level.split('');
     data.Test.findAll({
             where: {
                 category: value,
-		level: req.params.level
+		baseNumber: paramLevel[0],
+	    	operation: paramLevel[1]
             },
         })
         .then( testData => {
@@ -469,9 +468,11 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
 
 router.get('/level/:level', function (req, res) {
     var result = {};
+    var paramLevel = req.params.level.split('');
     data.Test.findAll({
         where: {
-            level: req.params.level
+            baseNumber: paramLevel[0],
+	    operation: paramLevel[1]
         }
     })
         .then(testData => {
@@ -515,10 +516,12 @@ router.get('/level/:level', function (req, res) {
  */
 router.get('/id/:id/level/:level', function(req,res) {
     var result = {};
+    var paramLevel = req.params.level.split('');
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	        level: req.params.level
+	        baseNumber: paramLevel[0],
+	    	operation: paramLevel[1]
             }
         })
         .then( testData => {
@@ -560,7 +563,6 @@ router.get('/id/:id/level/:level', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-<<<<<<< HEAD
 router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
     var result = {};
     data.Test.findAll({
@@ -895,7 +897,8 @@ router.post('/', async (req, res) =>{
 	console.log(req.body);
 	
 	var category = req.body.category;
-	var level = req.body.level;
+	var baseNumber = req.body.baseNumber;
+	var operation = req.body.operation;
 	var attemptsRemaining = req.body.attemptsRemaining;
 	var teacherId = req.body.teacherId;
 	var studentId = req.body.studentId;
@@ -904,7 +907,8 @@ router.post('/', async (req, res) =>{
 	    var newTest = await data.Test.create({
 		id: req.body.id,
 		category: req.body.category,
-		level: req.body.level,
+		baseNumber: req.body.baseNumber,
+		operation: req.body.operation,
 		attemptsRemaining: req.body.attemptsRemaining,
 		teacherId: req.body.teacherId,
 		studentId: req.body.studentId
@@ -917,7 +921,8 @@ router.post('/', async (req, res) =>{
 	result['new test'] = {
 		'id': newTest.id,
 		'category': category,
-		'level': level,
+		'baseNumber': baseNumber,
+		'operation':operation,
 		'attemptsRemaining': attemptsRemaining,
 		'teacherId': teacherId,
 		'studentId': studentId,
