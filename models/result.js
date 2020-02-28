@@ -22,9 +22,8 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-        time_taken: {
-            type: Sequelize.TIME,
-            allowNull: false
+        timeTaken: {
+            type: Sequelize.TIME
         }
 
     },{

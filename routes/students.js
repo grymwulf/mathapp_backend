@@ -78,7 +78,7 @@ router.get('/level/:level', function(req, res) {
 /**
  * @api (get) /students/teacher/:teacherId
  * 
- * @apiName GetStudentsByTeacherID
+ * @apiName GetStudentsByteacherId
  * 
  * @apiGroup Students
  * 
@@ -96,7 +96,7 @@ router.get('/level/:level', function(req, res) {
 /**
  * @api (get) /students/teacher/:teacherId
  * 
- * @apiName GetStudentsByTeacherID
+ * @apiName GetStudentsByteacherId
  * 
  * @apiGroup Student
  * 

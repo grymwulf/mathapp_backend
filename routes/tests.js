@@ -1,16 +1,14 @@
 /*
     Copyright 2019 SER401 Project 14 Team - All Rights Reserved
-
     Team Members: 
     RAYMOND ACEVEDO
     SHAWN WEINER
     CHRISTOPHER SALAZAR
     ROBERT PILLITTERI
     SHELTON LACY 
-
     Unauthorized copying of this file, via any medium is strictly prohibited
     Proprietary and confidential
-*/
+    */
 
 const express = require('express');
 const router = express.Router();
@@ -34,14 +32,19 @@ const HttpStatus = require('http-status-codes');
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/:id', function(req,res) {
+
+router.get('/:id', function (req, res) {
+
     var result = {};
     data.Test.findAll({
-            where: {
-                id: req.params.id
-            }
-        })
-        .then( testData => {
+        where: {
+            id: req.params.id
+        },
+        attributes: {
+            exclude: ['baseNumber', 'operation']
+        }
+    })
+        .then(testData => {
             result['data'] = testData;
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.OK;
@@ -250,7 +253,7 @@ router.get('/id/:id/students/:studentId', function(req,res) {
 });
 
 /**
- * @api (get) /tests/id/:id/teachers/:teachers/students/:studentId
+ * @api (get) /tests/id/:id/teachers/:teacherId/students/:studentId
  * 
  * @apiName GetTestsById&teacherId&studentId
  * 
@@ -313,17 +316,18 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/category/:category', function(req,res) {
+
+router.get('/category/:category', function (req, res) {
     var result = {};
     var value = req.params.category;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
     data.Test.findAll({
-            where: {
-                category: value
-            },
-        })
-        .then( testData => {
+        where: {
+            category: value
+        },
+    })
+        .then(testData => {
             result['data'] = testData;
             result['endpoint'] = `/tests/category/:category`;
             result['responseCode'] = HttpStatus.OK;
@@ -342,6 +346,8 @@ router.get('/category/:category', function(req,res) {
             res.json(result);
             return;
         })
+
+
 });
 
 /**
@@ -460,14 +466,15 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/level/:level', function(req,res) {
+
+router.get('/level/:level', function (req, res) {
     var result = {};
     data.Test.findAll({
-            where: {
-                level: req.params.level
-            }
-        })
-        .then( testData => {
+        where: {
+            level: req.params.level
+        }
+    })
+        .then(testData => {
             result['data'] = testData;
             result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.OK;
@@ -486,6 +493,7 @@ router.get('/level/:level', function(req,res) {
             res.json(result);
             return;
         })
+
 });
 
 /**
@@ -552,6 +560,7 @@ router.get('/id/:id/level/:level', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
+<<<<<<< HEAD
 router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
     var result = {};
     data.Test.findAll({
@@ -578,6 +587,7 @@ router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
             res.json(result);
             return;
         })
+
 });
 
 /**
@@ -597,14 +607,15 @@ router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/teachers/:teacherId', function(req,res) {
+
+router.get('/teachers/:teacherId', function (req, res) {
     var result = {};
     data.Test.findAll({
-            where: {
-                teacherId: req.params.teacherId
-            }
-        })
-        .then( testData => {
+        where: {
+            teacherId: req.params.teacherId
+        }
+    })
+        .then(testData => {
             result['data'] = testData;
             result['endpoint'] = `/tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
@@ -623,6 +634,7 @@ router.get('/teachers/:teacherId', function(req,res) {
             res.json(result);
             return;
         })
+
 });
 
 
@@ -643,14 +655,14 @@ router.get('/teachers/:teacherId', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/students/:studentId', function(req,res) {
+router.get('/students/:studentId', function (req, res) {
     var result = {};
     data.Test.findAll({
-            where: {
-                studentId: req.params.studentId
-            }
-        })
-        .then( testData => {
+        where: {
+            studentId: req.params.studentId
+        }
+    })
+        .then(testData => {
             result['data'] = testData;
             result['endpoint'] = `/tests/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
@@ -734,7 +746,7 @@ router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/teachers/:teacherId/students/:studentId', function(req,res) {
+router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
     var result = {};
     data.Test.findAll({
             where: {
@@ -935,8 +947,8 @@ router.post('/', async (req, res) =>{
 router.get('/', function (req, res) {
     var result = {};
     data.Test.findAll({
-            raw: true
-        })
+        raw: true
+    })
         .then(function (tests) {
             result['data'] = tests;
             result['endpoint'] = "/tests";
@@ -959,16 +971,15 @@ router.get('/', function (req, res) {
             res.json(result);
             return;
         })
-}) 
-
+})
 
 // default handler
 // anything not implemented gets a response not implemented
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
-router.use(function(req,res) {
+router.use(function (req, res) {
     var result = {};
     result['data'] = {
-        "endpoint" : "/tests"
+        "endpoint": "/tests"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
     result['response'] = "Not Implemented";
