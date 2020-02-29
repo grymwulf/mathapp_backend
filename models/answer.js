@@ -22,19 +22,19 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-        student_answer: {
+        studentAnswer: {
             type: Sequelize.INTEGER,
             allowNull: true,
             set(value) {
                 if (value === null) {
-                    this.setDataValue('student_answer', null)
+                    this.setDataValue('studentAnswer', null)
                 } else {
-                    this.setDataValue('student_answer', parseInt(value));
+                    this.setDataValue('studentAnswer', parseInt(value));
                 }
             }
         },
 
-        correctly_answered: {
+        correctlyAnswered: {
             type: Sequelize.BOOLEAN,
             allowNull: false
         },
@@ -51,29 +51,29 @@ module.exports = (sequelize, type) => {
             allowNull: false
         },
 
-        operand_1: {
+        operand1: {
             type: Sequelize.INTEGER,
             validate: {
-                min: 0,
-                max: 14,
+                min: process.env.APP_MIN_OPERAND,
+                max: process.env.APP_MAX_OPERAND,
                 isInt: true
             },
             allowNull: false,
             set(value) {
-                this.setDataValue('operand_1', parseInt(value));
+                this.setDataValue('operand1', parseInt(value));
             }
         },
 
-        operand_2: {
+        operand2: {
             type: Sequelize.INTEGER,
             validate: {
-                min: 0,
-                max: 14,
+                min: process.env.APP_MIN_OPERAND,
+                max: process.env.APP_MAX_OPERAND,
                 isInt: true
             },
             allowNull: false,
             set(value) {
-                this.setDataValue('operand_2', parseInt(value));
+                this.setDataValue('operand2', parseInt(value));
             }
         }
 
