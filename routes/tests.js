@@ -42,7 +42,12 @@ router.get('/:id', function (req, res) {
         }
     })
         .then(testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -87,11 +92,16 @@ router.get('/id/:id/category/:category', function(req,res) {
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	        category: value
+	            category: value
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/id/:id/category/:category`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -133,11 +143,16 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	        attemptsRemaining:req.params.attemptsRemaining
+	            attemptsRemaining:req.params.attemptsRemaining
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/id/:id/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -179,11 +194,16 @@ router.get('/id/:id/teachers/:teacherId', function(req,res) {
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	        teacherId:req.params.teacherId
+	           teacherId:req.params.teacherId
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -229,7 +249,12 @@ router.get('/id/:id/students/:studentId', function(req,res) {
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/id/:id/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -276,7 +301,12 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -325,7 +355,12 @@ router.get('/category/:category', function (req, res) {
         },
     })
         .then(testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/category/:category`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -378,7 +413,12 @@ router.get('/category/:category/level/:level', function(req,res) {
             },
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/category/:category/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -428,7 +468,12 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
             },
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/category/:category/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -476,7 +521,12 @@ router.get('/level/:level', function (req, res) {
         }
     })
         .then(testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -520,12 +570,17 @@ router.get('/id/:id/level/:level', function(req,res) {
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	        baseNumber: paramLevel[0],
-	    	operation: paramLevel[1]
+	            baseNumber: paramLevel[0],
+	    	    operation: paramLevel[1]
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/id/:id/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -571,7 +626,12 @@ router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -618,7 +678,12 @@ router.get('/teachers/:teacherId', function (req, res) {
         }
     })
         .then(testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -665,7 +730,12 @@ router.get('/students/:studentId', function (req, res) {
         }
     })
         .then(testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -707,11 +777,16 @@ router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function
     data.Test.findAll({
             where: {
                 studentId: req.params.studentId,
-		attemptsRemaining: req.params.attemptsRemaining
+		        attemptsRemaining: req.params.attemptsRemaining
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/students/:studentId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -752,12 +827,17 @@ router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
     var result = {};
     data.Test.findAll({
             where: {
-		teacherId: req.params.teacherId,
+		        teacherId: req.params.teacherId,
                 studentId: req.params.studentId
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -806,7 +886,12 @@ router.get('/category/:category/attemptsRemaining/:attemptsRemaining', function(
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/category/:category/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -855,7 +940,12 @@ router.get('/category/:category/students/:studentId', function(req,res) {
             }
         })
         .then( testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/category/:category/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -955,7 +1045,12 @@ router.get('/', function (req, res) {
         raw: true
     })
         .then(function (tests) {
-            result['data'] = tests;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = "/tests";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
