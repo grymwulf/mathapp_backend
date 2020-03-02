@@ -39,13 +39,15 @@ router.get('/:id', function (req, res) {
     data.Test.findAll({
         where: {
             id: req.params.id
-        },
-        attributes: {
-            exclude: ['baseNumber', 'operation']
         }
     })
         .then(testData => {
-            result['data'] = testData;
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
