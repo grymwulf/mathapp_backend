@@ -17,6 +17,7 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
+
 /**
  * @api (get) /students/teacherId/:teacherId/students/id/:level
  * 
@@ -92,6 +93,53 @@ router.get('/:id', function(req, res) {
             res.json(result);
             return;
         })
+});
+
+/**
+ * @api (get) /students/firstName/:firstName/lastName/:lastName
+ * 
+ * @apiName GetStudentsByFirstandLastName
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input student first and last name to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by student's full name
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/firstName/:firstName/lastName/:lastName', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+				firstName: req.params.firstName,
+				lastName: req.params.lastName
+            }
+    })
+    .then( studentData => {
+        result['data'] = studentData;
+        result['endpoint'] = `students/firstName/:firstName/students/lastName/:lastName`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by student first and last name');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = `students/firstName/:firstName/students/lastName/:lastName`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
 });
 
 /**
