@@ -408,8 +408,8 @@ router.get('/category/:category/level/:level', function(req,res) {
     data.Test.findAll({
             where: {
                 category: value,
-		baseNumber: paramLevel[0],
-	    	operation: paramLevel[1]
+		        baseNumber: paramLevel[0],
+	    	    operation: paramLevel[1]
             },
         })
         .then( testData => {
@@ -517,7 +517,7 @@ router.get('/level/:level', function (req, res) {
     data.Test.findAll({
         where: {
             baseNumber: paramLevel[0],
-	    operation: paramLevel[1]
+	        operation: paramLevel[1]
         }
     })
         .then(testData => {
@@ -538,6 +538,62 @@ router.get('/level/:level', function (req, res) {
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/level/:level`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
+
+/**
+ * @api (get) /tests/level/:level/attemptsRemaining/:attemptsRemaining/students/studentId
+ * 
+ * @apiName GetTestsByLevel&AttemptsRemaining&StudentId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch Level AttemptsRemaining StudentId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            attemptsRemaining: req.params.attemptsRemaining,
+            studentId: req.params.studentId
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
