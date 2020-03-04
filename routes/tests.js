@@ -937,7 +937,7 @@ router.get('/category/:category/attemptsRemaining/:attemptsRemaining', function(
     if (value === 'false') value = false;
     data.Test.findAll({
             where: {
-		category: value,
+		        category: value,
                 attemptsRemaining: req.params.attemptsRemaining
             }
         })
@@ -959,6 +959,60 @@ router.get('/category/:category/attemptsRemaining/:attemptsRemaining', function(
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/category/:category/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (get) /tests/category/:category/teachers/:teacherId
+ * 
+ * @apiName GetTestsBycategory&teacherId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch category & teacherId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/category/:category/teachers/:teacherId', function(req,res) {
+    var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    data.Test.findAll({
+            where: {
+		        category: value,
+                teacherId: req.params.teacherId
+            }
+        })
+        .then( testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `/tests/category/:category/teachers/:teacherId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/category/:category/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
