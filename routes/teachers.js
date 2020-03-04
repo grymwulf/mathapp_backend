@@ -513,6 +513,56 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     })
 });
 
+   /**
+ * @api (get) /teachers/student/lastName/:lastName
+ * 
+ * @apiName Get teachers by student last name
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom student last name belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/student/lastName/:lastName', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+        include: {
+         model: data.Student,
+         required: true,
+         where: {
+            lastName: req.params.lastName
+        },
+        attributes: {
+            exclude: ['teacherId', 'studentId']
+        }
+    }
+})
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/student/lastName/:lastName';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying teachers by student last name');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/student/lastName/:lastName';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
 ////////////////////////////
 //  DEFAULT SECTION       //
 //                        //
