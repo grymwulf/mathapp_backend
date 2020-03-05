@@ -73,7 +73,6 @@ router.get('/teacher/firstName/:firstName', (req, res) => {
 /*----------------------------------------------------------------------------------------------------------------*/
 
 
-
 /**
  * @api (get) /students/teacherId/:teacherId/students/id/:level
  * 
