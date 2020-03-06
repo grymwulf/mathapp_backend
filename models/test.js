@@ -22,7 +22,6 @@ module.exports = (sequelize, type) => {
             primaryKey: true
         },
 
-
         //category: practice(false, 0) or graded(true, 1)
         category: {
             type: Sequelize.BOOLEAN,
@@ -56,7 +55,6 @@ module.exports = (sequelize, type) => {
         //level: difficulty of test i.e. 1+, 2+, 3+, etc.
         level: {
             type: Sequelize.VIRTUAL,
-            allowNull: false,
             get() {
                 return `${this.baseNumber}${this.operation}`;
             },
