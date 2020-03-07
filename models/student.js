@@ -1,13 +1,11 @@
 /*
     Copyright 2019 SER402 Project 14 Team - All Rights Reserved
-
     Team Members: 
     RAYMOND ACEVEDO
     SHAWN WEINER
     CHRISTOPHER SALAZAR
     ROBERT PILLITTERI
     SHELTON LACY 
-
     Unauthorized copying of this file, via any medium is strictly prohibited
     Proprietary and confidential
 */
@@ -29,32 +27,27 @@ module.exports = (sequelize, type) => {
         //Student's first name
         firstName: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         },
 
         //Student's last name
         lastName: {
             type: Sequelize.STRING,
-            allowNull: false        
+            allowNull: true        
         },
 
         //Stars student has earned
         stars: {
             type: Sequelize.INTEGER(50),
-            allowNull: false
+            allowNull: true
         },
 
         //Level of student
         level: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         },
-
-        teacherId: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
-
+        
         // implement a data field to store data for testing get/post
         data: Sequelize.TEXT,
     },{
