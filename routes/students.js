@@ -17,6 +17,54 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
+
+/*----------------------------------------------------------------------------------------------------------------*/
+/**
+ * @api (get) /students/lastName/:lastName/level/:level
+ * 
+ * @apiName GetStudentsByLastName&Level
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input student level and last name to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by student's last name and level
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/lastName/:lastName/level/:level', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+				lastName: req.params.lastName,
+				level: req.params.level
+            }
+    })
+    .then( studentData => {
+        result['data'] = studentData;
+        result['endpoint'] = `students/lastName/:lastName/students/level/:level`;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by student first and last name');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = `students/lastName/:lastName/students/level/:level`;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
 /*----------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -68,9 +116,6 @@ router.get('/teacher/firstName/:firstName', (req, res) => {
         return;
     })
 });
-
-
-/*----------------------------------------------------------------------------------------------------------------*/
 
 
 /**
@@ -419,11 +464,7 @@ router.get('/teacherId/:teacherId', function(req,res) {
 /**
  * @api (get) /students/id/:id
  * 
-<<<<<<< HEAD
  * @apiName GetStudentsByStudentID
-=======
- * @apiName GetStudentsByteacherId
->>>>>>> master
  * 
  * @apiGroup Students
  * 
