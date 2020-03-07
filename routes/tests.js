@@ -1263,19 +1263,11 @@ router.get('/', function (req, res) {
         raw: true
     })
         .then(function (tests) {
-            var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
-                delete parsed[i].operation;
-                delete parsed[i].baseNumber;
-            }
-            result['data'] = parsed;
+            result['data'] = tests;
             result['endpoint'] = "/tests";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
-            tests.forEach(element => {
-                element.data = JSON.parse(element.data)
-            });
             res.json(result);
             return;
         }).catch(function (err) {
