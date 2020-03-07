@@ -21,19 +21,19 @@ module.exports = (sequelize, type) => {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
         },
 
         //Student's first name
         firstName: {
             type: Sequelize.STRING,
-            allowNull: true
+            allowNull: false,
         },
 
         //Student's last name
         lastName: {
             type: Sequelize.STRING,
-            allowNull: true        
+            allowNull: false,        
         },
 
         //Stars student has earned
@@ -45,11 +45,8 @@ module.exports = (sequelize, type) => {
         //Level of student
         level: {
             type: Sequelize.STRING,
-            allowNull: true
+            allowNull: true,
         },
-        
-        // implement a data field to store data for testing get/post
-        data: Sequelize.TEXT,
     },{
         timestamps: false
     })
