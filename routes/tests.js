@@ -247,7 +247,7 @@ router.get('/id/:id/teachers/:teacherId', function(req,res) {
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	           teacherId:req.params.teacherId
+	            teacherId:req.params.teacherId
             }
         })
         .then( testData => {
@@ -1153,7 +1153,7 @@ router.get('/category/:category/students/:studentId', function(req,res) {
     if (value === 'false') value = false;
     data.Test.findAll({
             where: {
-		category: value,
+		        category: value,
                 studentId: req.params.studentId
             }
         })
@@ -1182,6 +1182,7 @@ router.get('/category/:category/students/:studentId', function(req,res) {
             return;
         })
 });
+
 /**
  * @api (post) /tests/
  * 
@@ -1198,7 +1199,6 @@ router.get('/category/:category/students/:studentId', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-
 router.post('/', async (req, res) =>{
 	var result = {};
 	console.log(`Post: `);
@@ -1256,14 +1256,34 @@ router.post('/', async (req, res) =>{
      }
 });
 
-// implementing a basic getter to get all known tests in the DB
+/**
+ * @api (get) /tests/
+ * 
+ * @apiName GetTests
+ * 
+ * @apiGroup Tests
+ * 
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/', function (req, res) {
     var result = {};
     data.Test.findAll({
-        raw: true
+        model: data.Test
     })
-        .then(function (tests) {
-            result['data'] = tests;
+        .then( testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
             result['endpoint'] = "/tests";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
