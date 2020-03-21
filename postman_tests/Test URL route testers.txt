@@ -1,0 +1,38 @@
+Test url test routes 
+
+//Add(post) a test
+http://localhost:8000/tests/
+
+json body
+{
+	"category": true,
+	"baseNumber": 3,
+	"operation":"+",
+	"attemptsRemaining": 3,
+	"teacherId" : 1,
+	"studentId" : 2
+}
+
+
+// get all tests
+http://localhost:8000/tests/
+
+//get test by individual id
+http://localhost:8000/tests/1
+
+//get test by category
+http://localhost:8000/tests/category/true
+
+//get test by level
+http://localhost:8000/tests/level/3+
+
+//get test by attempts remaining 
+http://localhost:8000/tests/attemptsRemaining/3
+
+//get test by teacher id
+http://localhost:8000/tests/teachers/1
+
+//get test by student id
+http://localhost:8000/tests/students/2
+
+There are others such as id/category or id/level or level/studentId

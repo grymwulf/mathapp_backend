@@ -247,7 +247,7 @@ router.get('/id/:id/teachers/:teacherId', function(req,res) {
     data.Test.findAll({
             where: {
                 id: req.params.id,
-	           teacherId:req.params.teacherId
+	            teacherId:req.params.teacherId
             }
         })
         .then( testData => {
@@ -380,6 +380,66 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
 });
 
 /**
+ * @api (get) /tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/teacherId/students/studentId
+ * 
+ * @apiName GetTestsById&Category&Level&AttemptsRemaining&TeacherId&StudentId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch ID & Category & Level & AttemptsRemaining & TeacherId & StudentId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId', function(req,res) {
+    var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+            where: {
+                id: req.params.id,
+	            category: value,
+                baseNumber: paramLevel[0],
+	    	    operation: paramLevel[1],
+                attemptsRemaining: req.params.attemptsRemaining,
+                teacherId: req.params.teacherId,
+                studentId: req.params.studentId
+            }
+        })
+        .then( testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
  * @api (get) /tests/category/:category
  * 
  * @apiName GetTestsByCategory
@@ -431,8 +491,6 @@ router.get('/category/:category', function (req, res) {
             res.json(result);
             return;
         })
-
-
 });
 
 /**
@@ -516,8 +574,8 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
     data.Test.findAll({
             where: {
                 category: value,
-		teacherId: req.params.teacherId,
-		studentId: req.params.studentId
+		        teacherId: req.params.teacherId,
+		        studentId: req.params.studentId
             },
         })
         .then( testData => {
@@ -601,6 +659,65 @@ router.get('/level/:level', function (req, res) {
 });
 
 /**
+ * @api (get) /tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining
+ * 
+ * @apiName GetTestsByLevel&Category&AttemptsRemaining
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch Level Category AttemptsRemaining to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/level/:level/category/:category/attemptsRemaining/:attemptsRemaining', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            category: value,
+            attemptsRemaining: req.params.attemptsRemaining
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
+
+/**
  * @api (get) /tests/level/:level/students/studentId
  * 
  * @apiName GetTestsByLevel&StudentId
@@ -646,6 +763,61 @@ router.get('/level/:level/students/:studentId', function (req, res) {
             console.log(err)
             result['data'] = {};
             result['endpoint'] = `/tests/level/:level/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
+
+/**
+ * @api (get) /tests/level/:level/teachers/teacherId
+ * 
+ * @apiName GetTestsByLevel&teacherId
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch Level & teacherId to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/level/:level/teachers/:teacherId', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            teacherId: req.params.teacherId
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
             res.status(result.responseCode);
@@ -1153,7 +1325,7 @@ router.get('/category/:category/students/:studentId', function(req,res) {
     if (value === 'false') value = false;
     data.Test.findAll({
             where: {
-		category: value,
+		        category: value,
                 studentId: req.params.studentId
             }
         })
@@ -1182,6 +1354,7 @@ router.get('/category/:category/students/:studentId', function(req,res) {
             return;
         })
 });
+
 /**
  * @api (post) /tests/
  * 
@@ -1198,7 +1371,6 @@ router.get('/category/:category/students/:studentId', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-
 router.post('/', async (req, res) =>{
 	var result = {};
 	console.log(`Post: `);
@@ -1256,13 +1428,28 @@ router.post('/', async (req, res) =>{
      }
 });
 
-// implementing a basic getter to get all known tests in the DB
+/**
+ * @api (get) /tests/
+ * 
+ * @apiName GetTests
+ * 
+ * @apiGroup Tests
+ * 
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
 router.get('/', function (req, res) {
     var result = {};
     data.Test.findAll({
-        raw: true
+        model: data.Test
     })
-        .then(function (tests) {
+        .then( testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
             for(i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
@@ -1273,9 +1460,6 @@ router.get('/', function (req, res) {
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
             res.status(result.responseCode);
-            tests.forEach(element => {
-                element.data = JSON.parse(element.data)
-            });
             res.json(result);
             return;
         }).catch(function (err) {
