@@ -436,18 +436,19 @@ router.post('/', async (req, res) =>{
     //retrieves firstName and lastName from input json 
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
-    //var stars = req.body.stars
-    //var level = req.body.level
+    var stars = req.body.stars;
+    var level = req.body.level;
+    var teacherId = req.body.teacherId;
 
 
     try{
         var newStudent = await data.Student.create({
             id: req.body.id,
             firstName: req.body.firstName,
-            lastName: req.body.lastName
-            //stars: req.body.stars,
-            //level: req.body.level,
-            //teacherId: req.body.teacherId
+            lastName: req.body.lastName,
+            stars: req.body.stars,
+            level: req.body.level,
+            teacherId: req.body.teacherId
         });
 
         console.log(`New student data received: Entry ${newStudent.id} created.`);
@@ -459,6 +460,9 @@ router.post('/', async (req, res) =>{
             'id': newStudent.id,   // auto-generated id
             'firstName':firstName,
             'lastName': lastName,
+            'stars':stars,
+            'level':level,
+            'teacherId':teacherId,
             'uri': uri
         };
         result['endpoint'] = "/students";
@@ -792,7 +796,7 @@ router.get('/', function (req, res) {
     var result = {};
     data.Student.findAll()
         .then(function (students) {
-            result['students'] =students;
+            result['students'] = students;
             result['endpoint'] = "/students";
             res.status(HttpStatus.OK);
             students.forEach(element => {
