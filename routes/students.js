@@ -656,6 +656,54 @@ router.post('/', async (req, res) =>{
     }
 });
 
+router.post('/:studentId/tests', async (req, res) => {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+
+    try {
+        var student = await data.Student.findByPk(req.params.studentId);
+        var teacherId = student.teacherId;
+
+        var newTest = await data.Test.create({
+            category: req.body.practice,
+            attemptsRemaining: req.body.attemptsAllowed,
+            baseNumber: req.body.baseNumber,
+            operation: req.body.operation,
+            teacherId: teacherId,
+            studentId: req.params.studentId
+        });
+
+        console.log(`New student data received: Entry ${newTest.id} created.`);
+        console.log(`Data added was: ${newTest}.`);
+        
+        var uri = req.protocol + '://' + req.get('host') +
+           `/tests/${newTest.id}`;
+        result['data'] = {
+            'id': newTest.id,
+            'uri': uri
+        };
+        result['endpoint'] = "/students/:studentId/tests";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    } catch (err) {
+        console.log('Error creating new student record');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = "/students/:studentId/tests";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+
+});
+
 
 // default handler
 // anything not implemented gets a response not implemented
