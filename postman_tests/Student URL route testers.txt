@@ -1,0 +1,37 @@
+Student url test routes 
+
+//Create(post) a new student record
+http://localhost:8000/students/
+
+json body
+{
+"firstName":"Micah",
+"lastName":"Hyde",
+"stars": 0,
+"level": "2*",
+"teacherId": 3
+}
+
+//get list of all students
+http://localhost:8000/students
+
+//get student by lastname and level
+http://localhost:8000/students/lastName/Smith/level/9-
+
+//get student by their full name
+http://localhost:8000/students/firstName/Jane/lastName/Smith
+
+//get student by their first name
+http://localhost:8000/students/firstName/Joaquin
+
+//get student by their last name
+http://localhost:8000/students/lastName/Stanley
+
+//get student by student Id
+http://localhost:8000/students/4
+
+//get student by teacher first name
+http://localhost:8000/students/teacher/firstName/james
+
+//get student by teacher Id
+http://localhost:8000/students/teacherId/2
