@@ -578,6 +578,57 @@
 });
 
   /**
+ * @api (get) /teachers/student/stars/:stars
+ * 
+ * @apiName Get teachers by student stars
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom student stars belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/student/stars/:stars', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+        include: {
+           model: data.Student,
+           required: true,
+           where: {
+            stars: req.params.stars
+        },
+        attributes: {
+            exclude: ['teacherId', 'studentId']
+        }
+    }
+})
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/student/stars/:stars';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying teachers by student stars');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/student/stars/:stars';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+
+  /**
  * @api (get) /teachers/student/level/:level
  * 
  * @apiName Get teachers by student level
@@ -626,7 +677,6 @@
         return;
     })
 });
-
 
 ////////////////////////////
 //   STUDENT SECTION      //
