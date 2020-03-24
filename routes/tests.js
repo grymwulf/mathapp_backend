@@ -827,6 +827,59 @@ router.get('/level/:level/teachers/:teacherId', function (req, res) {
 
 });
 
+/**
+ * @api (get) /tests/level/:level/attemptsRemaining/:attemptsRemaining
+ * 
+ * @apiName GetTestsBylevel&attemptsRemaining
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch level attemptsRemaining to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/level/:level/attemptsRemaining/:attemptsRemaining', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            attemptsRemaining: req.params.attemptsRemaining
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
 
 /**
  * @api (get) /tests/level/:level/attemptsRemaining/:attemptsRemaining/students/studentId
