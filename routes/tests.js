@@ -1462,6 +1462,58 @@ router.get('/teachers/:teacherId/attemptsRemaining/:attemptsRemaining', function
 });
 
 /**
+ * @api (get) /tests/baseNumber/:baseNumber
+ * 
+ * @apiName GetTestsByBaseNumber
+ * 
+ * @apiGroup Tests
+ * 
+ * @apiParam (Number) input Test batch baseNumber to pull
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/baseNumber/:baseNumber', function (req, res) {
+    var result = {};
+    data.Test.findAll({
+        where: {
+            baseNumber: req.params.baseNumber
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['data'] = parsed;
+            result['endpoint'] = `/tests/baseNumber/:baseNumber`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['data'] = {};
+            result['endpoint'] = `/tests/baseNumber/:baseNumber`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
+
+/**
  * @api (post) /tests/
  * 
  * @apiName PostTests
