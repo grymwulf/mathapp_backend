@@ -17,9 +17,61 @@ const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
 
-/*------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------*/
 
-/*----------------------------------------------------------------------------------------------------------------*/
+/**
+ * @api (get) /students/teacher/firstName/:firstName/lastName/:lastName
+ * 
+ * @apiName Get student by teacher full name
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Student by teacher full name
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.get('/teacher/firstName/:firstName/lastName/:lastName', (req, res) => {
+    var result = {};
+    data.Student.findAll({
+        include: {
+         model: data.Teacher,
+         required: true,
+         where: {
+            lastName: req.params.lastName,
+			firstName: req.params.firstName
+        },
+        attributes: {
+            exclude: ['studentId','teacherId']
+        }
+    }
+})
+    .then(function (students) {
+        result['students'] = students;
+        result['endpoint'] = 'students/teacher/firstName/:firstName/lastName/:lastName';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying students by teacher full name');
+        console.log(err)
+        result['student'] = {};
+        result['endpoint'] = '/teacher/firstName/:firstName/lastName/:lastName';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+
+/*------------------------------------------------------------------------------------------------------------------*/
 
 
 /*----------------------------Student Methods by Student Attributes--------------------------------------------------*/
