@@ -25,6 +25,10 @@ module.exports = (sequelize, type) => {
         studentAnswer: {
             type: Sequelize.INTEGER,
             allowNull: true,
+            validate: {
+                min: -1 * Math.pow(process.env.APP_MAX_OPERAND, 2),
+                max: Math.pow(process.env.APP_MAX_OPERAND, 2)
+            },
             set(value) {
                 if (value === null) {
                     this.setDataValue('studentAnswer', null)
