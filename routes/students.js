@@ -24,7 +24,7 @@ const HttpStatus = require('http-status-codes');
  * 
  * @apiName Get student by teacher full name
  * 
- * @apiGroup Teachers
+ * @apiGroup Students
  * 
  * @apiSuccess (JSON) Student by teacher full name
  * @apiSuccess (JSON) responseCode HTTP Response Code
