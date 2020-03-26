@@ -25,10 +25,6 @@ module.exports = (sequelize, type) => {
         studentAnswer: {
             type: Sequelize.INTEGER,
             allowNull: true,
-            validate: {
-                min: -1 * Math.pow(process.env.APP_MAX_OPERAND, 2),
-                max: Math.pow(process.env.APP_MAX_OPERAND, 2)
-            },
             set(value) {
                 if (value === null) {
                     this.setDataValue('studentAnswer', null)
@@ -58,8 +54,16 @@ module.exports = (sequelize, type) => {
         operand1: {
             type: Sequelize.INTEGER,
             validate: {
-                min: process.env.APP_MIN_OPERAND,
-                max: process.env.APP_MAX_OPERAND,
+                min: {
+                    args: process.env.APP_MIN_OPERAND,
+                    msg: `operand1 is out of application bounds; value must be ` +
+                            `greater than or equal to ${process.env.APP_MIN_OPERAND}`
+                },
+                max: {
+                    args: process.env.APP_MAX_OPERAND,
+                    msg: `operand1 is out of application bounds; value must be ` +
+                            `less than or equal to ${process.env.APP_MAX_OPERAND}`
+                },
                 isInt: true
             },
             allowNull: false,
@@ -71,8 +75,16 @@ module.exports = (sequelize, type) => {
         operand2: {
             type: Sequelize.INTEGER,
             validate: {
-                min: process.env.APP_MIN_OPERAND,
-                max: process.env.APP_MAX_OPERAND,
+                min: {
+                    args: process.env.APP_MIN_OPERAND,
+                    msg: `operand2 is out of application bounds; value must be ` +
+                            `greater than or equal to ${process.env.APP_MIN_OPERAND}`
+                },
+                max: {
+                    args: process.env.APP_MAX_OPERAND,
+                    msg: `operand2 is out of application bounds; value must be ` +
+                            `less than or equal to ${process.env.APP_MAX_OPERAND}`
+                },
                 isInt: true
             },
             allowNull: false,
