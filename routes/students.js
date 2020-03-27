@@ -869,6 +869,125 @@ router.get('/', function (req, res) {
         })
 })
 
+<<<<<<< HEAD
+=======
+/**
+ * @api (post) /students/
+ * 
+ * @apiName Post new student
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.post('/', async (req, res) =>{
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+    
+    //retrieves firstName and lastName from input json 
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    //var stars = req.body.stars
+    //var level = req.body.level
+
+
+    try{
+        var newStudent = await data.Student.create({
+            id: req.body.id,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+            //stars: req.body.stars,
+            //level: req.body.level,
+            //teacherId: req.body.teacherId
+        });
+
+        console.log(`New student data received: Entry ${newStudent.id} created.`);
+        console.log(`Data added was: ${newStudent}.`);
+
+        var uri = req.protocol + '://' + req.get('host') +
+        req.baseUrl + req.path + newStudent.id;
+        result['new student'] = {
+            'id': newStudent.id,   // auto-generated id
+            'firstName':firstName,
+            'lastName': lastName,
+            'uri': uri
+        };
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    }catch (err) {
+        console.log('Error creating new student record');
+        console.log(err)
+        result['new student'] = {};
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+router.post('/:studentId/tests', async (req, res) => {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+
+    try {
+        var student = await data.Student.findByPk(req.params.studentId);
+        var teacherId = student.teacherId;
+
+        var newTest = await data.Test.create({
+            category: req.body.practice,
+            attemptsRemaining: req.body.attemptsAllowed,
+            baseNumber: req.body.baseNumber,
+            operation: req.body.operation,
+            teacherId: teacherId,
+            studentId: req.params.studentId
+        });
+
+        console.log(`New student data received: Entry ${newTest.id} created.`);
+        console.log(`Data added was: ${newTest}.`);
+        
+        var uri = req.protocol + '://' + req.get('host') +
+           `/tests/${newTest.id}`;
+        result['data'] = {
+            'id': newTest.id,
+            'uri': uri
+        };
+        result['endpoint'] = "/students/:studentId/tests";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    } catch (err) {
+        console.log('Error creating new student record');
+        console.log(err)
+        result['data'] = {};
+        result['endpoint'] = "/students/:studentId/tests";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+
+});
+
+>>>>>>> master
 
 // default handler
 // anything not implemented gets a response not implemented
