@@ -267,8 +267,22 @@
 //      TWO INPUTS        //
 ////////////////////////////
 
-
-router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
+   /**
+ * @api (get) /teachers/firstName/:firstName/lastName/:lastName
+ * 
+ * @apiName Get teachers by their first & last name
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom first & last belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     var result = {};
     data.Teacher.findAll({
         where: { 
@@ -326,9 +340,9 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     var result = {};
     data.Teacher.findAll({
         include: {
-           model: data.Test,
-           required: true,
-           where: {
+         model: data.Test,
+         required: true,
+         where: {
             id: req.params.id
         },
         attributes: {
@@ -377,9 +391,9 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     var result = {};
     data.Teacher.findAll({
         include: {
-           model: data.Test,
-           required: true,
-           where: {
+         model: data.Test,
+         required: true,
+         where: {
             level: req.params.level
         },
         attributes: {
@@ -432,9 +446,9 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     var result = {};
     data.Teacher.findAll({
         include: {
-         model: data.Student,
-         required: true,
-         where: {
+           model: data.Student,
+           required: true,
+           where: {
             id: req.params.id
         },
         attributes: {
@@ -482,9 +496,9 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     var result = {};
     data.Teacher.findAll({
         include: {
-         model: data.Student,
-         required: true,
-         where: {
+           model: data.Student,
+           required: true,
+           where: {
             firstName: req.params.firstName
         },
         attributes: {
@@ -532,9 +546,9 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
     var result = {};
     data.Teacher.findAll({
         include: {
-         model: data.Student,
-         required: true,
-         where: {
+           model: data.Student,
+           required: true,
+           where: {
             lastName: req.params.lastName
         },
         attributes: {
@@ -562,6 +576,67 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
         return;
     })
 });
+
+
+////////////////////////////
+//   STUDENT SECTION      //
+//      TWO INPUTS        //
+////////////////////////////
+
+
+   /**
+ * @api (get) /teachers/student/firstName/:firstName/lastName/:lastName
+ * 
+ * @apiName Get teachers by student first & last name
+ * 
+ * @apiGroup Teachers
+ * 
+ * @apiSuccess (JSON) Teacher whom student first & last belongs to
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/student/firstName/:firstName/lastName/:lastName', function (req, res) {
+    var result = {};
+    data.Teacher.findAll({
+        include: {
+         model: data.Student,
+         required: true,
+         where: { 
+            firstName: req.params.firstName,
+            lastName: req.params.lastName
+        },
+        attributes: {
+            exclude: ['teacherId', 'studentId']
+        }
+    }
+
+})
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/student/firstName/:firstName/lastName/:lastName';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying teacher by students first and last name');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/student/firstName/:firstName/lastName/:lastName';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+
 
 ////////////////////////////
 //  DEFAULT SECTION       //
