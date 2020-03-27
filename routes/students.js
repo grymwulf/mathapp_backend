@@ -917,6 +917,9 @@ router.get('/', function (req, res) {
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 762dc21a5958b36baad0518372a0710e9758dd14
 =======
 >>>>>>> 762dc21a5958b36baad0518372a0710e9758dd14
 /**
@@ -1036,6 +1039,10 @@ router.post('/:studentId/tests', async (req, res) => {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
+>>>>>>> 762dc21a5958b36baad0518372a0710e9758dd14
 =======
 >>>>>>> master
 >>>>>>> 762dc21a5958b36baad0518372a0710e9758dd14
