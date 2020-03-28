@@ -660,6 +660,24 @@ router.post('/', async (req, res) => {
     console.log(req.body);
 
     try {
+        var test = await data.Test.findByPk(req.body.testId);
+
+        if (test.attemptsRemaining == 0) {
+            throw new Error('Test has no attempts remaining')
+        }
+    } catch(err) {
+        console.log('Error creating new result record');
+        console.log(err);
+        result['data'] = {};
+        result['endpoint'] = "/results";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+
+    try {
         var addResult = await data.sequelize.transaction();
         var newResult = await data.Result.create({
             timeTaken: req.body.timeTaken,
@@ -689,9 +707,12 @@ router.post('/', async (req, res) => {
                 `Answer ${newAnswer.id} `);
         }
 
-        await data.Test.decrement('attempts_remaining', {
+        await data.Test.decrement('attemptsRemaining', {
             where: {
-                id: req.body.testId
+                id: req.body.testId,
+                attemptsRemaining: {
+                    [Sequelize.Op.not]: -1
+                }
             },
             transaction: addResult
         });
@@ -713,9 +734,8 @@ router.post('/', async (req, res) => {
         return;
     } catch (err) {
         await addResult.rollback();
-        console.log(err)
         console.log('Error creating new result record');
-        console.log(err);
+        console.log(err)
         result['data'] = {};
         result['endpoint'] = "/results";
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;

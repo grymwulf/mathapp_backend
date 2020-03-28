@@ -142,7 +142,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/newTest'
+              $ref: '#/components/schemas/newTestAssignment'
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -235,6 +235,42 @@ paths:
                     type: array
                     items: 
                       $ref: '#/components/schemas/student'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /tests:
+    get:
+      summary: Returns a list of tests
+      #operationID: testss.get_all
+      responses:
+        '200':
+          description: Test List
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teachers:
+                    description: Array of Test Records
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/test'
+        '400':
+          $ref: '#/components/responses/400Error'
+        '404':
+          $ref: '#/components/responses/404Error'
+    post:
+      summary: Creates a new Test record
+      #operationID: test.add_test
+      requestBody:
+        description: Test to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newTest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
           $ref: '#/components/responses/400Error'
   /tests/{testId}:
@@ -719,6 +755,28 @@ components:
         - attemptsAllowed
         - studentId
         - teacherId
+    newTestAssignment:
+      description: Create a new test for students to take
+      type: object
+      properties:
+        practice:
+          type: boolean
+          description: practice (true), assessment (false)
+          default: true
+        baseNumber:
+          type: integer
+          description: Base number of the test
+        operation:
+          type: string
+          description: Operation for the test either +, -, *, /
+          pattern: '[\+\-\/\*]'
+        attemptsAllowed:
+          type: integer
+          description: Number of times available, -1 for always available
+          default: 1
+      required:
+        - category
+        - attemptsAllowed
     newResult:
       description: Create a new result record
       type: object
@@ -726,6 +784,7 @@ components:
         timeTaken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
+          pattern: '^\d{2}:\d{2}:\d{2}$'
         testId:
           type: integer
           description: Test ID of the test the result belongs to

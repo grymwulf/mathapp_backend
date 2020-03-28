@@ -23,7 +23,30 @@ module.exports = (sequelize, type) => {
         },
 
         timeTaken: {
-            type: Sequelize.TIME
+            type: Sequelize.TIME,
+            defaultValue: process.env.APP_MAX_ATTEMPT_TIME,
+            validate: {
+                is: {
+                    args: /^\d{2}:\d{2}:\d{2}$/,
+                    msg: 'Time must me in "HH:MM:SS" format'
+                },
+                isUnderMax(value) {
+                    var maxTime = process.env.APP_MAX_ATTEMPT_TIME || "99:60:60"
+
+                    var times = value.split(":");
+                    var maxTimes = maxTime.split(":");
+
+                    var timesSeconds = new Date();
+                    var maxTimesSeconds = new Date();
+
+                    timesSeconds.setHours(times[0], times[1], times[2]);
+                    maxTimesSeconds.setHours(maxTimes[0], maxTimes[1], maxTimes[2]);
+
+                    if (timesSeconds.getTime() > maxTimesSeconds.getTime()) {
+                        throw new Error('Time exceeds allotted');
+                    }
+                }
+            }
         }
 
     },{
