@@ -35,3 +35,6 @@ http://localhost:8000/teachers/student/firstName/Jake
 
 //get teacher by student's last name
 http://localhost:8000/teachers/student/lastName/Smith
+
+//get teacher by student's stars
+http://localhost:8000/teachers/student/stars/1
