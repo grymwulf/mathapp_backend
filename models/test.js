@@ -61,10 +61,10 @@ module.exports = (sequelize, type) => {
 
         operation: {
             type: Sequelize.ENUM,
-            values: ['+', '-', '*', '/'],
+            values: ['+', '-', '*', '|'],
             validate: {
                 isIn: {
-                    args: [['+', '-', '*', '/']],
+                    args: [['+', '-', '*', '|']],
                     msg: "Must be basic arithmetic operation"
                 }
             },
