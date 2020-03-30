@@ -16,60 +16,9 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
-
-/*------------------------------------------------------------------------------------------------------------------*/
-/**
- * @api (post) /students/id/:id/tests
- * 
- * @apiName Get active tests for a student
- * 
- * @apiGroup Students
- * 
- * @apiSuccess (JSON) Students 
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-
-router.get('/id/:id/tests', (req, res) => {
-    var result = {};
-    data.Test.findAll({
-        include: {
-         model: data.Student,
-         required: true,
-         where: {
-            id: req.params.id
-        }
-    }
-})
-    .then(function (tests) {
-        result['tests'] = tests;
-        result['endpoint'] = 'students/id/:id/tests';
-        result['responseCode'] = HttpStatus.OK;
-        result['response'] = "Query Successful";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }).catch(function(err){
-        console.log('Error querying students by teacher full name');
-        console.log(err)
-        result['test'] = {};
-        result['endpoint'] = 'students/id/:id/tests';
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-});
-
-/*------------------------------------------------------------------------------------------------------------------*/
-
-
+/*-------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------Student Methods by Student Attributes--------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @api (get) /students
@@ -459,84 +408,12 @@ router.get('/:id', function(req, res) {
             return;
         })
 });
-
-/**
- * @api (post) /students/
- * 
- * @apiName Post new student
- * 
- * @apiGroup Students
- * 
- * @apiSuccess (JSON) Students 
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-router.post('/', async (req, res) =>{
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-    
-    //retrieves firstName and lastName from input json 
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var stars = req.body.stars;
-    var level = req.body.level;
-    var teacherId = req.body.teacherId;
+/*------------------------------------------------------------------------------------------------------------------*/
 
 
-    try{
-        var newStudent = await data.Student.create({
-            id: req.body.id,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            stars: req.body.stars,
-            level: req.body.level,
-            teacherId: req.body.teacherId
-        });
-
-        console.log(`New student data received: Entry ${newStudent.id} created.`);
-        console.log(`Data added was: ${newStudent}.`);
-
-        var uri = req.protocol + '://' + req.get('host') +
-        req.baseUrl + req.path + newStudent.id;
-        result['new student'] = {
-            'id': newStudent.id,   // auto-generated id
-            'firstName':firstName,
-            'lastName': lastName,
-            'stars':stars,
-            'level':level,
-            'teacherId':teacherId,
-            'uri': uri
-        };
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    }catch (err) {
-        console.log('Error creating new student record');
-        console.log(err)
-        result['new student'] = {};
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-});
-
-
-/*----------------------------------------------------------------------------------------------------------------*/
-
-
+/*-------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------Student Methods by Teacher Attributes--------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @api (get) /students/teacher/firstName/:firstName
@@ -784,10 +661,59 @@ router.get('/teacher/firstName/:firstName/lastName/:lastName', (req, res) => {
     })
 });
 
+/**
+ * @api (get) /students/teacherId/:teacherId/students/id/:stars
+ * 
+ * @apiName GetStudentsByTeacherID&Stars
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input teacher ID and stars to pull
+ * 
+ * @apiSuccess (JSON) data Current students entries by teacher and stars earned
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/teacherId/:teacherId/stars/:stars', function(req,res) {
+    var result = {};
+    data.Student.findAll({
+            where: {
+                teacherId: req.params.teacherId,
+				stars: req.params.stars
+            }
+    })
+    .then( studentData => {
+        result['student'] = studentData;
+        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function (err) {
+        console.log('Error querying a student by teacher ID and specific amount of stars earned');
+        console.log(err)
+        result['student'] = {};
+        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
 /*----------------------------------------------------------------------------------------------------------------*/
 
 
+/*----------------------------------------------------------------------------------------------------------------*/
 /*----------------------------Student Methods by Test Attributes--------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @api (get) /students/test/id/id
@@ -839,18 +765,14 @@ router.get('/test/id/:id', (req, res) => {
     })
 });
 
-/*----------------------------------------------------------------------------------------------------------------*/
-
 /**
- * @api (get) /students/teacherId/:teacherId/students/id/:stars
+ * @api (post) /students/id/:id/tests
  * 
- * @apiName GetStudentsByTeacherID&Stars
+ * @apiName Get active tests for a student
  * 
  * @apiGroup Students
  * 
- * @apiParam (Number) input teacher ID and stars to pull
- * 
- * @apiSuccess (JSON) data Current students entries by teacher and stars earned
+ * @apiSuccess (JSON) Students 
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -859,27 +781,30 @@ router.get('/test/id/:id', (req, res) => {
  * @apiError (JSON) response Server Response
  */
 
-router.get('/teacherId/:teacherId/stars/:stars', function(req,res) {
+router.get('/id/:id/tests', (req, res) => {
     var result = {};
-    data.Student.findAll({
-            where: {
-                teacherId: req.params.teacherId,
-				stars: req.params.stars
-            }
-    })
-    .then( studentData => {
-        result['student'] = studentData;
-        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
+    data.Test.findAll({
+        include: {
+         model: data.Student,
+         required: true,
+         where: {
+            id: req.params.id
+        }
+    }
+})
+    .then(function (tests) {
+        result['tests'] = tests;
+        result['endpoint'] = 'students/id/:id/tests';
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
         res.status(result.responseCode);
         res.json(result);
         return;
-    }).catch(function (err) {
-        console.log('Error querying a student by teacher ID and specific amount of stars earned');
+    }).catch(function(err){
+        console.log('Error querying students by teacher full name');
         console.log(err)
-        result['student'] = {};
-        result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
+        result['test'] = {};
+        result['endpoint'] = 'students/id/:id/tests';
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
         res.status(result.responseCode);
@@ -888,32 +813,85 @@ router.get('/teacherId/:teacherId/stars/:stars', function(req,res) {
     })
 });
 
-// implementing a basic getter to get all known students in the DB
-router.get('/', function (req, res) {
-    var result = {};
-    data.Student.findAll()
-        .then(function (students) {
-            result['students'] = students;
-            result['endpoint'] = "/students";
-            res.status(HttpStatus.OK);
-            students.forEach(element => {
-                element.data = JSON.parse(element.data)
-            });
-            res.json(result);
-            return;
-        }).catch(function (err) {
-            console.log('Error querying all students');
-            console.log(err)
-            result['student'] = {};
-            result['endpoint'] = "/students";
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-})
+/*----------------------------------------------------------------------------------------------------------------*/
 
+
+
+/*----------------------------------------------------------------------------------------------------------------*/
+/*----------------------------Student Post Methods----------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @api (post) /students/
+ * 
+ * @apiName Post new student
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.post('/', async (req, res) =>{
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+    
+    //retrieves firstName and lastName from input json 
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var stars = req.body.stars;
+    var level = req.body.level;
+    var teacherId = req.body.teacherId;
+
+
+    try{
+        var newStudent = await data.Student.create({
+            id: req.body.id,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            stars: req.body.stars,
+            level: req.body.level,
+            teacherId: req.body.teacherId
+        });
+
+        console.log(`New student data received: Entry ${newStudent.id} created.`);
+        console.log(`Data added was: ${newStudent}.`);
+
+        var uri = req.protocol + '://' + req.get('host') +
+        req.baseUrl + req.path + newStudent.id;
+        result['new student'] = {
+            'id': newStudent.id,   // auto-generated id
+            'firstName':firstName,
+            'lastName': lastName,
+            'stars':stars,
+            'level':level,
+            'teacherId':teacherId,
+            'uri': uri
+        };
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "New Student Record Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    }catch (err) {
+        console.log('Error creating new student record');
+        console.log(err)
+        result['new student'] = {};
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
 
 /**
  * @api (post) /students/
@@ -1030,6 +1008,35 @@ router.post('/:studentId/tests', async (req, res) => {
     }
 
 });
+/*--------------------------------------------------------------------------------------------------*/
+
+// implementing a basic getter to get all known students in the DB
+router.get('/', function (req, res) {
+    var result = {};
+    data.Student.findAll()
+        .then(function (students) {
+            result['students'] = students;
+            result['endpoint'] = "/students";
+            res.status(HttpStatus.OK);
+            students.forEach(element => {
+                element.data = JSON.parse(element.data)
+            });
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying all students');
+            console.log(err)
+            result['student'] = {};
+            result['endpoint'] = "/students";
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+})
+
+
 
 
 // default handler
