@@ -292,7 +292,7 @@ router.get('/lastName/:lastName', function(req,res) {
             res.json(result);
             return;
         }).catch(function (err) {
-            console.log('Error querying a teacher');
+            console.log('Error querying a student by last name');
             console.log(err)
             result['student'] = {};
             result['endpoint'] = `/student/lastName/:lastName`;
