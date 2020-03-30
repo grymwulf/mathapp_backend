@@ -34,18 +34,18 @@ module.exports = (sequelize, type) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
-
+        //baseNumber: the number used as the base for each test i.e. 1, 2, 3, 4 etc.
         baseNumber: {
             type: Sequelize.INTEGER,
             allowNull: false
         },
-
+        //operation: the operation used for each test i.e. +(add), -(subtract), *(multiply), /(divide).
         operation: {
             type: Sequelize.ENUM,
-            values: ['+', '-', '*', '|'],
+            values: ['+', '-', '*', '/'],
             validate: {
                 isIn: {
-                    args: [['+', '-', '*', '|']],
+                    args: [['+', '-', '*', '/']],
                     msg: "Must be basic arithmetic operation"
                 }
             },
