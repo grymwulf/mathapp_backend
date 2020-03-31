@@ -784,6 +784,7 @@ components:
         timeTaken:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
+          pattern: '^\d{2}:\d{2}:\d{2}$'
         testId:
           type: integer
           description: Test ID of the test the result belongs to

@@ -27,10 +27,22 @@
         },
         firstName: {
             type: Sequelize.STRING(50),
+            validate: {
+                isAlpha: {
+                    args: true,
+                    msg: 'Only letter characters are allowed for firstName'
+                }
+            },
             allowNull: false, 
         },
         lastName: {
             type: Sequelize.STRING(50),
+            validate: {
+                isAlpha: {
+                    args: true,
+                    msg: 'Only letter characters are allowed for lastName'
+                }
+            },
             allowNull: false, 
         },
     },{
