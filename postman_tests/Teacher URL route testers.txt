@@ -1,15 +1,15 @@
 Teacher url test routes 
 
-//Add(post) a teacher
+//Add (post) a teacher
 http://localhost:8000/teachers/
 
 json body
 {
-"firstName":"Jaden",
-"lastName":"Smith"
+"firstName":"John",
+"lastName":"Doe"
 }
 
-// get all teachers
+//get all teachers
 http://localhost:8000/teachers/
 
 //get teacher by their individual id
@@ -21,20 +21,23 @@ http://localhost:8000/teachers/firstName/John
 //get teacher by their last name
 http://localhost:8000/teachers/lastName/Doe
 
-//get teacher by test id
-http://localhost:8000/teachers/test/id/1
-
-//get teacher by teachers first and last name
+//get teacher by teacher's first and last name
 http://localhost:8000/teachers/firstName/James/lastName/Cruz
 
-//get teacher by student id
+//get teacher by student's id
 http://localhost:8000/teachers/student/id/2
 
 //get teacher by student's first name
-http://localhost:8000/teachers/student/firstName/Jake
+http://localhost:8000/teachers/student/firstName/Jeff
 
 //get teacher by student's last name
 http://localhost:8000/teachers/student/lastName/Smith
 
+//get teacher by student's first and last name
+http://localhost:8000/teachers/student/firstName/juan/lastName/Doe
+
 //get teacher by student's stars
 http://localhost:8000/teachers/student/stars/1
+
+//get teacher by test's id
+http://localhost:8000/teachers/test/id/1
