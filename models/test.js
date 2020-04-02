@@ -41,7 +41,7 @@ module.exports = (sequelize, type) => {
             },
             allowNull: false
         },
-
+        //baseNumber: the number used as the base for each test i.e. 1, 2, 3, 4 etc.
         baseNumber: {
             type: Sequelize.INTEGER,
             validate: {
@@ -58,7 +58,7 @@ module.exports = (sequelize, type) => {
             },
             allowNull: false
         },
-
+        //operation: the operation used for each test i.e. +(add), -(subtract), *(multiply), /(divide).
         operation: {
             type: Sequelize.ENUM,
             values: ['+', '-', '*', '/'],
