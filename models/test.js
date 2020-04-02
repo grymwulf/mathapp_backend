@@ -10,10 +10,10 @@
     Proprietary and confidential
     */
 
-const Sequelize = require('sequelize');
+    const Sequelize = require('sequelize');
 
-module.exports = (sequelize, type) => {
-    return sequelize.define('test', {
+    module.exports = (sequelize, type) => {
+        return sequelize.define('test', {
 
         // id: primary ID for the test
         id: {
@@ -48,7 +48,7 @@ module.exports = (sequelize, type) => {
                 min: {
                     args: process.env.APP_MIN_OPERAND,
                     msg: `baseNumber is out of application bounds; value must be ` +
-                            `greater than or equal to ${process.env.APP_MIN_OPERAND}`
+                    `greater than or equal to ${process.env.APP_MIN_OPERAND}`
                 },
                 max: {
                     args: process.env.APP_MAX_OPERAND,
@@ -85,4 +85,4 @@ module.exports = (sequelize, type) => {
     }, {
         timestamps: false
     })
-}
+    }
