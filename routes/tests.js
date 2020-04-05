@@ -47,7 +47,7 @@ router.get('/:id', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -57,7 +57,7 @@ router.get('/:id', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -101,7 +101,7 @@ router.get('/id/:id/category/:category', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/category/:category`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -111,7 +111,7 @@ router.get('/id/:id/category/:category', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/category/:category`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -152,7 +152,7 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -162,7 +162,7 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -205,7 +205,7 @@ router.get('/id/:id/level/:level', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -215,7 +215,7 @@ router.get('/id/:id/level/:level', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -256,7 +256,7 @@ router.get('/id/:id/teachers/:teacherId', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -266,7 +266,7 @@ router.get('/id/:id/teachers/:teacherId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -307,7 +307,7 @@ router.get('/id/:id/students/:studentId', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -317,7 +317,7 @@ router.get('/id/:id/students/:studentId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -359,7 +359,7 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -369,7 +369,7 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -419,7 +419,7 @@ router.get('/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsR
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -429,7 +429,7 @@ router.get('/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsR
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -473,7 +473,7 @@ router.get('/category/:category', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/category/:category`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -483,7 +483,7 @@ router.get('/category/:category', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/category/:category`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -529,7 +529,7 @@ router.get('/category/:category/level/:level', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/category/:category/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -539,7 +539,7 @@ router.get('/category/:category/level/:level', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/category/:category/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -584,7 +584,7 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/category/:category/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -594,7 +594,7 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/category/:category/teachers/teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -637,7 +637,7 @@ router.get('/level/:level', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -647,7 +647,7 @@ router.get('/level/:level', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -696,7 +696,7 @@ router.get('/level/:level/category/:category/attemptsRemaining/:attemptsRemainin
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -706,7 +706,7 @@ router.get('/level/:level/category/:category/attemptsRemaining/:attemptsRemainin
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -751,7 +751,7 @@ router.get('/level/:level/students/:studentId', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/level/:level/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -761,7 +761,7 @@ router.get('/level/:level/students/:studentId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/level/:level/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -806,7 +806,7 @@ router.get('/level/:level/teachers/:teacherId', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -816,7 +816,7 @@ router.get('/level/:level/teachers/:teacherId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -860,7 +860,7 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining', function (req, 
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -870,7 +870,7 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining', function (req, 
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -916,7 +916,7 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:student
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -926,7 +926,7 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:student
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -967,7 +967,7 @@ router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -977,7 +977,7 @@ router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1019,7 +1019,7 @@ router.get('/teachers/:teacherId', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1029,7 +1029,7 @@ router.get('/teachers/:teacherId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1070,7 +1070,7 @@ router.get('/students/:studentId', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1080,7 +1080,7 @@ router.get('/students/:studentId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1124,7 +1124,7 @@ router.get('/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaini
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1134,7 +1134,7 @@ router.get('/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaini
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1175,7 +1175,7 @@ router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/students/:studentId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1185,7 +1185,7 @@ router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/students/:studentId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1226,7 +1226,7 @@ router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1236,7 +1236,7 @@ router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1280,7 +1280,7 @@ router.get('/category/:category/attemptsRemaining/:attemptsRemaining', function(
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/category/:category/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1290,7 +1290,7 @@ router.get('/category/:category/attemptsRemaining/:attemptsRemaining', function(
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/category/:category/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1334,7 +1334,7 @@ router.get('/category/:category/teachers/:teacherId', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/category/:category/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1344,7 +1344,7 @@ router.get('/category/:category/teachers/:teacherId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/category/:category/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1388,7 +1388,7 @@ router.get('/category/:category/students/:studentId', function(req,res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/category/:category/students/:studentId`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1398,7 +1398,7 @@ router.get('/category/:category/students/:studentId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/category/:category/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1440,7 +1440,7 @@ router.get('/teachers/:teacherId/attemptsRemaining/:attemptsRemaining', function
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/teachers/:teacherId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1450,7 +1450,7 @@ router.get('/teachers/:teacherId/attemptsRemaining/:attemptsRemaining', function
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/teachers/:teacherId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1492,7 +1492,7 @@ router.get('/baseNumber/:baseNumber', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = `/tests/baseNumber/:baseNumber`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1502,7 +1502,7 @@ router.get('/baseNumber/:baseNumber', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = `/tests/baseNumber/:baseNumber`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1576,7 +1576,7 @@ router.post('/', async (req, res) =>{
      }catch(err) {
 	console.log('Error creating new test record');
 	console.log(err)
-	result['data'] = {};
+	result['tests'] = {};
 	result['endpoint'] = "/tests";
 	result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
 	result['response'] = "Internal Server Error";
@@ -1613,7 +1613,7 @@ router.get('/', function (req, res) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
-            result['data'] = parsed;
+            result['tests'] = parsed;
             result['endpoint'] = "/tests";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -1623,7 +1623,7 @@ router.get('/', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying all tests');
             console.log(err)
-            result['data'] = {};
+            result['tests'] = {};
             result['endpoint'] = "/tests";
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1638,7 +1638,7 @@ router.get('/', function (req, res) {
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use(function (req, res) {
     var result = {};
-    result['data'] = {
+    result['tests'] = {
         "endpoint": "/tests"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;
