@@ -23,9 +23,6 @@ http://localhost:8000/tests/1
 //get test by category
 http://localhost:8000/tests/category/true
 
-//get test by level
-http://localhost:8000/tests/level/3+
-
 //get test by attempts remaining 
 http://localhost:8000/tests/attemptsRemaining/3
 
