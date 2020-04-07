@@ -16,6 +16,8 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
+
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------Student Methods by Student Attributes--------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -455,7 +457,7 @@ router.get('/teacher/firstName/:firstName', (req, res) => {
     }).catch(function(err){
         console.log('Error querying students by teacher first name');
         console.log(err)
-        result['teacher'] = {};
+        result['student'] = {};
         result['endpoint'] = 'students/teacher/firstName/:firstName';
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -766,7 +768,7 @@ router.get('/test/id/:id', (req, res) => {
 });
 
 /**
- * @api (post) /students/id/:id/tests
+ * @api (get) /students/id/:id/tests
  * 
  * @apiName Get active tests for a student
  * 
@@ -814,6 +816,63 @@ router.get('/id/:id/tests', (req, res) => {
 });
 
 /*----------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------*/
+/*----------------------------Student Patch Methods----------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @api (patch) /students/:id
+ * 
+ * @apiName Update student name
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.patch('/:id', async (req, res) =>{
+    var result = {};
+
+    console.log(`Patch: `);
+    console.log(req.body);
+
+    try{
+    var updatedStudent = await data.Student.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        }, {where: {id: req.params.id} });
+    
+    if (updatedStudent[0] !== 0){
+        result['number of student records successfully updated'] = updatedStudent;
+            result['endpoint'] = "/students/:id";
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;  
+    } else {
+        throw new Error('Invalid request')
+      }
+    } catch (err) {
+        console.log('Error updating student information');
+        console.log(err)
+        result['update unsuccessful'] = {message: 'Invalid Request' };
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/*-------------------------------------------------------------------------------------------------------------------*/
 
 
 

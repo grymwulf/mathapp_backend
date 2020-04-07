@@ -39,3 +39,11 @@ http://localhost:8000/students/teacherId/2
 //get all active tests for a student
 http://localhost:8000/students/id/1/tests
 
+//Update(patch) a new student record
+http://localhost:8000/students/1
+
+json body
+{
+"firstName":"Mike",
+"lastName":"Williams"
+}
