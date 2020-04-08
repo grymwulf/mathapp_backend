@@ -1591,6 +1591,54 @@ router.post('/', async (req, res) =>{
 });
 
 /**
+ * @api (patch) /tests/
+ * 
+ * @apiName PatchTests
+ * 
+ * @apiGroup Tests
+ * 
+ * 
+ * @apiSuccess (JSON) data Current table entry for test
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set test on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.patch('/:id', async (req, res) =>{
+    var result = {};
+    console.log(`Patch: `);
+    console.log(req.body);
+    try{
+    var updatedTest = await data.Test.update({
+            attemptsRemaining: req.body.attemptsRemaining
+        }, {where: {id: req.params.id} });
+    if (updatedTest[0] !== 0){
+        result['number of test records successfully updated'] = updatedTest;
+            result['endpoint'] = "/tests/:id";
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;  
+    } else {
+        throw new Error('Invalid request')
+      }
+    } catch (err) {
+        console.log('Error updating test information');
+        console.log(err)
+        result['update unsuccessful'] = {message: 'Invalid Request' };
+        result['endpoint'] = "/tests";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/**
  * @api (get) /tests/
  * 
  * @apiName GetTests
