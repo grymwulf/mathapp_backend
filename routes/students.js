@@ -849,7 +849,7 @@ router.patch('/:id', async (req, res) =>{
         }, {where: {id: req.params.id} });
     
     if (updatedStudent[0] !== 0){
-        result['number of student records successfully updated'] = updatedStudent;
+        result['number of student records successfully updated'] = updatedStudent[0];
             result['endpoint'] = "/students/:id";
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
