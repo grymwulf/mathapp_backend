@@ -872,9 +872,9 @@ router.get('/test/id/:id', (req, res) => {
  * @apiError (JSON) response Server Response
  */
 
-// needs rework, primary data source needs to be student, not test (rpillitt)
+// belongs in tests.js, this is not a student route (rpillitt)
 
-router.get('/id/:id/tests', (req, res) => {
+/*router.get('/id/:id/tests', (req, res) => {
     var result = {};
     data.Test.findAll({
         include: {
@@ -904,7 +904,7 @@ router.get('/id/:id/tests', (req, res) => {
             res.json(result);
             return;
         })
-});
+});*/
 
 /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -935,20 +935,20 @@ router.post('/', async (req, res) => {
     console.log(req.body);
 
     //retrieves firstName and lastName from input json 
-    var firstName = req.body.firstName;
+    /*var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var stars = req.body.stars;
     var level = req.body.level;
-    var teacherId = req.body.teacherId;
+    var teacherId = req.body.teacherId;*/
 
 
     try {
         var newStudent = await data.Student.create({
-            id: req.body.id,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             stars: req.body.stars,
-            level: req.body.level,
+            baseNumber: req.body.baseNumber,
+            oepration: req.body.operation,
             teacherId: req.body.teacherId
         });
 
@@ -959,11 +959,11 @@ router.post('/', async (req, res) => {
             req.baseUrl + req.path + newStudent.id;
         result['new student'] = {
             'id': newStudent.id,   // auto-generated id
-            'firstName': firstName,
+            /*'firstName': firstName,
             'lastName': lastName,
             'stars': stars,
             'level': level,
-            'teacherId': teacherId,
+            'teacherId': teacherId,*/
             'uri': uri
         };
         result['endpoint'] = "/students";
@@ -1104,7 +1104,8 @@ router.post('/:studentId/tests', async (req, res) => {
 /*--------------------------------------------------------------------------------------------------*/
 
 // implementing a basic getter to get all known students in the DB
-router.get('/', function (req, res) {
+// duplicate pattern of get all route at top of file
+/*router.get('/', function (req, res) {
     var result = {};
     data.Student.findAll()
         .then(function (students) {
@@ -1127,7 +1128,7 @@ router.get('/', function (req, res) {
             res.json(result);
             return;
         })
-})
+})*/
 
 
 
