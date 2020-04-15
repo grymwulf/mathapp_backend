@@ -381,7 +381,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  results:
+                  result:
                     type: object
                     $ref: '#/components/schemas/result'
         '400':
@@ -406,7 +406,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  results:
+                  result:
                     type: object
                     $ref: '#/components/schemas/resultSummary'
         '400':

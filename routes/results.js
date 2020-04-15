@@ -38,7 +38,7 @@ const Sequelize = require('sequelize');
  */
 router.get('/:id', (req, res) => {
     var result = {};
-    data.Result.findAll({
+    data.Result.findOne({
         where: {
             id: req.params.id
         },
@@ -53,7 +53,7 @@ router.get('/:id', (req, res) => {
             }
         }
     }).then((resultData) => {
-        result['results'] = resultData;
+        result['result'] = resultData;
         result['endpoint'] = `/results/:id`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -106,7 +106,7 @@ router.get('/:id/summary', async (req, res) => {
                 }
             }
         });
-        var resultData = await data.Result.findAll({
+        var resultData = await data.Result.findOne({
             where: {
                 id: req.params.id
             },
@@ -124,8 +124,8 @@ router.get('/:id/summary', async (req, res) => {
                 ]
             }
         });
-        resultData[0].dataValues.correctlyAnswered = correctCount;
-        result['results'] = resultData;
+        resultData.dataValues.correctlyAnswered = correctCount;
+        result['result'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
