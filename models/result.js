@@ -10,18 +10,21 @@
 
     Unauthorized copying of this file, via any medium is strictly prohibited
     Proprietary and confidential
-*/
+    */
 
-const Sequelize = require('sequelize');
+    const Sequelize = require('sequelize');
 
-module.exports = (sequelize, type) => {
-    return sequelize.define('result', {
+    module.exports = (sequelize, type) => {
+        return sequelize.define('result', {
+
+        // id: primary ID for the results
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-
+        
+        // timeTaken: test results timeframe
         timeTaken: {
             type: Sequelize.TIME,
             defaultValue: process.env.APP_MAX_ATTEMPT_TIME,
@@ -52,4 +55,4 @@ module.exports = (sequelize, type) => {
     },{
         timestamps: (process.env.APP_ENVIRONMENT !== "dev")
     })
-}
+    }

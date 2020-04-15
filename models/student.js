@@ -60,12 +60,53 @@ module.exports = (sequelize, type) => {
             allowNull: true
         },
 
+        baseNumber: {
+            type: Sequelize.INTEGER,
+            validate: {
+                min: {
+                    args: process.env.APP_MIN_OPERAND || 0,
+                    msg: `baseNumber is out of application bounds; value must be ` +
+                            `greater than or equal to ${process.env.APP_MIN_OPERAND || 0}`
+                },
+                max: {
+                    args: process.env.APP_MAX_OPERAND || 12,
+                    msg: `baseNumber is out of application bounds; value must be ` +
+                            `greater than or equal to ${process.env.APP_MAX_OPERAND || 12}`
+                },
+            },
+            allowNull: true
+        },
+
+        operation: {
+            type: Sequelize.ENUM,
+            values: ['+', '-', '*', '/'],
+            validate: {
+                isIn: {
+                    args: [['+', '-', '*', '/']],
+                    msg: "Must be basic arithmetic operation"
+                }
+            },
+            allowNull: true
+        },
+
         //Level of student
         level: {
-            type: Sequelize.STRING,
-            allowNull: true,
-        },
+            type: Sequelize.VIRTUAL,
+            get() {
+                return `${this.baseNumber}${this.operation}`;
+            },
+            set(value) {
+                throw new Error("Do not set level directly");
+            }
+        }
     },{
+        validate: {
+            bothLevelComponents() {
+                if ((this.operation === null) !== (this.baseNumber === null)) {
+                    throw new Error('Set both operation and baseNumber, or neither');
+                }
+            }
+        },
         timestamps: false
     })
 }
