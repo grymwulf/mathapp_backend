@@ -189,42 +189,41 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/id/:id/level/:level', function(req,res) {
-//    var result = {};
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//            where: {
-//                id: req.params.id,
-//	            baseNumber: paramLevel[0],
-//	    	    operation: paramLevel[1]
-//            }
-//        })
-//        .then( testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/id/:id/level/:level`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/id/:id/level/:level`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//});
+router.get('/id/:id/level/:level', function(req,res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+            where: {
+                id: req.params.id,
+	            baseNumber: paramLevel[0],
+	    	    operation: paramLevel[1]
+            }
+        })
+        .then( testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/id/:id/level/:level`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/id/:id/level/:level`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
 /**
  * @api (get) /tests/id/:id/teachers/:teacherId
@@ -397,49 +396,48 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId', function(req,res) {
-//    var result = {};
-//    var value = req.params.category;
-//    if (value === 'true') value = true;
-//    if (value === 'false') value = false;
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//            where: {
-//                id: req.params.id,
-//	            category: value,
-//                baseNumber: paramLevel[0],
-//	    	    operation: paramLevel[1],
-//                attemptsRemaining: req.params.attemptsRemaining,
-//                teacherId: req.params.teacherId,
-//                studentId: req.params.studentId
-//            }
-//        })
-//        .then( testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//});
+router.get('/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId', function(req,res) {
+    var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+            where: {
+                id: req.params.id,
+	            category: value,
+                baseNumber: paramLevel[0],
+	    	    operation: paramLevel[1],
+                attemptsRemaining: req.params.attemptsRemaining,
+                teacherId: req.params.teacherId,
+                studentId: req.params.studentId
+            }
+        })
+        .then( testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
 /**
  * @api (get) /tests/category/:category
@@ -512,45 +510,44 @@ router.get('/category/:category', function (req, res) {
 // * @apiError (JSON) responseCode HTTP Response Code
 // * @apiError (JSON) response Server Response
 // */
-////commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/category/:category/level/:level', function(req,res) {
-//    var result = {};
-//    var value = req.params.category;
-//    if (value === 'true') value = true;
-//    if (value === 'false') value = false;
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//            where: {
-//                category: value,
-//		        baseNumber: paramLevel[0],
-//	    	    operation: paramLevel[1]
-//            },
-//        })
-//        .then( testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/category/:category/level/:level`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/category/:category/level/:level`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//});
+router.get('/category/:category/level/:level', function(req,res) {
+    var result = {};
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+            where: {
+                category: value,
+		        baseNumber: paramLevel[0],
+	    	    operation: paramLevel[1]
+            },
+        })
+        .then( testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/category/:category/level/:level`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/category/:category/level/:level`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
 
 /**
  * @api (get) /tests/category/:category/teachers/:teacherId/students/:studentId
@@ -624,42 +621,41 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
 // * @apiError (JSON) responseCode HTTP Response Code
 // * @apiError (JSON) response Server Response
 // */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/level/:level', function (req, res) {
-//    var result = {};
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//        where: {
-//            baseNumber: paramLevel[0],
-//	        operation: paramLevel[1]
-//        }
-//    })
-//        .then(testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/level/:level`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/level/:level`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//
-//});
+router.get('/level/:level', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1]
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/level/:level`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/level/:level`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
 
 /**
  * @api (get) /tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining
@@ -678,47 +674,46 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/level/:level/category/:category/attemptsRemaining/:attemptsRemaining', function (req, res) {
-//    var result = {};
-//    var paramLevel = req.params.level.split('');
-//    var value = req.params.category;
-//    if (value === 'true') value = true;
-//    if (value === 'false') value = false;
-//    data.Test.findAll({
-//        where: {
-//            baseNumber: paramLevel[0],
-//	        operation: paramLevel[1],
-//            category: value,
-//            attemptsRemaining: req.params.attemptsRemaining
-//        }
-//    })
-//        .then(testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//
-//});
+router.get('/level/:level/category/:category/attemptsRemaining/:attemptsRemaining', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    var value = req.params.category;
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            category: value,
+            attemptsRemaining: req.params.attemptsRemaining
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/level/:level/category/:category/attemptsRemaining/:attemptsRemaining`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
 
 /**
  * @api (get) /tests/level/:level/students/studentId
@@ -737,43 +732,42 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/level/:level/students/:studentId', function (req, res) {
-//    var result = {};
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//        where: {
-//            baseNumber: paramLevel[0],
-//	        operation: paramLevel[1],
-//            studentId: req.params.studentId
-//        }
-//    })
-//        .then(testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/level/:level/students/:studentId`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/level/:level/students/:studentId`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//
-//});
+router.get('/level/:level/students/:studentId', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            studentId: req.params.studentId
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/level/:level/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/level/:level/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
 
 /**
  * @api (get) /tests/level/:level/teachers/teacherId
@@ -792,43 +786,42 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/level/:level/teachers/:teacherId', function (req, res) {
-//    var result = {};
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//        where: {
-//            baseNumber: paramLevel[0],
-//	        operation: paramLevel[1],
-//            teacherId: req.params.teacherId
-//        }
-//    })
-//        .then(testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//
-//});
+router.get('/level/:level/teachers/:teacherId', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            teacherId: req.params.teacherId
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
 
 /**
  * @api (get) /tests/level/:level/attemptsRemaining/:attemptsRemaining
@@ -902,44 +895,43 @@ router.get('/category/:category/teachers/:teacherId/students/:studentId', functi
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-//commented out because URL params don't work with '/' so any implementation would require body parameters
-//router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId', function (req, res) {
-//    var result = {};
-//    var paramLevel = req.params.level.split('');
-//    data.Test.findAll({
-//        where: {
-//            baseNumber: paramLevel[0],
-//	        operation: paramLevel[1],
-//            attemptsRemaining: req.params.attemptsRemaining,
-//            studentId: req.params.studentId
-//        }
-//    })
-//        .then(testData => {
-//            var parsed = JSON.parse(JSON.stringify(testData));
-//            for(i = 0; i < parsed.length; i++) {
-//                delete parsed[i].operation;
-//                delete parsed[i].baseNumber;
-//            }
-//            result['tests'] = parsed;
-//            result['endpoint'] = `tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
-//            result['responseCode'] = HttpStatus.OK;
-//            result['response'] = "Query Successful";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        }).catch(function (err) {
-//            console.log('Error querying a test');
-//            console.log(err)
-//            result['tests'] = {};
-//            result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
-//            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-//            result['response'] = "Internal Server Error";
-//            res.status(result.responseCode);
-//            res.json(result);
-//            return;
-//        })
-//
-//});
+router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId', function (req, res) {
+    var result = {};
+    var paramLevel = req.params.level.split('');
+    data.Test.findAll({
+        where: {
+            baseNumber: paramLevel[0],
+	        operation: paramLevel[1],
+            attemptsRemaining: req.params.attemptsRemaining,
+            studentId: req.params.studentId
+        }
+    })
+        .then(testData => {
+            var parsed = JSON.parse(JSON.stringify(testData));
+            for(i = 0; i < parsed.length; i++) {
+                delete parsed[i].operation;
+                delete parsed[i].baseNumber;
+            }
+            result['tests'] = parsed;
+            result['endpoint'] = `tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a test');
+            console.log(err)
+            result['tests'] = {};
+            result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+
+});
 
 /**
  * @api (get) /tests/attemptsRemaining/:attemptsRemaining
