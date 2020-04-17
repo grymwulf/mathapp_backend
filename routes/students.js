@@ -994,11 +994,11 @@ router.post('/', async (req, res) => {
     console.log(req.body);
 
     //retrieves firstName and lastName from input json 
-    /*var firstName = req.body.firstName;
+    var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var stars = req.body.stars;
     var level = req.body.level;
-    var teacherId = req.body.teacherId;*/
+    var teacherId = req.body.teacherId;
 
 
     try {
@@ -1007,7 +1007,7 @@ router.post('/', async (req, res) => {
             lastName: req.body.lastName,
             stars: req.body.stars,
             baseNumber: req.body.baseNumber,
-            oepration: req.body.operation,
+            operation: req.body.operation,
             teacherId: req.body.teacherId
         });
 
@@ -1018,11 +1018,11 @@ router.post('/', async (req, res) => {
             req.baseUrl + req.path + newStudent.id;
         result['new student'] = {
             'id': newStudent.id,   // auto-generated id
-            /*'firstName': firstName,
+            'firstName': firstName,
             'lastName': lastName,
             'stars': stars,
-            'level': level,
-            'teacherId': teacherId,*/
+            'level': newStudent.baseNumber + newStudent.operation,
+            'teacherId': teacherId,
             'uri': uri
         };
         result['endpoint'] = "/students";
@@ -1045,10 +1045,11 @@ router.post('/', async (req, res) => {
     }
 });
 
+
 /**
- * @api (post) /students/
+ * @api (post) /students/:studentId/tests
  * 
- * @apiName Post new student
+ * @apiName Post new test for student
  * 
  * @apiGroup Students
  * 
@@ -1060,59 +1061,6 @@ router.post('/', async (req, res) => {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.post('/', async (req, res) => {
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-
-    //retrieves firstName and lastName from input json 
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    //var stars = req.body.stars
-    //var level = req.body.level
-
-
-    try {
-        var newStudent = await data.Student.create({
-            id: req.body.id,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName
-            //stars: req.body.stars,
-            //level: req.body.level,
-            //teacherId: req.body.teacherId
-        });
-
-        console.log(`New student data received: Entry ${newStudent.id} created.`);
-        console.log(`Data added was: ${newStudent}.`);
-
-        var uri = req.protocol + '://' + req.get('host') +
-            req.baseUrl + req.path + newStudent.id;
-        result['new student'] = {
-            'id': newStudent.id,   // auto-generated id
-            'firstName': firstName,
-            'lastName': lastName,
-            'uri': uri
-        };
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    } catch (err) {
-        console.log('Error creating new student record');
-        console.log(err)
-        result['new student'] = {};
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-});
-
 router.post('/:studentId/tests', async (req, res) => {
     var result = {};
     console.log(`Post: `);
