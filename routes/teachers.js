@@ -25,7 +25,7 @@
 ////////////////////////////
 
 /**
- * @api (post) /teachers/
+ * @api (post) /teachers
  * 
  * @apiName Post New Teacher
  * 
@@ -136,7 +136,7 @@
  * 
  * @apiParam (Number) input teacher ID to pull
  * 
- * @apiSuccess (JSON) data Current table entry for teacher
+ * @apiSuccess (JSON) data Current table entry for teacher by teacher id
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -181,7 +181,7 @@
  * 
  * @apiParam (String) input Teachers First Name to pull
  * 
- * @apiSuccess (JSON) data Current table entry for instructor
+ * @apiSuccess (JSON) data Current table entry for teacher by teacher's first name
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -226,7 +226,7 @@
  * 
  * @apiParam (String) input Teachers Last Name to pull
  * 
- * @apiSuccess (JSON) data Current table entry for instructor
+ * @apiSuccess (JSON) data Current table entry for teacher by teacher's last name
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -267,14 +267,16 @@
 //      TWO INPUTS        //
 ////////////////////////////
 
-   /**
+/**
  * @api (get) /teachers/firstName/:firstName/lastName/:lastName
  * 
- * @apiName Get teachers by their first & last name
+ * @apiName GetTeachersByFirstName&LastName
  * 
  * @apiGroup Teachers
+ *
+ * @apiParam (String) input Teachers First and Last Name to pull
  * 
- * @apiSuccess (JSON) Teacher whom first & last belongs to
+ * @apiSuccess (JSON) data Current table entry for teacher by teacher's first and last name
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -324,11 +326,13 @@
 /**
  * @api (get) /teachers/test/id/id
  * 
- * @apiName Get teachers by test id
+ * @apiName GetTestId
  * 
  * @apiGroup Teachers
  * 
- * @apiSuccess (JSON) Teacher whom the test belongs to
+ * @apiParam (Number) input test id
+ * 
+ * @apiSuccess (JSON) data Current table entry for teacher by test's id
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -340,9 +344,9 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-         model: data.Test,
-         required: true,
-         where: {
+           model: data.Test,
+           required: true,
+           where: {
             id: req.params.id
         },
         attributes: {
@@ -371,57 +375,6 @@
     })
 });
 
-
-/**
- * @api (get) /teachers/test/level/:level
- * 
- * @apiName Get teachers by test level
- * 
- * @apiGroup Teachers
- * 
- * @apiSuccess (JSON) Teacher whom the test level belongs to
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
- router.get('/test/level/:level', (req, res) => {
-    var result = {};
-    data.Teacher.findAll({
-        include: {
-         model: data.Test,
-         required: true,
-         where: {
-            level: req.params.level
-        },
-        attributes: {
-            exclude: ['teacherId', 'studentId']
-        }
-    }
-})
-    .then(function (teachers) {
-        result['teachers'] = teachers;
-        result['endpoint'] = '/teachers/test/level/:level';
-        result['responseCode'] = HttpStatus.OK;
-        result['response'] = "Query Successful";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }).catch(function(err){
-        console.log('Error querying teacher by test id');
-        console.log(err)
-        result['teacher'] = {};
-        result['endpoint'] = '/teachers/test/level/:level';
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    })
-});
-
 ////////////////////////////
 //   STUDENT SECTION      //
 //                        //
@@ -430,11 +383,13 @@
  /**
  * @api (get) /teachers/student/id/:id
  * 
- * @apiName Get teachers by student id
+ * @apiName GetTeacherByStudentId
  * 
  * @apiGroup Teachers
  * 
- * @apiSuccess (JSON) Teacher whom student id belongs to
+ * @apiParam (Number) input student id
+ * 
+ * @apiSuccess (JSON) data Current table entry for teacher by student's id
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -446,9 +401,9 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-           model: data.Student,
-           required: true,
-           where: {
+         model: data.Student,
+         required: true,
+         where: {
             id: req.params.id
         },
         attributes: {
@@ -480,11 +435,13 @@
   /**
  * @api (get) /teachers/student/firstName/:firstName
  * 
- * @apiName Get teachers by student first name
+ * @apiName GetTeacherByStudentFirstName
  * 
  * @apiGroup Teachers
+ *
+ * @apiParam (String) input student first name
  * 
- * @apiSuccess (JSON) Teacher whom student first name belongs to
+ * @apiSuccess (JSON) data Current table entry for teacher by student's first name
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -496,9 +453,9 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-           model: data.Student,
-           required: true,
-           where: {
+         model: data.Student,
+         required: true,
+         where: {
             firstName: req.params.firstName
         },
         attributes: {
@@ -530,11 +487,13 @@
    /**
  * @api (get) /teachers/student/lastName/:lastName
  * 
- * @apiName Get teachers by student last name
+ * @apiName GetTeacherByLastName
  * 
  * @apiGroup Teachers
+ *
+ * @apiParam (String) input student last name
  * 
- * @apiSuccess (JSON) Teacher whom student last name belongs to
+ * @apiSuccess (JSON) data Current table entry for teacher by student's last name
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -546,9 +505,9 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-           model: data.Student,
-           required: true,
-           where: {
+         model: data.Student,
+         required: true,
+         where: {
             lastName: req.params.lastName
         },
         attributes: {
@@ -577,6 +536,110 @@
     })
 });
 
+  /**
+ * @api (get) /teachers/student/stars/:stars
+ * 
+ * @apiName GetTeacherByStudentStars
+ * 
+ * @apiGroup Teachers
+ *
+ * @apiParam (Number) input student stars
+ * 
+ * @apiSuccess (JSON) data Current table entry for teacher by student's stars 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/student/stars/:stars', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+        include: {
+         model: data.Student,
+         required: true,
+         where: {
+            stars: req.params.stars
+        },
+        attributes: {
+            exclude: ['teacherId', 'studentId']
+        }
+    }
+})
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/student/stars/:stars';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying teachers by student stars');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/student/stars/:stars';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
+
+
+  /**
+ * @api (get) /teachers/student/level/:level
+ * 
+ * @apiName GetTeacherByStudentLevel
+ * 
+ * @apiGroup Teachers
+ *
+ * @apiParam (String) input student level
+ * 
+ * @apiSuccess (JSON) data Current table entry for teacher by student's level
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+ router.get('/student/level/:level', (req, res) => {
+    var result = {};
+    data.Teacher.findAll({
+        include: {
+         model: data.Student,
+         required: true,
+         where: {
+            level: req.params.level
+        },
+        attributes: {
+            exclude: ['teacherId', 'studentId']
+        }
+    }
+})
+    .then(function (teachers) {
+        result['teachers'] = teachers;
+        result['endpoint'] = '/teachers/student/level/:level';
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Query Successful";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }).catch(function(err){
+        console.log('Error querying teachers by student level');
+        console.log(err)
+        result['teacher'] = {};
+        result['endpoint'] = '/teachers/student/level/:level';
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    })
+});
 
 ////////////////////////////
 //   STUDENT SECTION      //
@@ -587,11 +650,13 @@
    /**
  * @api (get) /teachers/student/firstName/:firstName/lastName/:lastName
  * 
- * @apiName Get teachers by student first & last name
+ * @apiName GetTeacherByStudentFirst&LastName
  * 
  * @apiGroup Teachers
+ *
+ * @apiParam (String) input student first and last name
  * 
- * @apiSuccess (JSON) Teacher whom student first & last belongs to
+ * @apiSuccess (JSON) data Current table entry for teacher by student's first and last name
  * @apiSuccess (JSON) responseCode HTTP Response Code
  * @apiSuccess (JSON) response Server Response
  * 
@@ -603,9 +668,9 @@
     var result = {};
     data.Teacher.findAll({
         include: {
-         model: data.Student,
-         required: true,
-         where: { 
+           model: data.Student,
+           required: true,
+           where: { 
             firstName: req.params.firstName,
             lastName: req.params.lastName
         },

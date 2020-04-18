@@ -601,7 +601,8 @@ components:
           type: integer
           description: Stars student has earned
         level:
-          type: integer
+          type: string
+          pattern: '\d{1,2}[\+\-\/\*]'
           description: Level of student
         teacherId:
           type: string
@@ -631,6 +632,7 @@ components:
           description: practice (true), asessment (false)
         level:
           type: string
+          pattern: '\d{1,2}[\+\-\/\*]'
           description: Level of the test
         attemptsRemaining:
           type: integer
@@ -704,10 +706,18 @@ components:
         lastName:
           type: string
           description: Student's Last Name
+        baseNumber:
+          type: integer
+          description: Base number of the student's level
+          default: null
+        operation:
+          type: string
+          description: Operation for the test either +, -, *, /
+          pattern: '[\+\-\/\*]'
+          default: null
         teacherId:
           type: integer
           description: ID for Student's Teacher
-          default: 0
       required:
         - firstName
         - lastName

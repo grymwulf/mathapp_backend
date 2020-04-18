@@ -23,9 +23,6 @@ http://localhost:8000/tests/1
 //get test by category
 http://localhost:8000/tests/category/true
 
-//get test by level
-http://localhost:8000/tests/level/3+
-
 //get test by attempts remaining 
 http://localhost:8000/tests/attemptsRemaining/3
 
@@ -34,5 +31,11 @@ http://localhost:8000/tests/teachers/1
 
 //get test by student id
 http://localhost:8000/tests/students/2
+
+//get test by base number
+http://localhost:8000/tests/baseNumber/3
+
+//patch test by id
+localhost:8000/tests/1
 
 There are others such as id/category or id/level or level/studentId
