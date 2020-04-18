@@ -761,7 +761,7 @@ components:
           type: integer
           description: Teacher assigning the test
       required:
-        - category
+        - practice
         - attemptsAllowed
         - studentId
         - teacherId
