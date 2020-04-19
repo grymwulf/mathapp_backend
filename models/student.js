@@ -107,6 +107,6 @@ module.exports = (sequelize, type) => {
                 }
             }
         },
-        timestamps: false
+        timestamps: (process.env.APP_ENVIRONMENT !== "dev")
     })
 }

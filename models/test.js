@@ -26,7 +26,7 @@
         practice: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
-            defaultValue: false
+            defaultValue: true
         },
 
         //attempts_remaining: number of attempts left to take test
@@ -39,7 +39,8 @@
                     }
                 }
             },
-            allowNull: false
+            allowNull: false,
+            defaultValue: -1
         },
         //baseNumber: the number used as the base for each test i.e. 1, 2, 3, 4 etc.
         baseNumber: {
@@ -83,6 +84,6 @@
         }
 
     }, {
-        timestamps: false
+        timestamps: (process.env.APP_ENVIRONMENT !== "dev")
     })
     }

@@ -46,6 +46,6 @@
             allowNull: false, 
         },
     },{
-        timestamps: false
+        timestamps: (process.env.APP_ENVIRONMENT !== "dev")
     })
     }
