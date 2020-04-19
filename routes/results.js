@@ -38,7 +38,7 @@ const Sequelize = require('sequelize');
  */
 router.get('/:id', (req, res) => {
     var result = {};
-    data.Result.findAll({
+    data.Result.findOne({
         where: {
             id: req.params.id
         },
@@ -53,7 +53,7 @@ router.get('/:id', (req, res) => {
             }
         }
     }).then((resultData) => {
-        result['data'] = resultData;
+        result['result'] = resultData;
         result['endpoint'] = `/results/:id`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -63,7 +63,7 @@ router.get('/:id', (req, res) => {
     }).catch(function (err) {
         console.log('Error querying a result by id');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/:id`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -106,7 +106,7 @@ router.get('/:id/summary', async (req, res) => {
                 }
             }
         });
-        var resultData = await data.Result.findAll({
+        var resultData = await data.Result.findOne({
             where: {
                 id: req.params.id
             },
@@ -124,8 +124,8 @@ router.get('/:id/summary', async (req, res) => {
                 ]
             }
         });
-        resultData[0].dataValues.correctlyAnswered = correctCount;
-        result['data'] = resultData;
+        resultData.dataValues.correctlyAnswered = correctCount;
+        result['result'] = resultData;
         result['endpoint'] = `results/:id/summary`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -135,7 +135,7 @@ router.get('/:id/summary', async (req, res) => {
     } catch (err) {
         console.log('Error querying results summary');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/:id/summary`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -180,7 +180,7 @@ router.get('/test/:testId', (req, res) => {
             }
         }
     }).then((resultData) => {
-        result['data'] = resultData;
+        result['results'] = resultData;
         result['endpoint'] = `results/test/:testId`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -190,7 +190,7 @@ router.get('/test/:testId', (req, res) => {
     }).catch((err) => {
         console.log('Error querying results by test');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/test/:testId`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -263,7 +263,7 @@ router.get('/test/:testId/summary', async (req, res) => {
             resultData[i].dataValues.totalQuestions = totalCount;
             resultData[i].dataValues.correctlyAnswered = correctCount;
         }
-        result['data'] = resultData;
+        result['results'] = resultData;
         result['endpoint'] = `results/test/:testId/summary`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -273,7 +273,7 @@ router.get('/test/:testId/summary', async (req, res) => {
     } catch (err) {
         console.log('Error querying results by test');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/test/:testId/summary`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -319,7 +319,7 @@ router.get('/student/:studentId', (req, res) => {
             }
         }
     }).then((resultData) => {
-        result['data'] = resultData;
+        result['results'] = resultData;
         result['endpoint'] = `results/student/:studentId`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -329,7 +329,7 @@ router.get('/student/:studentId', (req, res) => {
     }).catch((err) => {
         console.log('Error querying results by student');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/student/:studentId`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -415,7 +415,7 @@ router.get('/student/:studentId/summary', async (req, res) => {
             resultData[i].dataValues.totalQuestions = totalCount;
             resultData[i].dataValues.correctlyAnswered = correctCount;
         }
-        result['data'] = resultData;
+        result['results'] = resultData;
         result['endpoint'] = `results/student/:studentId/summary`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -425,7 +425,7 @@ router.get('/student/:studentId/summary', async (req, res) => {
     } catch (err) {
         console.log('Error querying results by student');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/student/:studentId/summary`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -471,7 +471,7 @@ router.get('/teacher/:teacherId', (req, res) => {
             }
         }
     }).then((resultData) => {
-        result['data'] = resultData;
+        result['results'] = resultData;
         result['endpoint'] = `results/teacher/:teacherId`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -481,7 +481,7 @@ router.get('/teacher/:teacherId', (req, res) => {
     }).catch((err) => {
         console.log('Error querying results by teacher');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/teacher/:teacherId`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -567,7 +567,7 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
             resultData[i].dataValues.totalQuestions = totalCount;
             resultData[i].dataValues.correctlyAnswered = correctCount;
         }
-        result['data'] = resultData;
+        result['results'] = resultData;
         result['endpoint'] = `results/teacher/:teacherId/summary`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -577,7 +577,7 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
     } catch (err) {
         console.log('Error querying results by teacher');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/teacher/:teacherId/summary`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -618,7 +618,7 @@ router.get('/', (req, res) => {
             }
         }
     }).then(function (results) {
-        result['data'] = results;
+        result['results'] = results;
         result['endpoint'] = `/results/`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
@@ -628,7 +628,7 @@ router.get('/', (req, res) => {
     }).catch(function (err) {
         console.log('Error querying all results');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = `/results/`;
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -668,7 +668,7 @@ router.post('/', async (req, res) => {
     } catch(err) {
         console.log('Error creating new result record');
         console.log(err);
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = "/results";
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -721,7 +721,7 @@ router.post('/', async (req, res) => {
 
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
-        result['data'] = {
+        result['results'] = {
             'id': newResult.id,
             'uri': uri
         };
@@ -736,7 +736,7 @@ router.post('/', async (req, res) => {
         await addResult.rollback();
         console.log('Error creating new result record');
         console.log(err)
-        result['data'] = {};
+        result['results'] = {};
         result['endpoint'] = "/results";
         result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
         result['response'] = "Internal Server Error";
@@ -751,7 +751,7 @@ router.post('/', async (req, res) => {
 // this HAS to be last in file to ensure it doesn't trigger on anything else that might match
 router.use((req, res) => {
     var result = {};
-    result['data'] = {
+    result['results'] = {
         "endpoint": "/results"
     };
     result['responseCode'] = HttpStatus.NOT_IMPLEMENTED;

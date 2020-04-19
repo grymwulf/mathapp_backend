@@ -31,10 +31,10 @@
             validate: {
                 is: {
                     args: /^\d{2}:\d{2}:\d{2}$/,
-                    msg: 'Time must me in "HH:MM:SS" format'
+                    msg: 'Time must be in "HH:MM:SS" format'
                 },
                 isUnderMax(value) {
-                    var maxTime = process.env.APP_MAX_ATTEMPT_TIME || "99:60:60"
+                    var maxTime = process.env.APP_MAX_ATTEMPT_TIME || "99:59:59"
 
                     var times = value.split(":");
                     var maxTimes = maxTime.split(":");
@@ -53,6 +53,6 @@
         }
 
     },{
-        timestamps: false
+        timestamps: (process.env.APP_ENVIRONMENT !== "dev")
     })
     }

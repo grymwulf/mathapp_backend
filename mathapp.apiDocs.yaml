@@ -381,7 +381,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  results:
+                  result:
                     type: object
                     $ref: '#/components/schemas/result'
         '400':
@@ -406,7 +406,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  results:
+                  result:
                     type: object
                     $ref: '#/components/schemas/resultSummary'
         '400':
@@ -753,7 +753,7 @@ components:
         attemptsAllowed:
           type: integer
           description: Number of times available, -1 for always available
-          default: 1
+          default: -1
         studentId:
           type: integer
           description: Student taking the test
@@ -761,10 +761,10 @@ components:
           type: integer
           description: Teacher assigning the test
       required:
-        - practice
-        - attemptsAllowed
         - studentId
         - teacherId
+        - baseNumber
+        - operation
     newTestAssignment:
       description: Create a new test for students to take
       type: object
@@ -783,10 +783,10 @@ components:
         attemptsAllowed:
           type: integer
           description: Number of times available, -1 for always available
-          default: 1
+          default: -1
       required:
-        - category
-        - attemptsAllowed
+        - baseNumber
+        - operation
     newResult:
       description: Create a new result record
       type: object
@@ -795,6 +795,7 @@ components:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
           pattern: '^\d{2}:\d{2}:\d{2}$'
+          default: Max time allowed ("99:59:59" or environment variable)
         testId:
           type: integer
           description: Test ID of the test the result belongs to
@@ -806,6 +807,7 @@ components:
               studentAnswer:
                 type: integer
                 description: Answer the student submitted
+                default: null
               operation:
                 type: string
                 description: Operation for the test either +, -, *, /
