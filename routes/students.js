@@ -16,6 +16,8 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
+
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------Student Methods by Student Attributes--------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -857,7 +859,7 @@ router.get('/test/id/:id', (req, res) => {
 });
 
 /**
- * @api (post) /students/id/:id/tests
+ * @api (get) /students/id/:id/tests
  * 
  * @apiName Get active tests for a student
  * 
@@ -908,6 +910,63 @@ router.get('/test/id/:id', (req, res) => {
 
 /*----------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------*/
+/*----------------------------Student Patch Methods----------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @api (patch) /students/:id
+ * 
+ * @apiName Update student name
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.patch('/:id', async (req, res) =>{
+    var result = {};
+
+    console.log(`Patch: `);
+    console.log(req.body);
+
+    try{
+    var updatedStudent = await data.Student.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
+        }, {where: {id: req.params.id} });
+    
+    if (updatedStudent[0] !== 0){
+        result['number of student records successfully updated'] = updatedStudent[0];
+            result['endpoint'] = "/students/:id";
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;  
+    } else {
+        throw new Error('Invalid request')
+      }
+    } catch (err) {
+        console.log('Error updating student information');
+        console.log(err)
+        result['update unsuccessful'] = {message: 'Invalid Request' };
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+        result['response'] = "Internal Server Error";
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------*/
@@ -935,11 +994,11 @@ router.post('/', async (req, res) => {
     console.log(req.body);
 
     //retrieves firstName and lastName from input json 
-    /*var firstName = req.body.firstName;
+    var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var stars = req.body.stars;
     var level = req.body.level;
-    var teacherId = req.body.teacherId;*/
+    var teacherId = req.body.teacherId;
 
 
     try {
@@ -948,7 +1007,7 @@ router.post('/', async (req, res) => {
             lastName: req.body.lastName,
             stars: req.body.stars,
             baseNumber: req.body.baseNumber,
-            oepration: req.body.operation,
+            operation: req.body.operation,
             teacherId: req.body.teacherId
         });
 
@@ -959,11 +1018,11 @@ router.post('/', async (req, res) => {
             req.baseUrl + req.path + newStudent.id;
         result['new student'] = {
             'id': newStudent.id,   // auto-generated id
-            /*'firstName': firstName,
+            'firstName': firstName,
             'lastName': lastName,
             'stars': stars,
-            'level': level,
-            'teacherId': teacherId,*/
+            'level': newStudent.baseNumber + newStudent.operation,
+            'teacherId': teacherId,
             'uri': uri
         };
         result['endpoint'] = "/students";
@@ -986,10 +1045,11 @@ router.post('/', async (req, res) => {
     }
 });
 
+
 /**
- * @api (post) /students/
+ * @api (post) /students/:studentId/tests
  * 
- * @apiName Post new student
+ * @apiName Post new test for student
  * 
  * @apiGroup Students
  * 
@@ -1001,59 +1061,6 @@ router.post('/', async (req, res) => {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.post('/', async (req, res) => {
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-
-    //retrieves firstName and lastName from input json 
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    //var stars = req.body.stars
-    //var level = req.body.level
-
-
-    try {
-        var newStudent = await data.Student.create({
-            id: req.body.id,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName
-            //stars: req.body.stars,
-            //level: req.body.level,
-            //teacherId: req.body.teacherId
-        });
-
-        console.log(`New student data received: Entry ${newStudent.id} created.`);
-        console.log(`Data added was: ${newStudent}.`);
-
-        var uri = req.protocol + '://' + req.get('host') +
-            req.baseUrl + req.path + newStudent.id;
-        result['new student'] = {
-            'id': newStudent.id,   // auto-generated id
-            'firstName': firstName,
-            'lastName': lastName,
-            'uri': uri
-        };
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    } catch (err) {
-        console.log('Error creating new student record');
-        console.log(err)
-        result['new student'] = {};
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-});
-
 router.post('/:studentId/tests', async (req, res) => {
     var result = {};
     console.log(`Post: `);
