@@ -22,8 +22,8 @@
             primaryKey: true
         },
 
-        //category: practice(false, 0) or graded(true, 1)
-        category: {
+        //category: practice(true, 0) or graded(false, 1)
+        practice: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: false
