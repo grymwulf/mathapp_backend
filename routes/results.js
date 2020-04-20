@@ -722,18 +722,18 @@ router.post('/', async (req, res) => {
         res.json(result);
         return;
     } catch (err) {
-        var resultObject;
+        var message;
         var responseCode;
         var response;
         if (addResult) {
             await addResult.rollback();
         }
         if (err instanceof Sequelize.ValidationError) {
-            resultObject = err.message;
+            message = err.message;
             responseCode = HttpStatus.BAD_REQUEST;
             response = "Bad Request";
         } else if (err instanceof Sequelize.ForeignKeyConstraintError) {
-            resultObject = err.message;
+            message = err.message;
             responseCode = HttpStatus.NOT_FOUND;
             response = "Not Found";
         } else {
@@ -742,7 +742,7 @@ router.post('/', async (req, res) => {
         }
         console.log('Error creating new result record');
         console.log(err)
-        result['message'] = resultObject;
+        result['message'] = message;
         result['endpoint'] = "/results";
         result['responseCode'] = responseCode;
         result['response'] = response;
