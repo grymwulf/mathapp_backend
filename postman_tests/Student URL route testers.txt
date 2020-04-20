@@ -8,7 +8,8 @@ json body
 "firstName":"Micah",
 "lastName":"Hyde",
 "stars": 0,
-"level": "2*",
+"baseNumber": 2,
+"operation": "*",
 "teacherId": 3
 }
 
@@ -21,21 +22,26 @@ http://localhost:8000/students/4
 //get student by their first name
 http://localhost:8000/students/firstName/Joaquin
 
+//get student by teacher first name
+http://localhost:8000/students/teacher/firstName/james
+
 //get student by their last name
 http://localhost:8000/students/lastName/Stanley
 
 //get student by their full name
 http://localhost:8000/students/firstName/Jane/lastName/Smith
 
-//get student by lastname and level
-http://localhost:8000/students/lastName/Smith/level/9-
-
-//get student by teacher first name
-http://localhost:8000/students/teacher/firstName/james
+//get student by stars
+http://localhost:8000/students/stars/1
 
 //get student by teacher Id
 http://localhost:8000/students/teacherId/2
 
-//get all active tests for a student
-http://localhost:8000/students/id/1/tests
+//Update(patch) a new student record
+http://localhost:8000/students/1
 
+json body
+{
+"firstName":"Mike",
+"lastName":"Williams"
+}
