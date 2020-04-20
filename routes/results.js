@@ -662,22 +662,13 @@ router.post('/', async (req, res) => {
     try {
         var test = await data.Test.findByPk(req.body.testId);
 
-        if (test.attemptsRemaining == 0) {
-            throw new Error('Test has no attempts remaining')
+        if (test === null) {
+            throw new Sequelize.ForeignKeyConstraintError(
+                {message: `Test with id: ${req.body.testId} does not exist`});
+        } else if (test.attemptsRemaining == 0) {
+            throw new Sequelize.ValidationError('Test has no attempts remaining');
         }
-    } catch(err) {
-        console.log('Error creating new result record');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = "/results";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
 
-    try {
         var addResult = await data.sequelize.transaction();
         var newResult = await data.Result.create({
             timeTaken: req.body.timeTaken,
@@ -691,7 +682,7 @@ router.post('/', async (req, res) => {
 
         for (i = 0; i < Object.keys(req.body.answers).length; i++) {
             var answerData = req.body.answers[i]
-            var newAnswer = await data.Answer.create({
+            await data.Answer.create({
                 studentAnswer: answerData.studentAnswer,
                 operation: answerData.operation,
                 operand1: answerData.operand1,
@@ -703,8 +694,6 @@ router.post('/', async (req, res) => {
             }, {
                 transaction: addResult
             });
-            console.log(`New answer added to result ${newResult.id}: ` +
-                `Answer ${newAnswer.id} `);
         }
 
         await data.Test.decrement('attemptsRemaining', {
@@ -721,7 +710,7 @@ router.post('/', async (req, res) => {
 
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path + newResult.id;
-        result['results'] = {
+        result['resource'] = {
             'id': newResult.id,
             'uri': uri
         };
@@ -733,13 +722,30 @@ router.post('/', async (req, res) => {
         res.json(result);
         return;
     } catch (err) {
-        await addResult.rollback();
+        var resultObject;
+        var responseCode;
+        var response;
+        if (addResult) {
+            await addResult.rollback();
+        }
+        if (err instanceof Sequelize.ValidationError) {
+            resultObject = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError) {
+            resultObject = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error creating new result record');
         console.log(err)
-        result['results'] = {};
+        result['message'] = resultObject;
         result['endpoint'] = "/results";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;

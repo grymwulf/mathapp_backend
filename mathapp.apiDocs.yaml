@@ -860,13 +860,38 @@ components:
         message:
           type: string
           description: Error Message from server
+        endpoint:
+          type: string
+          description: Endpoint request was sent to
+        responseCode:
+          type: integer
+          description: HTTP error code
+        response:
+          type: string
+          description: Descriptor for response code
     success:
       description: Operation successful
       type: object
       properties:
-        message:
-          type: string
+        resource:
+          type: object
           description: Success Message
+          properties:
+            id:
+              type: integer
+              decsription: id of created resource
+            uri:
+              type: string
+              description: location of created resource
+        endpoint:
+          type: string
+          description: Endpoint request was sent to
+        responseCode:
+          type: integer
+          description: HTTP error code
+        response:
+          type: string
+          description: Descriptor for response code
   responses:
     201Created:
       description: Successfully created new Record
