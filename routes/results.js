@@ -303,12 +303,16 @@ router.get('/test/:testId/summary', async (req, res) => {
 router.get('/student/:studentId', (req, res) => {
     var result = {};
     data.Result.findAll({
+        where: {
+            testId: {
+                [Sequelize.Op.in]: Sequelize.literal(`(
+                    SELECT testId
+                    FROM tests
+                    WHERE studentId = ${req.params.studentId}
+                )`)
+            }
+        },
         include: {
-            model: data.Test,
-            required: true,
-            where: {
-                studentId: req.params.studentId
-            },
             model: data.Answer,
             required: true,
             where: {
@@ -361,13 +365,16 @@ router.get('/student/:studentId/summary', async (req, res) => {
 
     try {
         var resultData = await data.Result.findAll({
+            where: {
+                testId: {
+                    [Sequelize.Op.in]: Sequelize.literal(`(
+                        SELECT testId
+                        FROM tests
+                        WHERE studentId = ${req.params.studentId}
+                    )`)
+                }
+            },
             include: {
-                model: data.Test,
-                required: true,
-                where: {
-                    studentId: req.params.studentId
-                },
-                attributes: [],
                 model: data.Answer,
                 required: true,
                 where: {
@@ -382,11 +389,6 @@ router.get('/student/:studentId/summary', async (req, res) => {
                     id: resultData[i].dataValues.id
                 },
                 include: {
-                    model: data.Test,
-                    required: true,
-                    where: {
-                        studentId: req.params.studentId
-                    },
                     model: data.Answer,
                     required: true,
                     where: {
@@ -400,11 +402,6 @@ router.get('/student/:studentId/summary', async (req, res) => {
                     id: resultData[i].dataValues.id
                 },
                 include: {
-                    model: data.Test,
-                    required: true,
-                    where: {
-                        studentId: req.params.studentId
-                    },
                     model: data.Answer,
                     required: true,
                     where: {
@@ -455,12 +452,16 @@ router.get('/student/:studentId/summary', async (req, res) => {
 router.get('/teacher/:teacherId', (req, res) => {
     var result = {};
     data.Result.findAll({
+        where: {
+            testId: {
+                [Sequelize.Op.in]: Sequelize.literal(`(
+                    SELECT testId
+                    FROM tests
+                    WHERE teacherId = ${req.params.teacherId}
+                )`)
+            }
+        },
         include: {
-            model: data.Test,
-            required: true,
-            where: {
-                teacherId: req.params.teacherId
-            },
             model: data.Answer,
             required: true,
             where: {
@@ -513,13 +514,16 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
 
     try {
         var resultData = await data.Result.findAll({
+            where: {
+                testId: {
+                    [Sequelize.Op.in]: Sequelize.literal(`(
+                        SELECT testId
+                        FROM tests
+                        WHERE teacherId = ${req.params.teacherId}
+                    )`)
+                }
+            },
             include: {
-                model: data.Test,
-                required: true,
-                where: {
-                    studentId: req.params.teacherId
-                },
-                attributes: [],
                 model: data.Answer,
                 required: true,
                 where: {
@@ -534,11 +538,6 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
                     id: resultData[i].dataValues.id
                 },
                 include: {
-                    model: data.Test,
-                    required: true,
-                    where: {
-                        studentId: req.params.teacherId
-                    },
                     model: data.Answer,
                     required: true,
                     where: {
@@ -552,11 +551,6 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
                     id: resultData[i].dataValues.id
                 },
                 include: {
-                    model: data.Test,
-                    required: true,
-                    where: {
-                        studentId: req.params.teacherId
-                    },
                     model: data.Answer,
                     required: true,
                     where: {
