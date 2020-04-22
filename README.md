@@ -37,7 +37,7 @@ Proprietary and confidential
 5. For AWS Deployment, use the `ant aws` command in the base directory - this will assemble the correct package for uploading to AWS Elastic Beanstalk under `aws/mathapp.zip` - Just upload this zip file. 
     1. Review the `.env_sample` file - I've adjusted the files to use the default RDS_ environment variables supplied by Elastic Beanstalk
 6. In root directory type the following commands:
-    1. npm install (only once, on initial install)
+    1. yarn install (only once, on initial install)
     2. node database_setup.js (only once, on initial install)
     3. npm start
 7. Application will listen on port indicated by the environment variable PORT specified in .env or by default 8000
