@@ -34,7 +34,7 @@
                 </linecontains>
             </filterchain>
         </copy>
-        <copy file="package-lock.json" todir="${stage}" />
+        <copy file="package-lock.json" todir="${stage}" failonerror="false" />
         <copy file="mathapp.apiDocs.yaml" todir="${stage}" />
         <copy file="yarn.lock" todir="${stage}" />
     </target>

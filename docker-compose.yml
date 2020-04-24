@@ -35,8 +35,6 @@ services:
       - '8000:8000'
     expose:
       - '8000'
-    # having docker remove the node_modules directory avoids a bad CI issue with npm
-    # where it keeps erroring out with "npm err cb() never called"
-    # there may be a more effective solution, but it works so :meh:
+    # Using yarn to avoid a bad NPM issue of failure to launch
     command: >
       bash -c "yarn install && yarn run start"
