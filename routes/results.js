@@ -61,12 +61,25 @@ router.get('/:id', (req, res) => {
         res.json(result);
         return;
     }).catch(function (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying a result by id');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/:id`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results/:id/";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -133,12 +146,25 @@ router.get('/:id/summary', async (req, res) => {
         res.json(result);
         return;
     } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results summary');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/:id/summary`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results/:id/summary";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -188,12 +214,25 @@ router.get('/test/:testId', (req, res) => {
         res.json(result);
         return;
     }).catch((err) => {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results by test');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/test/:testId`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results/test/:testId";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -271,12 +310,25 @@ router.get('/test/:testId/summary', async (req, res) => {
         res.json(result);
         return;
     } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results by test');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/test/:testId/summary`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results/test/:testId/summary";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -331,12 +383,25 @@ router.get('/student/:studentId', (req, res) => {
         res.json(result);
         return;
     }).catch((err) => {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results by student');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/student/:studentId`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results/student/:studentId";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -420,12 +485,25 @@ router.get('/student/:studentId/summary', async (req, res) => {
         res.json(result);
         return;
     } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results by student');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/student/:studentId/summary`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results/student/:studentId/summary";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -480,12 +558,25 @@ router.get('/teacher/:teacherId', (req, res) => {
         res.json(result);
         return;
     }).catch((err) => {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results by teacher');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/teacher/:teacherId`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "results/teacher/:teacherId";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -569,12 +660,25 @@ router.get('/teacher/:teacherId/summary', async (req, res) => {
         res.json(result);
         return;
     } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying results by teacher');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/teacher/:teacherId/summary`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "results/teacher/:teacherId/summary";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -613,19 +717,32 @@ router.get('/', (req, res) => {
         }
     }).then(function (results) {
         result['results'] = results;
-        result['endpoint'] = `/results/`;
+        result['endpoint'] = `/results`;
         result['responseCode'] = HttpStatus.OK;
         result['response'] = "Query Successful";
         res.status(result.responseCode);
         res.json(result);
         return;
     }).catch(function (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
         console.log('Error querying all results');
-        console.log(err);
-        result['results'] = {};
-        result['endpoint'] = `/results/`;
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/results";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
         res.status(result.responseCode);
         res.json(result);
         return;
@@ -658,7 +775,7 @@ router.post('/', async (req, res) => {
 
         if (test === null) {
             throw new Sequelize.ForeignKeyConstraintError(
-                {message: `Test with id: ${req.body.testId} does not exist`});
+                {message: `Test with id ${req.body.testId} does not exist`});
         } else if (test.attemptsRemaining == 0) {
             throw new Sequelize.ValidationError('Test has no attempts remaining');
         }
@@ -722,15 +839,13 @@ router.post('/', async (req, res) => {
         if (addResult) {
             await addResult.rollback();
         }
-        if (err instanceof Sequelize.ValidationError) {
+        if (err instanceof Sequelize.ValidationError || 
+                err instanceof Sequelize.ForeignKeyConstraintError) {
             message = err.message;
             responseCode = HttpStatus.BAD_REQUEST;
             response = "Bad Request";
-        } else if (err instanceof Sequelize.ForeignKeyConstraintError) {
-            message = err.message;
-            responseCode = HttpStatus.NOT_FOUND;
-            response = "Not Found";
         } else {
+            message = "Error processing request";
             responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
             response = "Internal Server Error";
         }
