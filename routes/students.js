@@ -16,10 +16,10 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
-
+const Sequelize = require('sequelize');
 
 /*-------------------------------------------------------------------------------------------------------------------*/
-/*----------------------------Student Methods by Student Attributes--------------------------------------------------*/
+/*----------------------------API REQUIRED ROUTES--------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 /**
@@ -56,7 +56,7 @@ router.get('/', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying all students');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = "/students";
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -66,6 +66,336 @@ router.get('/', function (req, res) {
         })
 });
 
+/**
+ * @api (post) /students/
+ * 
+ * @apiName Post new student
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.post('/', async (req, res) => {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+
+    try {
+        var teacher = await data.Teacher.findByPk(req.body.teacherId);
+
+        if (teacher === null) {
+            throw new Sequelize.ForeignKeyConstraintError(
+                { message: `Teacher with id ${req.body.teacherId} does not exist` });
+        }
+
+        var newStudent = await data.Student.create({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            stars: req.body.stars,
+            baseNumber: req.body.baseNumber,
+            operation: req.body.operation,
+            teacherId: req.body.teacherId
+        });
+
+        console.log(`New student data received: Entry ${newStudent.id} created.`);
+        console.log(`Data added was: ${newStudent}.`);
+
+        var uri = req.protocol + '://' + req.get('host') +
+            req.baseUrl + req.path + newStudent.id;
+        result['resource'] = {
+            'id': newStudent.id,   // auto-generated id
+            'uri': uri
+        };
+        result['endpoint'] = "/students";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "New Student Record Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
+        console.log('Error creating new student record');
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/students";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/**
+ * @api (get) /students/:id
+ * 
+ * @apiName GetStudentsByStudentID
+ * 
+ * @apiGroup Students
+ * 
+ * @apiParam (Number) input student ID to pull
+ * 
+ * @apiSuccess (JSON) data Current student entries by id
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/:id', function (req, res) {
+    var result = {};
+    data.Student.findByPk(req.params.id)
+        .then(studentData => {
+            var parsed = JSON.parse(JSON.stringify(studentData));
+            delete parsed.operation;
+            delete parsed.baseNumber;
+            result['student'] = parsed;
+            result['endpoint'] = `/students/:id`;
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying a student by student id');
+            console.log(err)
+            result['message'] = "Error processing request";
+            result['endpoint'] = `/students/:id`;
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (patch) /students/:id
+ * 
+ * @apiName Update student name
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.patch('/:id', async (req, res) => {
+    var result = {};
+
+    console.log(`Patch: `);
+    console.log(req.body);
+
+    try {
+        var student = await data.Student.findByPk(req.params.id);
+
+        if (student === null) {
+            throw new Sequelize.EmptyResultError(
+                `Student with id ${req.params.id} does not exist`);
+        }
+
+        await data.Student.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            stars: req.body.stars,
+            baseNumber: req.body.baseNumber,
+            operation: req.body.operation
+        }, { where: { id: req.params.id } });
+        var uri = req.protocol + '://' + req.get('host') +
+            req.baseUrl + req.path;
+        res.set('Location', uri)
+        res.status(HttpStatus.NO_CONTENT);
+        res.json(result);
+        return;
+    } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError ||
+                err instanceof Sequelize.EmptyResultError) {
+            message = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {        
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
+        console.log('Error updating student information');
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/students/:id";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/**
+ * @api (get) /students/:id/tests
+ * 
+ * @apiName Get active tests for a student
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+
+router.get('/:id/tests', (req, res) => {
+    var result = {};
+    data.Test.findAll({
+        where: {
+            studentId: req.params.id
+        }
+    })
+        .then(function (tests) {
+            result['tests'] = tests;
+            result['endpoint'] = 'students/:id/tests';
+            result['responseCode'] = HttpStatus.OK;
+            result['response'] = "Query Successful";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        }).catch(function (err) {
+            console.log('Error querying all tests for student');
+            console.log(err)
+            result['message'] = "Error processing request";
+            result['endpoint'] = 'students/:id/tests';
+            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
+            result['response'] = "Internal Server Error";
+            res.status(result.responseCode);
+            res.json(result);
+            return;
+        })
+});
+
+/**
+ * @api (post) /students/:studentId/tests
+ * 
+ * @apiName Post new test for student
+ * 
+ * @apiGroup Students
+ * 
+ * @apiSuccess (JSON) Students 
+ * @apiSuccess (JSON) responseCode HTTP Response Code
+ * @apiSuccess (JSON) response Server Response
+ * 
+ * @apiError (JSON) data Empty data set result on error
+ * @apiError (JSON) responseCode HTTP Response Code
+ * @apiError (JSON) response Server Response
+ */
+router.post('/:studentId/tests', async (req, res) => {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
+
+    try {
+        var student = await data.Student.findByPk(req.params.studentId);
+
+        if (student === null) {
+            throw new Sequelize.ForeignKeyConstraintError(
+                { message: `Student with id ${req.params.studentId} does not exist` });
+        }
+        
+        var teacherId = student.teacherId;
+
+        var newTest = await data.Test.create({
+            practice: req.body.practice,
+            attemptsRemaining: req.body.attemptsAllowed,
+            baseNumber: req.body.baseNumber,
+            operation: req.body.operation,
+            teacherId: teacherId,
+            studentId: req.params.studentId
+        });
+
+        console.log(`New student data received: Entry ${newTest.id} created.`);
+        console.log(`Data added was: ${newTest}.`);
+
+        var uri = req.protocol + '://' + req.get('host') +
+            `/tests/${newTest.id}`;
+        result['resource'] = {
+            'id': newTest.id,
+            'uri': uri
+        };
+        result['endpoint'] = "/students/:studentId/tests";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError ||
+                err instanceof Sequelize.EmptyResultError) {
+            message = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {        
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
+        console.log('Error creating new student test record');
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/students/:studentId/tests";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------Student Methods by Student Attributes--------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------*/
 
 /**
  * @api (get) /students/lastName/:lastName/level/:level
@@ -85,10 +415,10 @@ router.get('/', function (req, res) {
  * @apiError (JSON) response Server Response
  */
 
- /**
-  * Route currently not implemented as '/' does not work as a URL
-  * parameter.  For route to work, body parameters would be required.
-  */
+/**
+ * Route currently not implemented as '/' does not work as a URL
+ * parameter.  For route to work, body parameters would be required.
+ */
 /*router.get('/lastName/:lastName/level/:level', function (req, res) {
     var result = {};
     data.Student.findAll({
@@ -113,7 +443,7 @@ router.get('/', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student by student first and last name');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `students/lastName/:lastName/students/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -167,7 +497,7 @@ router.get('/firstName/:firstName/lastName/:lastName', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student by student first and last name');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `students/firstName/:firstName/students/lastName/:lastName`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -219,7 +549,7 @@ router.get('/firstName/:firstName', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/students/firstName/:firstName`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -272,7 +602,7 @@ router.get('/lastName/:lastName', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student by last name');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/student/lastName/:lastName`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -281,60 +611,6 @@ router.get('/lastName/:lastName', function (req, res) {
             return;
         })
 });
-
-
-/**
- * @api (get) /students/id/:id
- * 
- * @apiName GetStudentsByStudentID
- * 
- * @apiGroup Students
- * 
- * @apiParam (Number) input student ID to pull
- * 
- * @apiSuccess (JSON) data Current student entries by id
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-
-router.get('/id/:id', function (req, res) {
-    var result = {};
-    data.Student.findAll({
-        where: {
-            id: req.params.id
-        }
-    })
-        .then(studentData => {
-            var parsed = JSON.parse(JSON.stringify(studentData));
-            for (i = 0; i < parsed.length; i++) {
-                delete parsed[i].operation;
-                delete parsed[i].baseNumber;
-            }
-            result['students'] = parsed;
-            result['endpoint'] = `/students/id/:id`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch(function (err) {
-            console.log('Error querying a student by student id');
-            console.log(err)
-            result['students'] = {};
-            result['endpoint'] = `/students/id/:id`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-});
-
-
 
 /**
  * @api (get) /students/stars/:stars
@@ -378,7 +654,7 @@ router.get('/stars/:stars', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/students/stars/:stars`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -416,7 +692,7 @@ router.get('/stars/:stars', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying students by level');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/students/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -426,41 +702,6 @@ router.get('/stars/:stars', function (req, res) {
         })
 });*/
 
-
-
-// basic getter to get record by primary key
-router.get('/:id', function (req, res) {
-    var result = {};
-    data.Student.findAll({
-        where: {
-            id: req.params.id
-        }
-    })
-        .then(studentData => {
-            var parsed = JSON.parse(JSON.stringify(studentData));
-            for (i = 0; i < parsed.length; i++) {
-                delete parsed[i].operation;
-                delete parsed[i].baseNumber;
-            }
-            result['students'] = parsed;
-            result['endpoint'] = `/students/:id`;
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch(function (err) {
-            console.log('Error querying a student');
-            console.log(err)
-            result['students'] = {};
-            result['endpoint'] = `/students/:id`;
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-});
 /*------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -513,7 +754,7 @@ router.get('/teacher/firstName/:firstName', (req, res) => {
         }).catch(function (err) {
             console.log('Error querying students by teacher first name');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = 'students/teacher/firstName/:firstName';
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -571,7 +812,7 @@ router.get('/teacher/firstName/:firstName', (req, res) => {
         }).catch(function (err) {
             console.log('Error querying a student by teacher ID and specific level');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/students/teacherId/:teacherId/students/id/:level `;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -622,7 +863,7 @@ router.get('/teacherId/:teacherId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student by teacher ID');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/students/teacherId/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -678,7 +919,7 @@ router.get('/teacher/lastName/:lastName', (req, res) => {
         }).catch(function (err) {
             console.log('Error querying students by teacher last name');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = 'students/teacher/lastName/:lastName';
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -734,7 +975,7 @@ router.get('/teacher/firstName/:firstName/lastName/:lastName', (req, res) => {
         }).catch(function (err) {
             console.log('Error querying students by teacher full name');
             console.log(err)
-            result['student'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = '/teacher/firstName/:firstName/lastName/:lastName';
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -786,7 +1027,7 @@ router.get('/teacherId/:teacherId/stars/:stars', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a student by teacher ID and specific amount of stars earned');
             console.log(err)
-            result['students'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/students/teacherId/:teacherId/students/id/:stars `;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -848,7 +1089,7 @@ router.get('/test/id/:id', (req, res) => {
         }).catch(function (err) {
             console.log('Error querying student by test id');
             console.log(err)
-            result['student'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = '/students/test/id/:id';
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -858,287 +1099,7 @@ router.get('/test/id/:id', (req, res) => {
         })
 });
 
-/**
- * @api (get) /students/id/:id/tests
- * 
- * @apiName Get active tests for a student
- * 
- * @apiGroup Students
- * 
- * @apiSuccess (JSON) Students 
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-
-// belongs in tests.js, this is not a student route (rpillitt)
-
-/*router.get('/id/:id/tests', (req, res) => {
-    var result = {};
-    data.Test.findAll({
-        include: {
-            model: data.Student,
-            required: true,
-            where: {
-                id: req.params.id
-            }
-        }
-    })
-        .then(function (tests) {
-            result['tests'] = tests;
-            result['endpoint'] = 'students/id/:id/tests';
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        }).catch(function (err) {
-            console.log('Error querying students by teacher full name');
-            console.log(err)
-            result['test'] = {};
-            result['endpoint'] = 'students/id/:id/tests';
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-});*/
-
-/*----------------------------------------------------------------------------------------------------------------*/
-
-/*----------------------------------------------------------------------------------------------------------------*/
-/*----------------------------Student Patch Methods----------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @api (patch) /students/:id
- * 
- * @apiName Update student name
- * 
- * @apiGroup Students
- * 
- * @apiSuccess (JSON) Students 
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-router.patch('/:id', async (req, res) =>{
-    var result = {};
-
-    console.log(`Patch: `);
-    console.log(req.body);
-
-    try{
-    var updatedStudent = await data.Student.update({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName
-        }, {where: {id: req.params.id} });
-    
-    if (updatedStudent[0] !== 0){
-        result['number of student records successfully updated'] = updatedStudent[0];
-            result['endpoint'] = "/students/:id";
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;  
-    } else {
-        throw new Error('Invalid request')
-      }
-    } catch (err) {
-        console.log('Error updating student information');
-        console.log(err)
-        result['update unsuccessful'] = {message: 'Invalid Request' };
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-});
-
-/*-------------------------------------------------------------------------------------------------------------------*/
-
-
-
-/*----------------------------------------------------------------------------------------------------------------*/
-/*----------------------------Student Post Methods----------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------------------------*/
-
-/**
- * @api (post) /students/
- * 
- * @apiName Post new student
- * 
- * @apiGroup Students
- * 
- * @apiSuccess (JSON) Students 
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-router.post('/', async (req, res) => {
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-
-    //retrieves firstName and lastName from input json 
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var stars = req.body.stars;
-    var level = req.body.level;
-    var teacherId = req.body.teacherId;
-
-
-    try {
-        var newStudent = await data.Student.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            stars: req.body.stars,
-            baseNumber: req.body.baseNumber,
-            operation: req.body.operation,
-            teacherId: req.body.teacherId
-        });
-
-        console.log(`New student data received: Entry ${newStudent.id} created.`);
-        console.log(`Data added was: ${newStudent}.`);
-
-        var uri = req.protocol + '://' + req.get('host') +
-            req.baseUrl + req.path + newStudent.id;
-        result['new student'] = {
-            'id': newStudent.id,   // auto-generated id
-            'firstName': firstName,
-            'lastName': lastName,
-            'stars': stars,
-            'level': newStudent.baseNumber + newStudent.operation,
-            'teacherId': teacherId,
-            'uri': uri
-        };
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "New Student Record Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    } catch (err) {
-        console.log('Error creating new student record');
-        console.log(err)
-        result['new student'] = {};
-        result['endpoint'] = "/students";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-});
-
-
-/**
- * @api (post) /students/:studentId/tests
- * 
- * @apiName Post new test for student
- * 
- * @apiGroup Students
- * 
- * @apiSuccess (JSON) Students 
- * @apiSuccess (JSON) responseCode HTTP Response Code
- * @apiSuccess (JSON) response Server Response
- * 
- * @apiError (JSON) data Empty data set result on error
- * @apiError (JSON) responseCode HTTP Response Code
- * @apiError (JSON) response Server Response
- */
-router.post('/:studentId/tests', async (req, res) => {
-    var result = {};
-    console.log(`Post: `);
-    console.log(req.body);
-
-    try {
-        var student = await data.Student.findByPk(req.params.studentId);
-        var teacherId = student.teacherId;
-
-        var newTest = await data.Test.create({
-            category: req.body.practice,
-            attemptsRemaining: req.body.attemptsAllowed,
-            baseNumber: req.body.baseNumber,
-            operation: req.body.operation,
-            teacherId: teacherId,
-            studentId: req.params.studentId
-        });
-
-        console.log(`New student data received: Entry ${newTest.id} created.`);
-        console.log(`Data added was: ${newTest}.`);
-
-        var uri = req.protocol + '://' + req.get('host') +
-            `/tests/${newTest.id}`;
-        result['data'] = {
-            'id': newTest.id,
-            'uri': uri
-        };
-        result['endpoint'] = "/students/:studentId/tests";
-        result['responseCode'] = HttpStatus.CREATED;
-        result['response'] = "Created"
-        res.status(result.responseCode);
-        res.header('Location', uri);
-        res.json(result);
-        return;
-    } catch (err) {
-        console.log('Error creating new student record');
-        console.log(err)
-        result['data'] = {};
-        result['endpoint'] = "/students/:studentId/tests";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
-        res.json(result);
-        return;
-    }
-
-});
 /*--------------------------------------------------------------------------------------------------*/
-
-// implementing a basic getter to get all known students in the DB
-// duplicate pattern of get all route at top of file
-/*router.get('/', function (req, res) {
-    var result = {};
-    data.Student.findAll()
-        .then(function (students) {
-            result['students'] = students;
-            result['endpoint'] = "/students";
-            res.status(HttpStatus.OK);
-            students.forEach(element => {
-                element.data = JSON.parse(element.data)
-            });
-            res.json(result);
-            return;
-        }).catch(function (err) {
-            console.log('Error querying all students');
-            console.log(err)
-            result['student'] = {};
-            result['endpoint'] = "/students";
-            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-            result['response'] = "Internal Server Error";
-            res.status(result.responseCode);
-            res.json(result);
-            return;
-        })
-})*/
-
-
-
 
 // default handler
 // anything not implemented gets a response not implemented

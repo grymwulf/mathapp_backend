@@ -775,7 +775,7 @@ router.post('/', async (req, res) => {
 
         if (test === null) {
             throw new Sequelize.ForeignKeyConstraintError(
-                {message: `Test with id ${req.body.testId} does not exist`});
+                { message: `Test with id ${req.body.testId} does not exist` });
         } else if (test.attemptsRemaining == 0) {
             throw new Sequelize.ValidationError('Test has no attempts remaining');
         }
@@ -839,12 +839,15 @@ router.post('/', async (req, res) => {
         if (addResult) {
             await addResult.rollback();
         }
-        if (err instanceof Sequelize.ValidationError || 
-                err instanceof Sequelize.ForeignKeyConstraintError) {
+        if (err instanceof Sequelize.ValidationError) {
             message = err.message;
             responseCode = HttpStatus.BAD_REQUEST;
             response = "Bad Request";
-        } else {
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {        
             message = "Error processing request";
             responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
             response = "Internal Server Error";

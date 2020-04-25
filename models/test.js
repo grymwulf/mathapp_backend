@@ -34,8 +34,8 @@
             type: Sequelize.INTEGER,
             validate: {
                 isValid(value) {
-                    if (value <= 0 && value != -1) {
-                        throw new Error('Attempts must be initially set to -1 or greater than 0')
+                    if (value < 0 && value != -1) {
+                        throw new Error('Attempts must be set to greater than -1')
                     }
                 }
             },
