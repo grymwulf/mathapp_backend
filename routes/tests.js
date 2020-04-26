@@ -14,6 +14,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../database');
 const HttpStatus = require('http-status-codes');
+const Sequelize = require('sequelize');
 
 /**
  * @api (get) /tests/:id
@@ -34,20 +35,13 @@ const HttpStatus = require('http-status-codes');
  */
 
 router.get('/:id', function (req, res) {
-
     var result = {};
-    data.Test.findAll({
-        where: {
-            id: req.params.id
-        }
-    })
+    data.Test.findByPk(req.params.id)
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
-                delete parsed[i].operation;
-                delete parsed[i].baseNumber;
-            }
-            result['tests'] = parsed;
+            delete parsed.operation;
+            delete parsed.baseNumber;
+            result['test'] = parsed;
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.OK;
             result['response'] = "Query Successful";
@@ -57,7 +51,7 @@ router.get('/:id', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/:id`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -112,7 +106,7 @@ router.get('/id/:id/category/:category', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/category/:category`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -165,7 +159,7 @@ router.get('/id/:id/attemptsRemaining/:attemptsRemaining', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -220,7 +214,7 @@ router.get('/id/:id/level/:level', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -273,7 +267,7 @@ router.get('/id/:id/teachers/:teacherId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -326,7 +320,7 @@ router.get('/id/:id/students/:studentId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -380,7 +374,7 @@ router.get('/id/:id/teachers/:teacherId/students/:studentId', function(req,res) 
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -442,7 +436,7 @@ router.get('/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsR
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/id/:id/category/:category/level/:level/attemptsRemaining/:attemptsRemaining/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -483,7 +477,7 @@ router.get('/practice/:isPractice', function (req, res) {
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -497,7 +491,7 @@ router.get('/practice/:isPractice', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/practice/:isPractice`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -524,22 +518,22 @@ router.get('/practice/:isPractice', function (req, res) {
 // * @apiError (JSON) responseCode HTTP Response Code
 // * @apiError (JSON) response Server Response
 // */
-router.get('/practice/:isPractice/level/:level', function(req,res) {
+router.get('/practice/:isPractice/level/:level', function (req, res) {
     var result = {};
     var value = req.params.isPractice;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
     var paramLevel = req.params.level.split('');
     data.Test.findAll({
-            where: {
-                practice: value,
-		        baseNumber: paramLevel[0],
-	    	    operation: paramLevel[1]
-            },
-        })
-        .then( testData => {
+        where: {
+            practice: value,
+            baseNumber: paramLevel[0],
+            operation: paramLevel[1]
+        },
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -553,7 +547,7 @@ router.get('/practice/:isPractice/level/:level', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/practice/:isPractice/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -580,21 +574,21 @@ router.get('/practice/:isPractice/level/:level', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/practice/:isPractice/teachers/:teacherId/students/:studentId', function(req,res) {
+router.get('/practice/:isPractice/teachers/:teacherId/students/:studentId', function (req, res) {
     var result = {};
     var value = req.params.isPractice;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
     data.Test.findAll({
-            where: {
-                practice: value,
-		        teacherId: req.params.teacherId,
-		        studentId: req.params.studentId
-            },
-        })
-        .then( testData => {
+        where: {
+            practice: value,
+            teacherId: req.params.teacherId,
+            studentId: req.params.studentId
+        },
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -608,7 +602,7 @@ router.get('/practice/:isPractice/teachers/:teacherId/students/:studentId', func
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/practice/:isPractice/teachers/teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -641,12 +635,12 @@ router.get('/level/:level', function (req, res) {
     data.Test.findAll({
         where: {
             baseNumber: paramLevel[0],
-	        operation: paramLevel[1]
+            operation: paramLevel[1]
         }
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -660,7 +654,7 @@ router.get('/level/:level', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/level/:level`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -697,14 +691,14 @@ router.get('/level/:level/practice/:isPractice/attemptsRemaining/:attemptsRemain
     data.Test.findAll({
         where: {
             baseNumber: paramLevel[0],
-	        operation: paramLevel[1],
+            operation: paramLevel[1],
             practice: value,
             attemptsRemaining: req.params.attemptsRemaining
         }
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -718,7 +712,7 @@ router.get('/level/:level/practice/:isPractice/attemptsRemaining/:attemptsRemain
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/level/:level/practice/:isPractice/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -752,13 +746,13 @@ router.get('/level/:level/students/:studentId', function (req, res) {
     data.Test.findAll({
         where: {
             baseNumber: paramLevel[0],
-	        operation: paramLevel[1],
+            operation: paramLevel[1],
             studentId: req.params.studentId
         }
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -772,7 +766,7 @@ router.get('/level/:level/students/:studentId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/level/:level/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -806,13 +800,13 @@ router.get('/level/:level/teachers/:teacherId', function (req, res) {
     data.Test.findAll({
         where: {
             baseNumber: paramLevel[0],
-	        operation: paramLevel[1],
+            operation: paramLevel[1],
             teacherId: req.params.teacherId
         }
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -826,7 +820,7 @@ router.get('/level/:level/teachers/:teacherId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/level/:level/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -881,7 +875,7 @@ router.get('/level/:level/teachers/:teacherId', function (req, res) {
 //        }).catch(function (err) {
 //            console.log('Error querying a test');
 //            console.log(err)
-//            result['tests'] = {};
+//            result['message'] = "Error processing request";
 //            result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining`;
 //            result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
 //            result['response'] = "Internal Server Error";
@@ -915,14 +909,14 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:student
     data.Test.findAll({
         where: {
             baseNumber: paramLevel[0],
-	        operation: paramLevel[1],
+            operation: paramLevel[1],
             attemptsRemaining: req.params.attemptsRemaining,
             studentId: req.params.studentId
         }
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -936,7 +930,7 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:student
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/level/:level/attemptsRemaining/:attemptsRemaining/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -964,16 +958,16 @@ router.get('/level/:level/attemptsRemaining/:attemptsRemaining/students/:student
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
+router.get('/attemptsRemaining/:attemptsRemaining', function (req, res) {
     var result = {};
     data.Test.findAll({
-            where: {
-                attemptsRemaining: req.params.attemptsRemaining
-            }
-        })
-        .then( testData => {
+        where: {
+            attemptsRemaining: req.params.attemptsRemaining
+        }
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -987,7 +981,7 @@ router.get('/attemptsRemaining/:attemptsRemaining', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1025,7 +1019,7 @@ router.get('/teachers/:teacherId', function (req, res) {
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1039,7 +1033,7 @@ router.get('/teachers/:teacherId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1076,7 +1070,7 @@ router.get('/students/:studentId', function (req, res) {
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1090,7 +1084,7 @@ router.get('/students/:studentId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1124,13 +1118,13 @@ router.get('/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaini
         where: {
             studentId: req.params.studentId,
             baseNumber: paramLevel[0],
-	        operation: paramLevel[1],
+            operation: paramLevel[1],
             attemptsRemaining: req.params.attemptsRemaining
         }
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1144,7 +1138,7 @@ router.get('/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaini
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1171,17 +1165,17 @@ router.get('/students/:studentId/level/:level/attemptsRemaining/:attemptsRemaini
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function(req,res) {
+router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function (req, res) {
     var result = {};
     data.Test.findAll({
-            where: {
-                studentId: req.params.studentId,
-		        attemptsRemaining: req.params.attemptsRemaining
-            }
-        })
-        .then( testData => {
+        where: {
+            studentId: req.params.studentId,
+            attemptsRemaining: req.params.attemptsRemaining
+        }
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1195,7 +1189,7 @@ router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/students/:studentId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1225,14 +1219,14 @@ router.get('/students/:studentId/attemptsRemaining/:attemptsRemaining', function
 router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
     var result = {};
     data.Test.findAll({
-            where: {
-		        teacherId: req.params.teacherId,
-                studentId: req.params.studentId
-            }
-        })
-        .then( testData => {
+        where: {
+            teacherId: req.params.teacherId,
+            studentId: req.params.studentId
+        }
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1246,7 +1240,7 @@ router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/teachers/:teacherId/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1273,20 +1267,20 @@ router.get('/teachers/:teacherId/students/:studentId', function (req, res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/practice/:isPractice/attemptsRemaining/:attemptsRemaining', function(req,res) {
+router.get('/practice/:isPractice/attemptsRemaining/:attemptsRemaining', function (req, res) {
     var result = {};
     var value = req.params.isPractice;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
     data.Test.findAll({
-            where: {
-		        practice: value,
-                attemptsRemaining: req.params.attemptsRemaining
-            }
-        })
-        .then( testData => {
+        where: {
+            practice: value,
+            attemptsRemaining: req.params.attemptsRemaining
+        }
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1300,7 +1294,7 @@ router.get('/practice/:isPractice/attemptsRemaining/:attemptsRemaining', functio
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/practice/:isPractice/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1327,20 +1321,20 @@ router.get('/practice/:isPractice/attemptsRemaining/:attemptsRemaining', functio
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/practice/:isPractice/teachers/:teacherId', function(req,res) {
+router.get('/practice/:isPractice/teachers/:teacherId', function (req, res) {
     var result = {};
     var value = req.params.isPractice;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
     data.Test.findAll({
-            where: {
-		        practice: value,
-                teacherId: req.params.teacherId
-            }
-        })
-        .then( testData => {
+        where: {
+            practice: value,
+            teacherId: req.params.teacherId
+        }
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1354,7 +1348,7 @@ router.get('/practice/:isPractice/teachers/:teacherId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/practice/:isPractice/teachers/:teacherId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1381,20 +1375,20 @@ router.get('/practice/:isPractice/teachers/:teacherId', function(req,res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.get('/practice/:isPractice/students/:studentId', function(req,res) {
+router.get('/practice/:isPractice/students/:studentId', function (req, res) {
     var result = {};
     var value = req.params.isPractice;
     if (value === 'true') value = true;
     if (value === 'false') value = false;
     data.Test.findAll({
-            where: {
-		        practice: value,
-                studentId: req.params.studentId
-            }
-        })
-        .then( testData => {
+        where: {
+            practice: value,
+            studentId: req.params.studentId
+        }
+    })
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1408,7 +1402,7 @@ router.get('/practice/:isPractice/students/:studentId', function(req,res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/practice/:isPractice/students/:studentId`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1446,7 +1440,7 @@ router.get('/teachers/:teacherId/attemptsRemaining/:attemptsRemaining', function
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1460,7 +1454,7 @@ router.get('/teachers/:teacherId/attemptsRemaining/:attemptsRemaining', function
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/teachers/:teacherId/attemptsRemaining/:attemptsRemaining`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1498,7 +1492,7 @@ router.get('/baseNumber/:baseNumber', function (req, res) {
     })
         .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1512,7 +1506,7 @@ router.get('/baseNumber/:baseNumber', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying a test');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = `/tests/baseNumber/:baseNumber`;
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
@@ -1539,59 +1533,74 @@ router.get('/baseNumber/:baseNumber', function (req, res) {
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.post('/', async (req, res) =>{
-	var result = {};
-	console.log(`Post: `);
-	console.log(req.body);
-	
-	var practice = req.body.practice;
-	var baseNumber = req.body.baseNumber;
-	var operation = req.body.operation;
-	var attemptsRemaining = req.body.attemptsRemaining;
-	var teacherId = req.body.teacherId;
-	var studentId = req.body.studentId;
-	
-	try{
-	    var newTest = await data.Test.create({
-		practice: req.body.practice,
-		baseNumber: req.body.baseNumber,
-		operation: req.body.operation,
-		attemptsRemaining: req.body.attemptsRemaining,
-		teacherId: req.body.teacherId,
-		studentId: req.body.studentId
-	});
+router.post('/', async (req, res) => {
+    var result = {};
+    console.log(`Post: `);
+    console.log(req.body);
 
-	console.log(`New tests data received: Entry ${newTest.id} created.`);
+    try {
+        var student = await data.Student.findByPk(req.body.studentId);
+        var teacher = await data.Teacher.findByPk(req.body.teacherId);
 
-	var uri = req.protocol + '://' + req.get('host') +
-	req.baseUrl + req.path + newTest.id;
-	result['new test'] = {
-		'id': newTest.id,
-		'practice': practice,
-		'level': baseNumber + operation,
-		'attemptsRemaining': attemptsRemaining,
-		'teacherId': teacherId,
-		'studentId': studentId,
-		'uri': uri
-	};
-	result['endpoint'] = "/tests";
-	result['responseCode'] = HttpStatus.CREATED;
-	result['response'] = "Created"
-	res.status(result.responseCode);
-	res.header('Location', uri);
-	res.json(result);
-	return;
-     }catch(err) {
-	console.log('Error creating new test record');
-	console.log(err)
-	result['tests'] = {};
-	result['endpoint'] = "/tests";
-	result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-	result['response'] = "Internal Server Error";
-	res.status(result.responseCode);
-	res.json(result);
-	return;
-     }
+        if (student === null) {
+            throw new Sequelize.ForeignKeyConstraintError(
+                { message: `Student with id ${req.body.studentId} does not exist` });
+        } else if (teacher === null) {
+            throw new Sequelize.ForeignKeyConstraintError(
+                { message: `Teacher with id ${req.body.teacherId} does not exist` });
+        }
+
+        var newTest = await data.Test.create({
+            practice: req.body.practice,
+            baseNumber: req.body.baseNumber,
+            operation: req.body.operation,
+            attemptsRemaining: req.body.attemptsAllowed,
+            teacherId: req.body.teacherId,
+            studentId: req.body.studentId
+        });
+
+        console.log(`New tests data received: Entry ${newTest.id} created.`);
+
+        var uri = req.protocol + '://' + req.get('host') +
+            req.baseUrl + req.path + newTest.id;
+        result['resource'] = {
+            'id': newTest.id,
+            'uri': uri
+        };
+        result['endpoint'] = "/tests";
+        result['responseCode'] = HttpStatus.CREATED;
+        result['response'] = "Created"
+        res.status(result.responseCode);
+        res.header('Location', uri);
+        res.json(result);
+        return;
+    } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError) {
+            message = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {        
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
+        console.log('Error creating new test record');
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/tests";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
 });
 
 /**
@@ -1610,35 +1619,53 @@ router.post('/', async (req, res) =>{
  * @apiError (JSON) responseCode HTTP Response Code
  * @apiError (JSON) response Server Response
  */
-router.patch('/:id', async (req, res) =>{
+router.patch('/:id', async (req, res) => {
     var result = {};
     console.log(`Patch: `);
     console.log(req.body);
-    try{
-    var updatedTest = await data.Test.update({
+    try {
+        var test = await data.Test.findByPk(req.params.id);
+
+        if (test === null) {
+            throw new Sequelize.EmptyResultError(
+                `Test with id ${req.params.id} does not exist`);
+        }
+
+        await data.Test.update({
             attemptsRemaining: req.body.attemptsRemaining
-        }, {where: {id: req.params.id} });
-    if (updatedTest[0] !== 0){
-        result['number of test records successfully updated'] = updatedTest;
-            result['endpoint'] = "/tests/:id";
-            result['responseCode'] = HttpStatus.OK;
-            result['response'] = "Query Successful";
-            res.status(result.responseCode);
-            res.json(result);
-            return;  
-    } else {
-        throw new Error('Invalid request')
-      }
-    } catch (err) {
-        console.log('Error updating test information');
-        console.log(err)
-        result['update unsuccessful'] = {message: 'Invalid Request' };
-        result['endpoint'] = "/tests";
-        result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
-        result['response'] = "Internal Server Error";
-        res.status(result.responseCode);
+        }, { where: { id: req.params.id } });
+        var uri = req.protocol + '://' + req.get('host') +
+            req.baseUrl + req.path;
+        res.set('Location', uri);
+        res.status(HttpStatus.NO_CONTENT);
         res.json(result);
         return;
+    } catch (err) {
+        var message;
+        var responseCode;
+        var response;
+        if (err instanceof Sequelize.ValidationError) {
+            message = err.message;
+            responseCode = HttpStatus.BAD_REQUEST;
+            response = "Bad Request";
+        } else if (err instanceof Sequelize.ForeignKeyConstraintError ||
+                err instanceof Sequelize.EmptyResultError) {
+            message = err.message;
+            responseCode = HttpStatus.NOT_FOUND;
+            response = "Not Found";
+        } else {        
+            message = "Error processing request";
+            responseCode = HttpStatus.INTERNAL_SERVER_ERROR;
+            response = "Internal Server Error";
+        }
+        console.log('Error updating test information');
+        console.log(err)
+        result['message'] = message;
+        result['endpoint'] = "/tests";
+        result['responseCode'] = responseCode;
+        result['response'] = response;
+        res.status(result.responseCode);
+        res.json(result);
     }
 });
 
@@ -1660,12 +1687,10 @@ router.patch('/:id', async (req, res) =>{
  */
 router.get('/', function (req, res) {
     var result = {};
-    data.Test.findAll({
-        model: data.Test
-    })
-        .then( testData => {
+    data.Test.findAll()
+        .then(testData => {
             var parsed = JSON.parse(JSON.stringify(testData));
-            for(i = 0; i < parsed.length; i++) {
+            for (i = 0; i < parsed.length; i++) {
                 delete parsed[i].operation;
                 delete parsed[i].baseNumber;
             }
@@ -1679,7 +1704,7 @@ router.get('/', function (req, res) {
         }).catch(function (err) {
             console.log('Error querying all tests');
             console.log(err)
-            result['tests'] = {};
+            result['message'] = "Error processing request";
             result['endpoint'] = "/tests";
             result['responseCode'] = HttpStatus.INTERNAL_SERVER_ERROR;
             result['response'] = "Internal Server Error";
