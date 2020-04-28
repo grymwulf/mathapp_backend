@@ -222,17 +222,22 @@ router.patch('/:id', async (req, res) => {
                 `Student with id ${req.params.id} does not exist`);
         }
 
-        await data.Student.update({
+        var updatedStudent =  await data.Student.update({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             stars: req.body.stars,
             baseNumber: req.body.baseNumber,
             operation: req.body.operation
         }, { where: { id: req.params.id } });
+        console.log(updatedStudent);
+        result['number of student records successfully updated'] = updatedStudent[0];
+        result['endpoint'] = "/students/:id";
+        result['responseCode'] = HttpStatus.OK;
+        result['response'] = "Update Successful";
         var uri = req.protocol + '://' + req.get('host') +
             req.baseUrl + req.path;
         res.set('Location', uri)
-        res.status(HttpStatus.NO_CONTENT);
+        res.status(result.responseCode);
         res.json(result);
         return;
     } catch (err) {
