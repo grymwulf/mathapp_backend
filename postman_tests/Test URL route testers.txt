@@ -5,11 +5,11 @@ http://localhost:8000/tests/
 
 json body
 {
-	"category": true,
-	"baseNumber": 3,
-	"operation":"+",
-	"attemptsRemaining": 3,
-	"teacherId" : 1,
+	"practice": true,
+	"baseNumber": 4,
+	"operation":"-",
+	"attemptsAllowed": 3,
+	"teacherId" : 3,
 	"studentId" : 2
 }
 
@@ -20,8 +20,8 @@ http://localhost:8000/tests/
 //get test by individual id
 http://localhost:8000/tests/1
 
-//get test by category
-http://localhost:8000/tests/category/true
+//get test by isPractice
+http://localhost:8000/tests/practice/true
 
 //get test by attempts remaining 
 http://localhost:8000/tests/attemptsRemaining/3
@@ -37,5 +37,3 @@ http://localhost:8000/tests/baseNumber/3
 
 //patch test by id
 localhost:8000/tests/1
-
-There are others such as id/category or id/level or level/studentId
