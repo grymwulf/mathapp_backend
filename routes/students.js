@@ -229,7 +229,6 @@ router.patch('/:id', async (req, res) => {
             baseNumber: req.body.baseNumber,
             operation: req.body.operation
         }, { where: { id: req.params.id } });
-        console.log(updatedStudent);
         result['number of student records successfully updated'] = updatedStudent[0];
         result['endpoint'] = "/students/:id";
         result['responseCode'] = HttpStatus.OK;
