@@ -38,7 +38,7 @@ Proprietary and confidential
     1. Review the `.env_sample` file - I've adjusted the files to use the default RDS_ environment variables supplied by Elastic Beanstalk
 6. In root directory type the following commands:
     1. yarn install (only once, on initial install)
-    2. node database_setup.js (only once, on initial install)
+    2. node database_setup.js (only once, on initial install, if needed)
     3. npm start
 7. Application will listen on port indicated by the environment variable PORT specified in .env or by default 8000
 
