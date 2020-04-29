@@ -22,9 +22,6 @@ http://localhost:8000/students/4
 //get student by their first name
 http://localhost:8000/students/firstName/Joaquin
 
-//get student by teacher first name
-http://localhost:8000/students/teacher/firstName/james
-
 //get student by their last name
 http://localhost:8000/students/lastName/Stanley
 
@@ -36,6 +33,9 @@ http://localhost:8000/students/stars/1
 
 //get student by teacher Id
 http://localhost:8000/students/teacherId/2
+
+//get student by teacher first name
+http://localhost:8000/students/teacher/firstName/james
 
 //Update(patch) a new student record
 http://localhost:8000/students/1
