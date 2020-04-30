@@ -30,7 +30,7 @@ module.exports = (sequelize, type) => {
             defaultValue: process.env.APP_MAX_ATTEMPT_TIME,
             validate: {
                 is: {
-                    args: /^\d{1,}:\d{2}:\d{2}$/,
+                    args: /^\d{1,3}:\d{2}:\d{2}$/,
                     msg: 'Time must be in "HH:MM:SS" format'
                 },
                 isUnderMax(value) {
