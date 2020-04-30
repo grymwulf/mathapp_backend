@@ -711,12 +711,10 @@ components:
           description: Base number of the student's level
           min: 0 or environment variable
           max: 12 or environment variable
-          default: null
         operation:
           type: string
           description: Operation for the test either +, -, *, /
           pattern: '[\+\-\/\*]'
-          default: null
         teacherId:
           type: integer
           description: ID for Student's Teacher
@@ -813,7 +811,6 @@ components:
               studentAnswer:
                 type: integer
                 description: Answer the student submitted
-                default: null
               operation:
                 type: string
                 description: Operation for the test either +, -, *, /
@@ -822,12 +819,12 @@ components:
                 type: integer
                 description: Operand preceding the operation
                 min: 0 or environment variable
-                max: 12 or environment variable
+                max: 14 or environment variable
               operand2:
                 type: integer
                 description: Operand subsequent to operation
                 min: 0 or environment variable
-                max: 12 or environment variable
+                max: 14 or environment variable
             required:
               - operation
               - operand1
@@ -891,7 +888,7 @@ components:
           properties:
             id:
               type: integer
-              decsription: id of created resource
+              description: id of created resource
             uri:
               type: string
               description: location of created resource
