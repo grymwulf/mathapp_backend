@@ -709,6 +709,8 @@ components:
         baseNumber:
           type: integer
           description: Base number of the student's level
+          min: 0 or environment variable
+          max: 12 or environment variable
           default: null
         operation:
           type: string
@@ -746,6 +748,8 @@ components:
         baseNumber:
           type: integer
           description: Base number of the test
+          min: 0 or environment variable
+          max: 12 or environment variable
         operation:
           type: string
           description: Operation for the test either +, -, *, /
@@ -776,6 +780,8 @@ components:
         baseNumber:
           type: integer
           description: Base number of the test
+          min: 0 or environment variable
+          max: 12 or environment variable
         operation:
           type: string
           description: Operation for the test either +, -, *, /
@@ -795,7 +801,7 @@ components:
           type: string
           description: Time taken for the individual test attempt ("HH:MM:SS")
           pattern: '^\d{2}:\d{2}:\d{2}$'
-          default: Max time allowed ("99:59:59" or environment variable)
+          default: Max time allowed ("838:59:59" or environment variable)
         testId:
           type: integer
           description: Test ID of the test the result belongs to
@@ -815,9 +821,13 @@ components:
               operand1:
                 type: integer
                 description: Operand preceding the operation
+                min: 0 or environment variable
+                max: 12 or environment variable
               operand2:
                 type: integer
                 description: Operand subsequent to operation
+                min: 0 or environment variable
+                max: 12 or environment variable
             required:
               - operation
               - operand1
@@ -840,6 +850,8 @@ components:
         baseNumber:
           type: integer
           description: Operand for student level (i.e. 3 for 3+)
+          min: 0 or environment variable
+          max: 12 or environment variable
         operation:
           type: string
           description: Operation for student level (i.e. '+' for 3+) either +,-,*,/

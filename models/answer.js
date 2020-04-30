@@ -25,6 +25,7 @@ module.exports = (sequelize, type) => {
         studentAnswer: {
             type: Sequelize.INTEGER,
             allowNull: true,
+            defaultValue: null,
             set(value) {
                 if (value === null) {
                     this.setDataValue('studentAnswer', null)
