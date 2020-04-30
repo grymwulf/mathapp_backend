@@ -15,9 +15,7 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize, type) => {
     return sequelize.define('student', {
 
-        // id: primary ID of student, should match any 
-        // tracking ID for underlying student info
-        // retained at the school
+        // id: primary ID of student, generated internally
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,

@@ -17,9 +17,7 @@
     module.exports = (sequelize, type) => {
         return sequelize.define('teacher', {
 
-        // id: primary ID of teacher, should match any 
-        // tracking ID for underlying student info
-        // retained at the school
+        // id: primary ID of teacher, generated internally
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
