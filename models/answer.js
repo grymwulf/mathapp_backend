@@ -56,14 +56,14 @@ module.exports = (sequelize, type) => {
             type: Sequelize.INTEGER,
             validate: {
                 min: {
-                    args: process.env.APP_MIN_OPERAND || 0,
+                    args: [process.env.APP_MIN_OPERAND || 0],
                     msg: `operand1 is out of application bounds; value must be ` +
                             `greater than or equal to ${process.env.APP_MIN_OPERAND || 0}`
                 },
                 max: {
-                    args: process.env.APP_MAX_OPERAND || 12,
+                    args: [process.env.APP_MAX_OPERAND || 14],
                     msg: `operand1 is out of application bounds; value must be ` +
-                            `less than or equal to ${process.env.APP_MAX_OPERAND || 12}`
+                            `less than or equal to ${process.env.APP_MAX_OPERAND || 14}`
                 },
                 isInt: true
             },
@@ -77,14 +77,14 @@ module.exports = (sequelize, type) => {
             type: Sequelize.INTEGER,
             validate: {
                 min: {
-                    args: process.env.APP_MIN_OPERAND || 0,
+                    args: [process.env.APP_MIN_OPERAND || 0],
                     msg: `operand2 is out of application bounds; value must be ` +
                             `greater than or equal to ${process.env.APP_MIN_OPERAND || 0}`
                 },
                 max: {
-                    args: process.env.APP_MAX_OPERAND || 12,
+                    args: [process.env.APP_MAX_OPERAND || 12],
                     msg: `operand2 is out of application bounds; value must be ` +
-                            `less than or equal to ${process.env.APP_MAX_OPERAND || 12}`
+                            `less than or equal to ${process.env.APP_MAX_OPERAND || 14}`
                 },
                 isInt: true
             },

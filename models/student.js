@@ -55,21 +55,22 @@ module.exports = (sequelize, type) => {
                     msg: 'Only integers are allowed for number of stars'
                 }
             },
-            allowNull: true
+            allowNull: false,
+            defaultValue: 0
         },
 
         baseNumber: {
             type: Sequelize.INTEGER,
             validate: {
                 min: {
-                    args: process.env.APP_MIN_OPERAND || 0,
+                    args: [process.env.APP_MIN_OPERAND || 0],
                     msg: `baseNumber is out of application bounds; value must be ` +
                             `greater than or equal to ${process.env.APP_MIN_OPERAND || 0}`
                 },
                 max: {
-                    args: process.env.APP_MAX_OPERAND || 12,
+                    args: [process.env.APP_MAX_OPERAND || 14],
                     msg: `baseNumber is out of application bounds; value must be ` +
-                            `greater than or equal to ${process.env.APP_MAX_OPERAND || 12}`
+                            `less than or equal to ${process.env.APP_MAX_OPERAND || 14}`
                 },
             },
             allowNull: true

@@ -607,6 +607,15 @@ components:
         teacherId:
           type: string
           description: Student's Teacher
+      endpoint:
+        type: string
+        description: Endpoint request was sent to
+      responseCode:
+        type: integer
+        description: HTTP error code
+      response:
+        type: string
+        description: Descriptor for response code
     teacher:
       description: Teacher record
       type: object
@@ -620,6 +629,15 @@ components:
         lastName:
           type: string
           description: Teacher's Last Name
+      endpoint:
+        type: string
+        description: Endpoint request was sent to
+      responseCode:
+        type: integer
+        description: HTTP error code
+      response:
+        type: string
+        description: Descriptor for response code
     test:
       description: Test record
       type: object
@@ -853,6 +871,15 @@ components:
           type: string
           description: Operation for student level (i.e. '+' for 3+) either +,-,*,/
           pattern: '[\+\-\/\*]'
+      endpoint:
+        type: string
+        description: Endpoint request was sent to
+      responseCode:
+        type: integer
+        description: HTTP error code
+      response:
+        type: string
+        description: Descriptor for response code
     updateTest:
       description: Update test details
       type: object
