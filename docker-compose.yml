@@ -27,7 +27,7 @@ services:
       - RDS_USERNAME=mathapp_api
       - RDS_PASSWORD=password_mathapp_api
       - RDS_PORT=3306
-      - APP_ENVIRONMENT=dev
+      - APP_ENVIRONMENT=live
       - DB_DIALECT=mysql
     volumes: 
       - ./backend:/home/node/app
