@@ -47,15 +47,15 @@
             type: Sequelize.INTEGER,
             validate: {
                 min: {
-                    args: process.env.APP_MIN_OPERAND,
+                    args: [process.env.APP_MIN_OPERAND || 0],
                     msg: `baseNumber is out of application bounds; value must be ` +
-                    `greater than or equal to ${process.env.APP_MIN_OPERAND}`
+                            `greater than or equal to ${process.env.APP_MIN_OPERAND || 0}`
                 },
                 max: {
-                    args: process.env.APP_MAX_OPERAND,
+                    args: [process.env.APP_MAX_OPERAND || 14],
                     msg: `baseNumber is out of application bounds; value must be ` +
-                    `less than or equal to ${process.env.APP_MAX_OPERAND}`
-                }
+                            `less than or equal to ${process.env.APP_MAX_OPERAND || 14}`
+                },
             },
             allowNull: false
         },

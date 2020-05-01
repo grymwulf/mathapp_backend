@@ -29,6 +29,7 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocs = YAML.load('./mathapp.apiDocs.yaml');
 const router = express.Router();
+const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
@@ -47,16 +48,55 @@ const SERVER_PORT = process.env.PORT || 8000;
 app.set('trust proxy', true);
 
 // initialize app settings
-app.use(express.json());
+// Added functionality to process text/plain into JSON, just in case it is not set correctly
 
-/*
+app.use(bodyParser.json());
+app.use(bodyParser.text());
+
+
+// try to convert raw text to json
+app.use(function (req, res, next) {
+    console.log(req.method);
+    console.log(next);
+    if (req.method === "GET") {
+        console.log("Confirmed Get");
+        next();
+    } else if (req.is('json')) {
+        console.log("Json Request");
+        console.log(req.body);
+        next();
+    } else if (req.is('text/plain')) {
+        console.log("Plain text recieved")
+        console.log(req.body);
+        req.body = JSON.parse(req.body);
+        console.log(req.body);
+        next();
+    } else {
+        console.log("Request not JSON");
+        var result = {};
+        result['data'] = {
+            "endpoint": req.path,
+            "payload": "Expects JSON request",
+        };
+        result['responseCode'] = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+        result['response'] = 'UNSUPPORTED_MEDIA_TYPE';
+        res.status(result.responseCode);
+        res.json(result);
+        return;
+    }
+});
+
+
 // troubleshooting
+/*
 app.use(function (req,res,next) {
     console.log(req.url);
     console.log(req.ip);
+    console.log(req.body);
     next();
 });
 */
+
 
 /*
     Routes
